@@ -6,12 +6,14 @@ import { RefreshCw, CalendarDays, ShoppingCart, Package, ChevronRight, Settings,
 import { WeekCalendar } from './WeekCalendar'
 import { GroceryList } from './GroceryList'
 import { PantryAlerts } from './PantryAlerts'
+import { MealDetail } from './MealDetail'
 import { Button } from '@/components/ui/Button'
 import {
   loadCurrentPlan,
   loadPreferences,
   saveCurrentPlan,
   getPantryAlerts,
+  deductMealFromPantry,
 } from '@/lib/storage'
 import { generateMonthPlan } from '@/lib/mealGenerator'
 import type { MealPlan, UserPreferences, PantryAlert, Meal } from '@/lib/types'
@@ -42,6 +44,23 @@ export function MealPlanView() {
 
   // Per-meal swap state
   const [swappingMeal, setSwappingMeal] = useState<SwappingMeal | null>(null)
+
+  // Meal detail modal
+  const [selectedMeal, setSelectedMeal] = useState<{ meal: Meal; dayName: string } | null>(null)
+
+  function handleMealClick(dayIndex: number, mealType: string) {
+    if (!plan) return
+    const day = plan.days[dayIndex]
+    const meal = (day.meals as unknown as Record<string, Meal>)[mealType]
+    if (meal) setSelectedMeal({ meal, dayName: day.dayName })
+  }
+
+  async function handleMarkCooked(meal: Meal) {
+    if (!prefs) return
+    const updated = await deductMealFromPantry(meal, prefs)
+    setPrefs(updated)
+    setAlerts(getPantryAlerts(updated.pantryItems))
+  }
 
   const [extendedPlans, setExtendedPlans] = useState<MealPlan[] | null>(null)
   const [activeWeek, setActiveWeek] = useState(0)
@@ -287,8 +306,10 @@ export function MealPlanView() {
           <WeekCalendar
             days={currentPlan.days}
             mealsPerDay={prefs.mealsPerDay}
+            startDate={currentPlan.startDate}
             onSwap={swapMeal}
             swappingMeal={swappingMeal}
+            onMealClick={handleMealClick}
           />
         )}
 
@@ -341,6 +362,15 @@ export function MealPlanView() {
           </div>
         )}
       </main>
+
+      {selectedMeal && (
+        <MealDetail
+          meal={selectedMeal.meal}
+          dayName={selectedMeal.dayName}
+          onClose={() => setSelectedMeal(null)}
+          onMarkCooked={() => handleMarkCooked(selectedMeal.meal)}
+        />
+      )}
     </div>
   )
 }

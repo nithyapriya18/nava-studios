@@ -17,12 +17,16 @@ interface CompactMeal {
   desc: string
   spice: number
   allergy: string[]
-  ing: string[]         // "Name|qty|unit|cat" e.g. "Rice|200|g|grain"
+  sides?: string        // e.g. "Serve with 8 rotis (3 per adult, 2 for child)"
+  ing: string[]         // "Name|qty|unit|cat"
   mac: number[]         // [calories, protein, carbs, fat, fiber, sugar]
+  ins: string[]         // cooking steps
 }
 
 interface CompactDay {
-  day: string           // "Mon", "Tue", ...
+  day: string
+  date: string          // "2024-06-24"
+  prep: string[]        // "Soak chana tonight for tomorrow"
   meals: Record<string, CompactMeal>
 }
 
@@ -30,6 +34,7 @@ interface CompactPlan {
   id: string
   at: string
   week: string
+  start: string         // start date ISO
   days: CompactDay[]
   grocery: Array<{ n: string; qty: string; unit: string; cat: string; meals: string[] }>
 }
@@ -37,19 +42,10 @@ interface CompactPlan {
 // ─── Category shortcode → full name ──────────────────────────────────────────
 
 const CAT: Record<string, GroceryCategory> = {
-  prod: 'produce',
-  dairy: 'dairy',
-  meat: 'meat-seafood',
-  grain: 'grains-legumes',
-  spice: 'spices-condiments',
-  oil: 'oils-fats',
-  bev: 'beverages',
-  frz: 'frozen',
-  can: 'canned',
-  other: 'other',
+  prod: 'produce', dairy: 'dairy', meat: 'meat-seafood', grain: 'grains-legumes',
+  spice: 'spices-condiments', oil: 'oils-fats', bev: 'beverages',
+  frz: 'frozen', can: 'canned', other: 'other',
 }
-
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 // ─── Expand compact → full MealPlan ──────────────────────────────────────────
 
@@ -68,6 +64,8 @@ function expandPlan(c: CompactPlan): MealPlan {
       description: m.desc,
       spiceLevel: (m.spice ?? 3) as SpiceLevel,
       allergens: m.allergy ?? [],
+      sides: m.sides,
+      instructions: m.ins ?? [],
       ingredients: (m.ing ?? []).map((s) => {
         const [name, quantity, unit, cat] = s.split('|')
         return { name, quantity, unit, category: CAT[cat] ?? 'other' }
@@ -90,9 +88,12 @@ function expandPlan(c: CompactPlan): MealPlan {
     id: c.id,
     generatedAt: c.at,
     weekLabel: c.week,
+    startDate: c.start,
     days: c.days.map((d, i): DayPlan => ({
       dayIndex: i,
-      dayName: DAYS[i] ?? d.day,
+      dayName: d.day,
+      date: d.date,
+      prepNotes: d.prep ?? [],
       meals: Object.fromEntries(
         Object.entries(d.meals).map(([type, meal]) => [type, expandMeal(meal, type)])
       ) as unknown as DayPlan['meals'],
@@ -107,13 +108,35 @@ function expandPlan(c: CompactPlan): MealPlan {
   }
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function addDays(dateStr: string, n: number): string {
+  const d = new Date(dateStr)
+  d.setDate(d.getDate() + n)
+  return d.toISOString().split('T')[0]
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })
+}
+
 // ─── Prompt builder ───────────────────────────────────────────────────────────
 
 function buildPrompt(prefs: UserPreferences): string {
+  // Household composition
+  const adults = prefs.members.filter((m) => !m.age || parseInt(m.age) >= 12).length || 2
+  const children = prefs.members.filter((m) => m.age && parseInt(m.age) < 12).length
+  const totalSrv = adults + children
+
+  const rotiNote = adults > 0
+    ? `For meals with roti/bread: ${adults * 3 + children * 2} rotis total (${adults} adult×3, ${children > 0 ? `${children} child×2` : 'no children'})`
+    : ''
+  const riceNote = `For meals with rice: ${adults * 150 + children * 75}g total (${adults} adult×150g, ${children > 0 ? `${children} child×75g` : ''})`
+
   const members = prefs.members
     .map(
       (m) =>
-        `  - ${m.name} (${m.age}): diet=${m.dietType}, spice=${m.spiceLevel}/5` +
+        `  - ${m.name} (age ${m.age || '?'}): diet=${m.dietType}, spice=${m.spiceLevel}/5` +
         (m.allergies.length ? `, allergies=[${m.allergies.join(',')}]` : '') +
         (m.likes.length ? `, likes=[${m.likes.join(',')}]` : '') +
         (m.dislikes.length ? `, dislikes=[${m.dislikes.join(',')}]` : '') +
@@ -125,30 +148,60 @@ function buildPrompt(prefs: UserPreferences): string {
     .map((p) => `  ${p.name}: ${p.quantity}${p.unit}${p.expiryDate ? ` exp:${p.expiryDate}` : ''}`)
     .join('\n')
 
-  const today = new Date()
-  const weekLabel = `Week of ${today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+  const startDate = prefs.planStartDate ?? new Date().toISOString().split('T')[0]
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const iso = addDays(startDate, i)
+    return { iso, label: formatDate(iso) }
+  })
+  const weekLabel = `${days[0].label} – ${days[6].label}`
   const mealTypes = prefs.mealsPerDay === 4 ? 'breakfast,lunch,dinner,snack' : prefs.mealsPerDay === 3 ? 'breakfast,lunch,dinner' : 'breakfast,dinner'
 
   return `Generate a 7-day personalised meal plan as compact JSON.
 
 HOUSEHOLD: "${prefs.householdName}"
-MEMBERS:
-${members || '  (none)'}
+MEMBERS (total ${totalSrv} — ${adults} adult${adults !== 1 ? 's' : ''}, ${children} child${children !== 1 ? 'ren' : ''}):
+${members || '  (2 adults)'}
 SETTINGS: cuisines=[${prefs.cuisinePreferences.join(',') || 'any'}], goal=${prefs.primaryGoal}, meals/day=${prefs.mealsPerDay} (${mealTypes})
 PANTRY (use first):
 ${pantry || '  (empty)'}
 ${prefs.additionalInstructions ? `SPECIAL INSTRUCTIONS (override defaults): ${prefs.additionalInstructions}\n` : ''}
-RULES: 1.Respect all diet restrictions/allergens 2.Vary cuisines (no same 2 days in a row) 3.Accurate macros 4.Use pantry first 5.Grocery list=only items NOT in pantry 6.Max 7 ingredients/meal
+SERVING RULES:
+- All quantities must feed ${totalSrv} people (${adults} adult${adults !== 1 ? 's' : ''}, ${children} child${children !== 1 ? 'ren' : ''})
+- ${rotiNote}
+- ${riceNote}
+- NEVER serve a main dish alone. Always include accompaniments as ingredients (rotis, rice, raita, bread, etc.)
+- Example: Paneer Bhurji dinner must include whole wheat flour (for rotis) + ghee in the ingredient list
+
+PLAN RULES:
+1. Respect ALL diet restrictions and allergens
+2. Vary cuisines — no same cuisine on consecutive days
+3. Accurate macros for full meal including sides
+4. Use pantry items first; grocery list = items NOT in pantry
+5. Max 8 ingredients per meal (include accompaniments)
+6. Prep notes: if any ingredient needs advance prep (soaking, marinating, thawing), add it to the PREVIOUS day's prep array
+7. Cooking steps: clear, numbered, max 6 steps, max 12 words each
+
+PLAN DATES:
+${days.map((d, i) => `  Day ${i}: ${d.label} (${d.iso})`).join('\n')}
 
 Return ONLY valid compact JSON (no markdown):
 {
-  "id":"plan-001","at":"<ISO>","week":"${weekLabel}",
+  "id":"plan-001","at":"<ISO>","week":"${weekLabel}","start":"${startDate}",
   "days":[
-    {"day":"Mon","meals":{
-      "breakfast":{"id":"d0-b","name":"","cui":"","prep":10,"cook":15,"srv":2,"desc":"max 10 words","spice":3,"allergy":[],"ing":["Name|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar]},
-      "lunch":{...},"dinner":{...}
-    }},
-    {"day":"Tue",...},{"day":"Wed",...},{"day":"Thu",...},{"day":"Fri",...},{"day":"Sat",...},{"day":"Sun",...}
+    {
+      "day":"${days[0].label}","date":"${days[0].iso}",
+      "prep":["Soak X overnight for tomorrow if needed"],
+      "meals":{
+        "breakfast":{"id":"d0-b","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"max 10 words","spice":2,"allergy":[],"sides":"Serve with X (quantity per person)","ing":["Name|qty|unit|cat","Accompaniment|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar],"ins":["Step 1","Step 2","Step 3","Step 4","Step 5"]},
+        "lunch":{...},"dinner":{...}${prefs.mealsPerDay === 4 ? ',"snack":{...}' : ''}
+      }
+    },
+    {"day":"${days[1].label}","date":"${days[1].iso}","prep":[...],"meals":{...}},
+    {"day":"${days[2].label}","date":"${days[2].iso}","prep":[...],"meals":{...}},
+    {"day":"${days[3].label}","date":"${days[3].iso}","prep":[...],"meals":{...}},
+    {"day":"${days[4].label}","date":"${days[4].iso}","prep":[...],"meals":{...}},
+    {"day":"${days[5].label}","date":"${days[5].iso}","prep":[...],"meals":{...}},
+    {"day":"${days[6].label}","date":"${days[6].iso}","prep":[...],"meals":{...}}
   ],
   "grocery":[{"n":"","qty":"","unit":"","cat":"","meals":["meal name"]}]
 }

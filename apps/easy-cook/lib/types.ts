@@ -31,6 +31,7 @@ export interface UserPreferences {
   primaryGoal: HealthGoal
   mealsPerDay: 2 | 3 | 4
   additionalInstructions?: string
+  planStartDate?: string // ISO date, first day of the plan
   setupComplete: boolean
   setupDate: string
 }
@@ -85,6 +86,8 @@ export interface Meal {
   spiceLevel: SpiceLevel
   nutrition: Nutrition
   allergens: string[]
+  sides?: string         // e.g. "Serve with 8 rotis (3 per adult, 2 for child)"
+  instructions?: string[] // step-by-step cooking steps
   /** @deprecated use nutrition.macros.calories */
   calories?: number
   /** @deprecated use nutrition.macros.protein */
@@ -120,7 +123,9 @@ export interface DayMeals {
 export interface DayPlan {
   dayIndex: number
   dayName: string
+  date?: string          // ISO date e.g. "2024-06-24"
   meals: DayMeals
+  prepNotes?: string[]   // e.g. ["Soak chickpeas tonight for tomorrow's lunch"]
 }
 
 export interface GroceryItem {
@@ -135,6 +140,7 @@ export interface MealPlan {
   id: string
   generatedAt: string
   weekLabel: string
+  startDate?: string     // ISO date for day 0 of this plan
   days: DayPlan[]
   groceryList: GroceryItem[]
   extended?: boolean

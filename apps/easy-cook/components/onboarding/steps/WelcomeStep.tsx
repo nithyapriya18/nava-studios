@@ -43,6 +43,18 @@ export function WelcomeStep({ prefs, onChange, onNext }: Props) {
           onChange={(e) => onChange({ householdName: e.target.value })}
         />
 
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-text-primary">When do you want to start?</label>
+          <input
+            type="date"
+            min={new Date().toISOString().split('T')[0]}
+            value={prefs.planStartDate ?? new Date().toISOString().split('T')[0]}
+            onChange={(e) => onChange({ planStartDate: e.target.value })}
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+          />
+          <p className="text-xs text-text-muted">Day 1 of your meal plan. Defaults to today.</p>
+        </div>
+
         <Button
           size="lg"
           className="w-full"

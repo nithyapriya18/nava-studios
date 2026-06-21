@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS meal_plans (
 
 -- Add user_id to households (run this if table already exists)
 ALTER TABLE households ADD COLUMN IF NOT EXISTS user_id TEXT UNIQUE;
+-- Add plan_start_date column
+ALTER TABLE households ADD COLUMN IF NOT EXISTS plan_start_date TEXT;
 
 -- Index for fast household lookups
 CREATE INDEX IF NOT EXISTS idx_members_household ON members(household_id);

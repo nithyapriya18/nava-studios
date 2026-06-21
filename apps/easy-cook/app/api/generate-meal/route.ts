@@ -38,6 +38,16 @@ export async function POST(req: NextRequest) {
     const { dayIndex, dayName, mealType, existingMealName, sibling, reason, prefs }: SwapRequest =
       await req.json()
 
+    const allAllergens = [...new Set(prefs.members.flatMap((m) => m.allergies))]
+    const allDietTypes = [...new Set(prefs.members.map((m) => m.dietType))]
+    const strictestDiet = allDietTypes.includes('veg')
+      ? 'veg'
+      : allDietTypes.includes('vegan')
+        ? 'vegan'
+        : allDietTypes.includes('eggetarian')
+          ? 'eggetarian'
+          : 'non-veg'
+
     const members = prefs.members
       .map((m) =>
         `${m.name}: diet=${m.dietType}, spice=${m.spiceLevel}/5` +
@@ -56,6 +66,21 @@ export async function POST(req: NextRequest) {
 
     const hint = REASON_HINTS[reason] ?? REASON_HINTS['Different']
 
+    const hardRules = [
+      allAllergens.length
+        ? `NEVER use these allergens (household allergy): ${allAllergens.join(', ')}`
+        : null,
+      strictestDiet === 'veg'
+        ? 'NO meat, fish, seafood, or eggs — at least one member is vegetarian'
+        : strictestDiet === 'vegan'
+          ? 'NO meat, fish, seafood, eggs, or dairy — at least one member is vegan'
+          : strictestDiet === 'eggetarian'
+            ? 'NO meat or fish — at least one member is eggetarian'
+            : null,
+    ]
+      .filter(Boolean)
+      .join('\n')
+
     const prompt = `Generate ONE replacement ${mealType} for ${dayName}.
 
 HOUSEHOLD: members=[${members}], cuisines=[${prefs.cuisinePreferences.join(',') || 'any'}], goal=${prefs.primaryGoal}
@@ -63,6 +88,7 @@ PANTRY: ${pantry}
 OTHER MEALS TODAY: ${siblingList || 'none'}
 REPLACE: "${existingMealName}" — do NOT suggest the same meal again
 REASON: ${reason}. ${hint}
+${hardRules ? `\nHARD RULES (violations are unacceptable):\n${hardRules}` : ''}
 
 Return ONE compact meal JSON (no markdown, no explanation):
 {"id":"d${dayIndex}-${mealType.slice(0,1)}","name":"","cui":"","prep":5,"cook":15,"srv":${prefs.members.length || 2},"desc":"max 10 words","spice":2,"allergy":[],"ing":["Name|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar]}

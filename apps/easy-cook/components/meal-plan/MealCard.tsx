@@ -11,6 +11,7 @@ interface MealCardProps {
   compact?: boolean
   onSwap?: (reason: string) => void
   swapping?: boolean
+  onClick?: () => void
 }
 
 const MEAL_TYPE_COLORS = {
@@ -60,7 +61,7 @@ const MICRO_LABELS: { key: keyof Micros; label: string; unit: string }[] = [
   { key: 'omega3',     label: 'Omega-3',     unit: 'mg'  },
 ]
 
-export function MealCard({ meal, compact = false, onSwap, swapping = false }: MealCardProps) {
+export function MealCard({ meal, compact = false, onSwap, swapping = false, onClick }: MealCardProps) {
   const [showSwapPanel, setShowSwapPanel] = useState(false)
   const totalTime = meal.prepTime + meal.cookTime
   const macros = meal.nutrition?.macros
@@ -102,7 +103,10 @@ export function MealCard({ meal, compact = false, onSwap, swapping = false }: Me
   }
 
   return (
-    <div className="rounded-xl border border-border bg-white overflow-hidden hover:shadow-md transition-shadow group relative">
+    <div
+      className={`rounded-xl border border-border bg-white overflow-hidden transition-shadow group relative ${onClick ? 'hover:shadow-md hover:border-accent/30 cursor-pointer' : 'hover:shadow-md'}`}
+      onClick={!showSwapPanel ? onClick : undefined}
+    >
       {/* Loading overlay */}
       {swapping && (
         <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10 rounded-xl gap-2">

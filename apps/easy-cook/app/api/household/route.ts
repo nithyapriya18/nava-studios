@@ -37,6 +37,7 @@ export async function GET(_req: NextRequest) {
     mealsPerDay: household.mealsPerDay as UserPreferences['mealsPerDay'],
     cuisinePreferences: household.cuisinePreferences,
     additionalInstructions: household.additionalInstructions ?? undefined,
+    planStartDate: household.planStartDate ?? undefined,
     setupComplete: household.setupComplete,
     setupDate: household.setupDate?.toISOString() ?? '',
     members: members.map((m) => ({
@@ -79,6 +80,7 @@ export async function POST(req: NextRequest) {
       mealsPerDay: prefs.mealsPerDay,
       cuisinePreferences: prefs.cuisinePreferences,
       additionalInstructions: prefs.additionalInstructions ?? null,
+      planStartDate: prefs.planStartDate ?? null,
       setupComplete: prefs.setupComplete,
       setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
       updatedAt: new Date(),
@@ -91,6 +93,7 @@ export async function POST(req: NextRequest) {
         mealsPerDay: prefs.mealsPerDay,
         cuisinePreferences: prefs.cuisinePreferences,
         additionalInstructions: prefs.additionalInstructions ?? null,
+        planStartDate: prefs.planStartDate ?? null,
         setupComplete: prefs.setupComplete,
         setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
         updatedAt: new Date(),

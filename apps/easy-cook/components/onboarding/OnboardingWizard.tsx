@@ -59,6 +59,7 @@ export function OnboardingWizard() {
       primaryGoal: prefs.primaryGoal ?? 'balanced',
       mealsPerDay: prefs.mealsPerDay ?? 3,
       additionalInstructions: prefs.additionalInstructions?.trim() || undefined,
+      planStartDate: prefs.planStartDate ?? new Date().toISOString().split('T')[0],
       setupComplete: true,
       setupDate: new Date().toISOString(),
     }
