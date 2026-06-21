@@ -20,6 +20,7 @@ export const households = pgTable('households', {
   cuisinePreferences: text('cuisine_preferences').array().notNull().default([]),
   additionalInstructions: text('additional_instructions'),
   planStartDate: text('plan_start_date'),
+  planStartMeal: text('plan_start_meal'),
   setupComplete: boolean('setup_complete').notNull().default(false),
   setupDate: timestamp('setup_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

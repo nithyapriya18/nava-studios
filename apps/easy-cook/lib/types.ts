@@ -31,7 +31,8 @@ export interface UserPreferences {
   primaryGoal: HealthGoal
   mealsPerDay: 2 | 3 | 4
   additionalInstructions?: string
-  planStartDate?: string // ISO date, first day of the plan
+  planStartDate?: string    // ISO date, first day of the plan
+  planStartMeal?: 'breakfast' | 'lunch' | 'dinner' // first meal of Day 1
   setupComplete: boolean
   setupDate: string
 }

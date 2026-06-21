@@ -38,6 +38,7 @@ export async function GET(_req: NextRequest) {
     cuisinePreferences: household.cuisinePreferences,
     additionalInstructions: household.additionalInstructions ?? undefined,
     planStartDate: household.planStartDate ?? undefined,
+    planStartMeal: (household.planStartMeal as UserPreferences['planStartMeal']) ?? undefined,
     setupComplete: household.setupComplete,
     setupDate: household.setupDate?.toISOString() ?? '',
     members: members.map((m) => ({
@@ -81,6 +82,7 @@ export async function POST(req: NextRequest) {
       cuisinePreferences: prefs.cuisinePreferences,
       additionalInstructions: prefs.additionalInstructions ?? null,
       planStartDate: prefs.planStartDate ?? null,
+      planStartMeal: prefs.planStartMeal ?? null,
       setupComplete: prefs.setupComplete,
       setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
       updatedAt: new Date(),
@@ -94,6 +96,7 @@ export async function POST(req: NextRequest) {
         cuisinePreferences: prefs.cuisinePreferences,
         additionalInstructions: prefs.additionalInstructions ?? null,
         planStartDate: prefs.planStartDate ?? null,
+        planStartMeal: prefs.planStartMeal ?? null,
         setupComplete: prefs.setupComplete,
         setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
         updatedAt: new Date(),

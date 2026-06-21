@@ -154,7 +154,22 @@ function buildPrompt(prefs: UserPreferences): string {
     return { iso, label: formatDate(iso) }
   })
   const weekLabel = `${days[0].label} – ${days[6].label}`
-  const mealTypes = prefs.mealsPerDay === 4 ? 'breakfast,lunch,dinner,snack' : prefs.mealsPerDay === 3 ? 'breakfast,lunch,dinner' : 'breakfast,dinner'
+  const allMealTypes = prefs.mealsPerDay === 4
+    ? ['breakfast', 'lunch', 'dinner', 'snack']
+    : prefs.mealsPerDay === 3
+      ? ['breakfast', 'lunch', 'dinner']
+      : ['breakfast', 'dinner']
+  const mealTypes = allMealTypes.join(',')
+
+  // Day 1 may start partway through (e.g. only dinner if user sets up in the evening)
+  const startMeal = prefs.planStartMeal ?? 'breakfast'
+  const startMealOrder = { breakfast: 0, lunch: 1, dinner: 2, snack: 3 }
+  const day1MealTypes = allMealTypes.filter(
+    (m) => (startMealOrder[m as keyof typeof startMealOrder] ?? 0) >= startMealOrder[startMeal]
+  )
+  const day1Note = startMeal !== 'breakfast'
+    ? `DAY 1 SPECIAL: Start from ${startMeal} only — skip earlier meals. Day 1 meals: ${day1MealTypes.join(', ')}.`
+    : ''
 
   return `Generate a 7-day personalised meal plan as compact JSON.
 
@@ -180,7 +195,7 @@ PLAN RULES:
 5. Max 8 ingredients per meal (include accompaniments)
 6. Prep notes: if any ingredient needs advance prep (soaking, marinating, thawing), add it to the PREVIOUS day's prep array
 7. Cooking steps: clear, numbered, max 6 steps, max 12 words each
-
+${day1Note ? `8. ${day1Note}` : ''}
 PLAN DATES:
 ${days.map((d, i) => `  Day ${i}: ${d.label} (${d.iso})`).join('\n')}
 
@@ -192,8 +207,7 @@ Return ONLY valid compact JSON (no markdown):
       "day":"${days[0].label}","date":"${days[0].iso}",
       "prep":["Soak X overnight for tomorrow if needed"],
       "meals":{
-        "breakfast":{"id":"d0-b","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"max 10 words","spice":2,"allergy":[],"sides":"Serve with X (quantity per person)","ing":["Name|qty|unit|cat","Accompaniment|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar],"ins":["Step 1","Step 2","Step 3","Step 4","Step 5"]},
-        "lunch":{...},"dinner":{...}${prefs.mealsPerDay === 4 ? ',"snack":{...}' : ''}
+        ${day1MealTypes.map((m, i) => `"${m}":{"id":"d0-${m.slice(0,1)}","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"max 10 words","spice":2,"allergy":[],"sides":"Serve with X","ing":["Name|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar],"ins":["Step 1","Step 2"]}`).join(',\n        ')}
       }
     },
     {"day":"${days[1].label}","date":"${days[1].iso}","prep":[...],"meals":{...}},

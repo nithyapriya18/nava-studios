@@ -60,6 +60,7 @@ export function OnboardingWizard() {
       mealsPerDay: prefs.mealsPerDay ?? 3,
       additionalInstructions: prefs.additionalInstructions?.trim() || undefined,
       planStartDate: prefs.planStartDate ?? new Date().toISOString().split('T')[0],
+      planStartMeal: prefs.planStartMeal ?? 'breakfast',
       setupComplete: true,
       setupDate: new Date().toISOString(),
     }
