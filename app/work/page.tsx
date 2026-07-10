@@ -14,6 +14,30 @@ const allWork: WorkCardProps[] = [
     afterText:
       'A single web app handles forward + reverse GST and itemized bill totals, with a login-gated live version.',
   },
+  {
+    slug: 'easycook',
+    title: 'EasyCook — the week’s meals, decided',
+    problem: 'The nightly "what do we eat tomorrow" negotiation',
+    outcome: 'A week of meals planned around the household in one tap',
+    metric: '7 dinners in 1 tap',
+    tags: ['Family', 'AI', 'Verity Home'],
+    beforeText:
+      'Meal planning is a nightly negotiation: what’s in the fridge, who eats what, whose day ran late — decided at 6pm with no plan.',
+    afterText:
+      'EasyCook plans the whole week around the household’s tastes, allergies and schedule, with recipes, prep notes and allergy-aware swaps.',
+  },
+  {
+    slug: 'snugglefox',
+    title: 'SnuggleFox — bedtime stories, made just for them',
+    problem: 'The fourth "one more story" of the night',
+    outcome: 'A new, personal story every night — parents stay in control',
+    metric: 'A new story every night',
+    tags: ['Family', 'AI', 'Verity Home'],
+    beforeText:
+      'Every parent runs out of fresh bedtime material. The same three books on rotation, invented plots trailing off mid-sentence.',
+    afterText:
+      'SnuggleFox weaves the child’s name, their day, and their favourite things into a gentle, age-appropriate story — a new one every night.',
+  },
 ]
 
 export default function WorkPage() {
@@ -29,7 +53,8 @@ export default function WorkPage() {
           </AnimateIn>
           <AnimateIn delay={0.1}>
             <p className="text-text-muted text-lg md:text-xl max-w-xl leading-relaxed">
-              Real products I&apos;m shipping. Starting with the GST Calculator.
+              Real products I&apos;m shipping — business tools and two built for
+              my own family.
             </p>
           </AnimateIn>
         </div>
