@@ -88,7 +88,7 @@ export const PRODUCTS: Product[] = [
       'Saved clients & items once you sign in',
     ],
     price: 'Free to start · ₹199/mo to save & track',
-    status: 'building',
+    status: 'beta',
     href: '/tools/one-page-invoice',
   },
   {
@@ -107,7 +107,7 @@ export const PRODUCTS: Product[] = [
       'Scheduled payment reminders',
     ],
     price: 'Free for 5 invoices/mo · ₹299/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/gst-whatsapp-biller',
   },
   {
@@ -126,7 +126,7 @@ export const PRODUCTS: Product[] = [
       'One dashboard of who owes you what',
     ],
     price: 'Free for 1 client · ₹199/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/follow-up-fox',
   },
   {
@@ -221,7 +221,7 @@ export const PRODUCTS: Product[] = [
       '“Your apps ate X% of profit” report',
     ],
     price: 'Free for 100 orders/mo · ₹299/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/margin-lens',
   },
   {
@@ -259,7 +259,7 @@ export const PRODUCTS: Product[] = [
       'Year-end income report',
     ],
     price: 'Free for 2 units · ₹199/mo up to 20',
-    status: 'building',
+    status: 'beta',
     href: '/tools/rent-ledger',
   },
   {
@@ -278,7 +278,7 @@ export const PRODUCTS: Product[] = [
       'Nothing else — deliberately',
     ],
     price: 'Free for 25 SKUs · ₹149/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/stock-sentinel',
   },
   {
@@ -354,7 +354,7 @@ export const PRODUCTS: Product[] = [
       'Works for cleaning, tutoring, repairs, anything priced by formula',
     ],
     price: 'Free with badge · ₹199/mo white-label',
-    status: 'building',
+    status: 'beta',
     href: '/tools/quote-card',
   },
   {
@@ -373,7 +373,7 @@ export const PRODUCTS: Product[] = [
       'Text now, video later',
     ],
     price: 'Free for 10 testimonials · ₹149/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/testimonial-jar',
   },
   {
@@ -449,7 +449,7 @@ export const PRODUCTS: Product[] = [
       'A record when you need it',
     ],
     price: 'Free for 1 project · ₹149/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/scope-guard',
   },
   {
@@ -468,7 +468,7 @@ export const PRODUCTS: Product[] = [
       'Import/export CSV, no lock-in',
     ],
     price: 'Free for 100 contacts · ₹149/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/tiny-crm',
   },
   {
