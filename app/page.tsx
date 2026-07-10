@@ -10,6 +10,7 @@ import { BeforeAfterToggle } from '@/components/before-after-toggle'
 import { AnimateIn } from '@/components/animate-in'
 import { CursorGlow } from '@/components/cursor-glow'
 import { siteConfig } from '@/config'
+import { productsByFamily, FAMILIES } from '@/lib/products'
 
 const placeholderWork: WorkCardProps[] = [
   {
@@ -108,8 +109,63 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section 2.5: Products */}
+      <section className="bg-background py-24 md:py-32">
+        <div className="max-w-layout mx-auto px-6 md:px-8">
+          <AnimateIn className="mb-3">
+            <h2 className="font-display font-semibold text-3xl md:text-4xl text-text-primary">
+              Small software. Fair prices. One job each.
+            </h2>
+          </AnimateIn>
+          <AnimateIn delay={0.05} className="mb-12 md:mb-14">
+            <p className="text-text-muted text-lg max-w-2xl">
+              Tools for the problems big software companies won&apos;t touch —
+              released one at a time, honestly labeled.
+            </p>
+          </AnimateIn>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[...productsByFamily().entries()]
+              .filter(([, products]) => products.length > 0)
+              .map(([familyKey, products]) => {
+                const family = FAMILIES[familyKey]
+                const liveCount = products.filter(
+                  (p) => p.status === 'live' || p.status === 'beta',
+                ).length
+                return (
+                  <AnimateIn key={familyKey}>
+                    <Link
+                      href="/products"
+                      className="group flex h-full flex-col gap-2 rounded-2xl border border-border bg-surface p-6 transition-all duration-200 hover:border-accent/40 hover:shadow-md"
+                    >
+                      <h3 className="font-display text-lg font-semibold text-text-primary">
+                        {family.name}
+                      </h3>
+                      <p className="text-sm text-text-muted">{family.promise}</p>
+                      <p className="mt-auto pt-3 text-xs font-medium text-accent">
+                        {products.length} tools
+                        {liveCount > 0 ? ` · ${liveCount} live` : ''}
+                      </p>
+                    </Link>
+                  </AnimateIn>
+                )
+              })}
+          </div>
+
+          <AnimateIn className="mt-10">
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:gap-3 transition-all duration-200"
+            >
+              Browse all products
+              <ArrowRight size={14} />
+            </Link>
+          </AnimateIn>
+        </div>
+      </section>
+
       {/* Section 3: How It Works */}
-      <section id="how-it-works" className="bg-background py-24 md:py-32">
+      <section id="how-it-works" className="bg-surface py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <AnimateIn className="mb-14 md:mb-16">
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-text-primary">
@@ -122,7 +178,7 @@ export default function Home() {
       </section>
 
       {/* Section 4: About */}
-      <section className="bg-surface py-24 md:py-32">
+      <section className="bg-background py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
             {/* Left: photo */}
@@ -190,7 +246,7 @@ export default function Home() {
       </section>
 
       {/* Section 5: Selected Work */}
-      <section className="bg-background py-24 md:py-32">
+      <section className="bg-surface py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <AnimateIn className="mb-3">
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-text-primary">
@@ -222,7 +278,7 @@ export default function Home() {
       </section>
 
       {/* Section 6: Writing Preview */}
-      <section className="bg-surface py-24 md:py-32">
+      <section className="bg-background py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <AnimateIn className="mb-3">
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-text-primary">
@@ -256,7 +312,7 @@ export default function Home() {
       </section>
 
       {/* Section 7: Social Proof */}
-      <section className="bg-background py-24 md:py-32">
+      <section className="bg-surface py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <AnimateIn className="mb-12 md:mb-14">
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-text-primary">
@@ -278,7 +334,7 @@ export default function Home() {
       </section>
 
       {/* Section 8: Honest Scope */}
-      <section className="bg-surface py-24 md:py-32">
+      <section className="bg-background py-24 md:py-32">
         <div className="max-w-layout mx-auto px-6 md:px-8">
           <AnimateIn>
             <div className="max-w-2xl border-l-4 border-accent pl-8 py-2">

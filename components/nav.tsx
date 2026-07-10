@@ -10,8 +10,10 @@ import { MarqueeStrip } from '@/components/marquee-strip'
 import { Logo } from '@/components/logo'
 
 const navLinks = [
+  { href: '/products', label: 'Products' },
   { href: '/work', label: 'Work' },
   { href: '/writing', label: 'Writing' },
+  { href: '/about', label: 'About' },
 ]
 
 export function Nav() {

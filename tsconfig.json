@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "node_modules",
-    "apps/gst-mobile"
+    "apps/gst-mobile",
+    "apps/easy-cook",
+    "apps/snugglefox"
   ]
 }

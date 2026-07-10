@@ -25,8 +25,17 @@ export function Footer() {
 
           {/* Right: links */}
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+            <Link href="/products" className="text-text-muted hover:text-accent transition-colors">
+              Products
+            </Link>
             <Link href="/privacy" className="text-text-muted hover:text-accent transition-colors">
               Privacy
+            </Link>
+            <Link href="/terms" className="text-text-muted hover:text-accent transition-colors">
+              Terms
+            </Link>
+            <Link href="/refunds" className="text-text-muted hover:text-accent transition-colors">
+              Refunds
             </Link>
             <Link href="/support" className="text-text-muted hover:text-accent transition-colors">
               Support
