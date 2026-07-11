@@ -33,16 +33,14 @@ const styles = StyleSheet.create({
   chip: {
     backgroundColor: colors.chip,
     borderRadius: radius.pill,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+    paddingHorizontal: 16,
+    paddingVertical: 11,
   },
   chipActive: {
-    backgroundColor: colors.chipActive,
+    backgroundColor: colors.primaryContainer,
     borderRadius: radius.pill,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 11,
   },
   text: {
     color: colors.text,
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
   },
   textActive: {
     color: colors.chipTextActive,
-    fontWeight: '800',
+    fontWeight: '900',
     fontSize: typography.small,
   },
   pressed: {

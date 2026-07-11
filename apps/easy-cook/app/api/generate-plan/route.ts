@@ -192,33 +192,15 @@ PLAN RULES:
 2. Vary cuisines — no same cuisine on consecutive days
 3. Accurate macros for full meal including sides
 4. Use pantry items first; grocery list = items NOT in pantry
-5. Max 8 ingredients per meal (include accompaniments)
-6. Prep notes: if any ingredient needs advance prep (soaking, marinating, thawing), add it to the PREVIOUS day's prep array
-7. Cooking steps: clear, numbered, max 6 steps, max 12 words each
-${day1Note ? `8. ${day1Note}` : ''}
+5. STRICT MAX 6 ingredients per meal (include accompaniments, cut the rest)
+6. Prep notes: if any ingredient needs advance prep, add to PREVIOUS day's prep array. Max 1 prep note per day.
+7. desc: max 6 words. NO ins field — instructions are loaded separately on demand
+${day1Note ? `9. ${day1Note}` : ''}
 PLAN DATES:
 ${days.map((d, i) => `  Day ${i}: ${d.label} (${d.iso})`).join('\n')}
 
-Return ONLY valid compact JSON (no markdown):
-{
-  "id":"plan-001","at":"<ISO>","week":"${weekLabel}","start":"${startDate}",
-  "days":[
-    {
-      "day":"${days[0].label}","date":"${days[0].iso}",
-      "prep":["Soak X overnight for tomorrow if needed"],
-      "meals":{
-        ${day1MealTypes.map((m, i) => `"${m}":{"id":"d0-${m.slice(0,1)}","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"max 10 words","spice":2,"allergy":[],"sides":"Serve with X","ing":["Name|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar],"ins":["Step 1","Step 2"]}`).join(',\n        ')}
-      }
-    },
-    {"day":"${days[1].label}","date":"${days[1].iso}","prep":[...],"meals":{...}},
-    {"day":"${days[2].label}","date":"${days[2].iso}","prep":[...],"meals":{...}},
-    {"day":"${days[3].label}","date":"${days[3].iso}","prep":[...],"meals":{...}},
-    {"day":"${days[4].label}","date":"${days[4].iso}","prep":[...],"meals":{...}},
-    {"day":"${days[5].label}","date":"${days[5].iso}","prep":[...],"meals":{...}},
-    {"day":"${days[6].label}","date":"${days[6].iso}","prep":[...],"meals":{...}}
-  ],
-  "grocery":[{"n":"","qty":"","unit":"","cat":"","meals":["meal name"]}]
-}
+Output MINIFIED JSON only — no spaces, no newlines, no markdown. Every byte counts.
+{"id":"plan-001","at":"<ISO>","week":"${weekLabel}","start":"${startDate}","days":[{"day":"${days[0].label}","date":"${days[0].iso}","prep":["prep note"],"meals":{${day1MealTypes.map((m) => `"${m}":{"id":"d0-${m.slice(0,1)}","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"6 words","spice":2,"allergy":[],"sides":"X rotis","ing":["Name|qty|unit|cat"],"mac":[cal,p,c,f,fi,s]}`).join(',')}}},{"day":"${days[1].label}","date":"${days[1].iso}","prep":[...],"meals":{...}},{"day":"${days[2].label}","date":"${days[2].iso}","prep":[...],"meals":{...}},{"day":"${days[3].label}","date":"${days[3].iso}","prep":[...],"meals":{...}},{"day":"${days[4].label}","date":"${days[4].iso}","prep":[...],"meals":{...}},{"day":"${days[5].label}","date":"${days[5].iso}","prep":[...],"meals":{...}},{"day":"${days[6].label}","date":"${days[6].iso}","prep":[...],"meals":{...}}],"grocery":[{"n":"","qty":"","unit":"","cat":"","meals":["meal name"]}]}
 
 Category codes: prod=produce dairy=dairy meat=meat-seafood grain=grains-legumes spice=spices-condiments oil=oils-fats bev=beverages frz=frozen can=canned other=other
 mac order: [calories,protein_g,carbs_g,fat_g,fiber_g,sugar_g]`
@@ -246,7 +228,7 @@ export async function POST(req: NextRequest) {
 
     const stream = client.messages.stream({
       model: 'claude-haiku-4-5',
-      max_tokens: 8000,
+      max_tokens: 8192,
       messages: [{ role: 'user', content: prompt }],
     })
 

@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { StepCard } from '@/components/ui/StepCard'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
@@ -25,10 +27,31 @@ function defaultStartMeal(): 'breakfast' | 'lunch' | 'dinner' {
 }
 
 export function WelcomeStep({ prefs, onChange, onNext }: Props) {
+  const router = useRouter()
   const today = new Date().toISOString().split('T')[0]
   const selectedDate = prefs.planStartDate ?? today
   const isToday = selectedDate === today
   const selectedMeal = prefs.planStartMeal ?? (isToday ? defaultStartMeal() : 'breakfast')
+  const [recovering, setRecovering] = useState(false)
+  const [recoverError, setRecoverError] = useState<string | null>(null)
+
+  async function recoverHousehold() {
+    setRecovering(true)
+    setRecoverError(null)
+    try {
+      const res = await fetch('/api/household/recover', { method: 'POST' })
+      if (res.ok) {
+        router.replace('/meal-plan')
+      } else {
+        const body = await res.json().catch(() => ({}))
+        setRecoverError(body.error ?? 'Could not find an existing household to recover.')
+      }
+    } catch {
+      setRecoverError('Network error.')
+    } finally {
+      setRecovering(false)
+    }
+  }
 
   function handleDateChange(date: string) {
     const isTodayNow = date === today
@@ -115,6 +138,21 @@ export function WelcomeStep({ prefs, onChange, onNext }: Props) {
               </p>
             )}
           </div>
+        </div>
+
+        {/* Recover existing household */}
+        <div className="rounded-xl border border-accent/30 bg-accent-light px-4 py-3 space-y-2">
+          <p className="text-sm font-medium text-accent">Already set up before?</p>
+          <p className="text-xs text-text-muted">If you had a household set up earlier, click below to recover it instead of starting over.</p>
+          {recoverError && <p className="text-xs text-red-500">{recoverError}</p>}
+          <button
+            type="button"
+            onClick={recoverHousehold}
+            disabled={recovering}
+            className="w-full py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-colors disabled:opacity-60"
+          >
+            {recovering ? 'Recovering…' : 'Recover my existing household →'}
+          </button>
         </div>
 
         <Button

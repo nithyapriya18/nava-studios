@@ -84,10 +84,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   control: {
-    borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.control,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceAlt,
     paddingHorizontal: spacing.md,
     paddingVertical: 12,
   },
@@ -108,8 +106,6 @@ const styles = StyleSheet.create({
   modalCard: {
     backgroundColor: colors.surface,
     borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.lg,
     maxHeight: '80%',
   },
@@ -120,10 +116,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   searchInput: {
-    borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.control,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceAlt,
     paddingHorizontal: 12,
     paddingVertical: 10,
     color: colors.text,
@@ -133,11 +127,11 @@ const styles = StyleSheet.create({
   optionRow: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    marginBottom: 4,
+    borderRadius: radius.lg,
   },
   optionActive: {
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.secondaryContainer,
   },
   optionText: {
     color: colors.text,

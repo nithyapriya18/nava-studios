@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
   controlWrap: {
     position: 'relative',
     justifyContent: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.surfaceHighest,
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: radius.control,
+    borderTopRightRadius: radius.control,
   },
   prefix: {
     position: 'absolute',
@@ -56,15 +61,13 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
   },
   input: {
-    borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.control,
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
     paddingHorizontal: 12,
     paddingVertical: 12,
     color: colors.text,
     fontSize: typography.body,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   inputWithPrefix: {
     paddingLeft: 28,

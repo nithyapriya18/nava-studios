@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Audit Trail | Sovereign Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffdbd1",
+                    "outline": "#86736e",
+                    "on-tertiary-container": "#c3dae6",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-high": "#e6e8ea",
+                    "on-surface-variant": "#53433f",
+                    "surface": "#f7f9fb",
+                    "on-primary-container": "#ffcabb",
+                    "primary-fixed-dim": "#ffb59f",
+                    "tertiary-fixed-dim": "#b4cad6",
+                    "primary": "#703321",
+                    "on-surface": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary-container": "#0f6f62",
+                    "on-primary-fixed-variant": "#723522",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb59f",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "background": "#f7f9fb",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-fixed": "#a0f2e1",
+                    "secondary": "#046b5e",
+                    "surface-bright": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#354a53",
+                    "tertiary": "#334852",
+                    "secondary-container": "#9defde",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-fixed": "#00201b",
+                    "surface-tint": "#8f4c38",
+                    "outline-variant": "#d9c2bb",
+                    "on-primary-fixed": "#3a0b01",
+                    "inverse-surface": "#2d3133",
+                    "on-background": "#191c1e",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#4b606a",
+                    "secondary-fixed-dim": "#84d5c5",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#eceef0",
+                    "primary-container": "#8d4a36",
+                    "on-tertiary-fixed": "#071e27",
+                    "tertiary-fixed": "#cfe6f2",
+                    "surface-dim": "#d8dadc",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#005046"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Work Sans"],
+                    "label": ["Work Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .headline-sm { font-size: 1.5rem; line-height: 2rem; font-weight: 700; }
+        .body-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .display-lg { font-size: 3.5rem; line-height: 4rem; font-weight: 800; letter-spacing: -0.02em; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-[#F7F9FB] dark:bg-gray-900 flex justify-between items-center px-6 h-16 w-full docked full-width top-0 z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#8D4A36] dark:text-[#D9C2BB]" data-icon="menu">menu</span>
+<h1 class="font-headline headline-sm tracking-wider uppercase text-[#191C1E] dark:text-white text-xl font-bold tracking-tighter">Sovereign Ledger</h1>
+</div>
+<div class="h-10 w-10 rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Professional studio portrait of a business consultant with neutral lighting and clean corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJvmSg4fPo9UH5Kgz8_dN8XzS8jWO_PIIzWhhT4kl-BlIUmr2De9nDBFgNZOr6_O9Wifa1lCDIa4OBwRRj3-jO5MHURHbQCRYR0-BolIJVuUaSVAQUxbpd83XqU16uZtA9C9S6J57WgMdTfF3ZNEmDwmvYIU9jcc8SJsUrhSSQu71Gx536LAmw5jPtZsQpm2Z_IiU3MvkGOz-0rwGSy1Divy9OBWb_3jYf-P42J2et6jguw6w_lxeM1tBuKU3NJMs6hsc1XEXWnjIF"/>
+</div>
+</header>
+<main class="px-6 pt-8 pb-12 max-w-2xl mx-auto">
+<!-- Editorial Header Section -->
+<section class="mb-10">
+<div class="flex flex-col gap-1">
+<span class="text-secondary font-medium tracking-[0.2em] uppercase text-xs">The Archives</span>
+<h2 class="font-headline text-4xl font-extrabold text-on-surface tracking-tight">Audit Trail</h2>
+</div>
+<!-- Bento-style Summary Grid (Subtle Layering) -->
+<div class="grid grid-cols-2 gap-4 mt-8">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_32px_rgba(25,28,30,0.06)] flex flex-col gap-2">
+<span class="text-outline text-xs font-semibold uppercase tracking-wider">Total Volume</span>
+<p class="font-headline text-2xl font-bold">₹4,82,900</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-2">
+<span class="text-outline text-xs font-semibold uppercase tracking-wider">Records</span>
+<p class="font-headline text-2xl font-bold">142 Items</p>
+</div>
+</div>
+</section>
+<!-- Filter Controls (No borders, background shift) -->
+<nav class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20">All</button>
+<button class="bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest px-6 py-2.5 rounded-full text-sm font-semibold transition-colors">Invoices</button>
+<button class="bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest px-6 py-2.5 rounded-full text-sm font-semibold transition-colors">Calculations</button>
+</nav>
+<!-- Chronological List -->
+<div class="space-y-6">
+<!-- Date Group Marker -->
+<div class="sticky top-20 z-10 bg-surface/80 backdrop-blur-sm py-2 mb-2">
+<span class="text-outline text-xs font-bold uppercase tracking-[0.15em]">Tuesday, 24 Oct</span>
+</div>
+<!-- Record Card: Invoice -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-6 shadow-[0_12px_32px_rgba(25,28,30,0.04)] hover:shadow-[0_12px_32px_rgba(25,28,30,0.08)] transition-all flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface">Invoice #SL-2024-089</h3>
+<p class="text-xs text-outline font-medium">B2B Supply · Tech Solutions Inc.</p>
+</div>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Filed</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/15">
+<div>
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">Total Amount</span>
+<p class="font-headline text-lg font-bold text-on-surface">₹1,24,000</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">GST (18%)</span>
+<p class="font-headline text-lg font-bold text-secondary">₹22,320</p>
+</div>
+</div>
+</div>
+<!-- Record Card: Calculation -->
+<div class="group relative bg-surface-container-low rounded-xl p-6 transition-all flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="calculate">calculate</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface">Tax Estimation</h3>
+<p class="text-xs text-outline font-medium">Q3 Projections · Internal</p>
+</div>
+</div>
+<div class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Draft</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/15">
+<div>
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">Estimated</span>
+<p class="font-headline text-lg font-bold text-on-surface opacity-60">₹85,000</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">Net Payable</span>
+<p class="font-headline text-lg font-bold text-primary">₹15,300</p>
+</div>
+</div>
+</div>
+<!-- Date Group Marker -->
+<div class="sticky top-20 z-10 bg-surface/80 backdrop-blur-sm py-2 mb-2 mt-12">
+<span class="text-outline text-xs font-bold uppercase tracking-[0.15em]">Monday, 23 Oct</span>
+</div>
+<!-- Record Card: Invoice (Zebra style through surface shift) -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-6 shadow-[0_12px_32px_rgba(25,28,30,0.04)] flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface">Invoice #SL-2024-088</h3>
+<p class="text-xs text-outline font-medium">Consultancy · Vertex Media</p>
+</div>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Filed</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/15">
+<div>
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">Total Amount</span>
+<p class="font-headline text-lg font-bold text-on-surface">₹2,45,000</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] uppercase text-outline tracking-wider font-bold">GST (12%)</span>
+<p class="font-headline text-lg font-bold text-secondary">₹29,400</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (The Shell) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-4 px-2 bg-[#F7F9FB]/80 dark:bg-gray-900/80 backdrop-blur-md z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(25,28,30,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calculate">calculate</span>
+<span class="font-label font-medium body-sm">Calculate</span>
+</a>
+<!-- ACTIVE STATE: History -->
+<a class="flex flex-col items-center justify-center bg-[#F2F4F6] dark:bg-gray-800 text-[#00695C] dark:text-[#4DB6AC] rounded-xl px-4 py-1 scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label font-medium body-sm">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label font-medium body-sm">Invoices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label font-medium body-sm">Settings</span>
+</a>
+</nav>
+</body></html>

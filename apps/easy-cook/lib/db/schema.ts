@@ -21,6 +21,7 @@ export const households = pgTable('households', {
   additionalInstructions: text('additional_instructions'),
   planStartDate: text('plan_start_date'),
   planStartMeal: text('plan_start_meal'),
+  mealTimes: jsonb('meal_times'),
   setupComplete: boolean('setup_complete').notNull().default(false),
   setupDate: timestamp('setup_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

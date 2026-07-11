@@ -6,16 +6,30 @@ import type { DayPlan } from '@/lib/types'
 
 interface SwappingMeal { dayIndex: number; mealType: string }
 
+interface MealTimes { breakfast: string; lunch: string; dinner: string; snack?: string }
+
 interface WeekCalendarProps {
   days: DayPlan[]
   mealsPerDay: number
   startDate?: string
+  mealTimes?: MealTimes
   onSwap?: (dayIndex: number, mealType: string, reason: string) => void
   swappingMeal?: SwappingMeal | null
   onMealClick?: (dayIndex: number, mealType: string) => void
 }
 
-export function WeekCalendar({ days, mealsPerDay, startDate, onSwap, swappingMeal, onMealClick }: WeekCalendarProps) {
+function getNextMeal(mealTimes?: MealTimes): string | null {
+  if (!mealTimes) return null
+  const now = new Date()
+  const nowMins = now.getHours() * 60 + now.getMinutes()
+  const meals = ['breakfast', 'lunch', 'dinner', 'snack'].filter((m) => mealTimes[m as keyof MealTimes])
+  const toMins = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m }
+  // find the next meal that hasn't passed yet (within 30 min grace)
+  const upcoming = meals.find((m) => toMins(mealTimes[m as keyof MealTimes]!) >= nowMins - 30)
+  return upcoming ?? null
+}
+
+export function WeekCalendar({ days, mealsPerDay, startDate, mealTimes, onSwap, swappingMeal, onMealClick }: WeekCalendarProps) {
   // Default to today's day index if it falls within this plan's range
   const defaultDay = (() => {
     if (!startDate) return 0
@@ -26,6 +40,8 @@ export function WeekCalendar({ days, mealsPerDay, startDate, onSwap, swappingMea
 
   const [selectedDay, setSelectedDay] = useState<number>(defaultDay)
   const activeDay = days[selectedDay]
+  const isToday = selectedDay === defaultDay
+  const nextMeal = isToday ? getNextMeal(mealTimes) : null
 
   function makeSwapHandler(dayIndex: number, mealType: string) {
     return onSwap ? (reason: string) => onSwap(dayIndex, mealType, reason) : undefined
@@ -88,32 +104,32 @@ export function WeekCalendar({ days, mealsPerDay, startDate, onSwap, swappingMea
           <h3 className="font-display text-lg font-semibold text-text-primary">
             {activeDay.dayName}
           </h3>
+          {nextMeal && (
+            <p className="text-xs font-medium text-accent flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block animate-pulse" />
+              Next up: {nextMeal.charAt(0).toUpperCase() + nextMeal.slice(1)}
+            </p>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <MealCard
-              meal={activeDay.meals.breakfast}
-              onSwap={makeSwapHandler(activeDay.dayIndex, 'breakfast')}
-              swapping={isSwapping(activeDay.dayIndex, 'breakfast')}
-              onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, 'breakfast') : undefined}
-            />
-            <MealCard
-              meal={activeDay.meals.lunch}
-              onSwap={makeSwapHandler(activeDay.dayIndex, 'lunch')}
-              swapping={isSwapping(activeDay.dayIndex, 'lunch')}
-              onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, 'lunch') : undefined}
-            />
-            <MealCard
-              meal={activeDay.meals.dinner}
-              onSwap={makeSwapHandler(activeDay.dayIndex, 'dinner')}
-              swapping={isSwapping(activeDay.dayIndex, 'dinner')}
-              onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, 'dinner') : undefined}
-            />
+            {(['breakfast', 'lunch', 'dinner'] as const).map((type) => (
+              <div key={type} className={nextMeal === type ? 'ring-2 ring-accent rounded-xl' : ''}>
+                <MealCard
+                  meal={activeDay.meals[type]}
+                  onSwap={makeSwapHandler(activeDay.dayIndex, type)}
+                  swapping={isSwapping(activeDay.dayIndex, type)}
+                  onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, type) : undefined}
+                />
+              </div>
+            ))}
             {activeDay.meals.snack && (
-              <MealCard
-                meal={activeDay.meals.snack}
-                onSwap={makeSwapHandler(activeDay.dayIndex, 'snack')}
-                swapping={isSwapping(activeDay.dayIndex, 'snack')}
-                onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, 'snack') : undefined}
-              />
+              <div className={nextMeal === 'snack' ? 'ring-2 ring-accent rounded-xl' : ''}>
+                <MealCard
+                  meal={activeDay.meals.snack}
+                  onSwap={makeSwapHandler(activeDay.dayIndex, 'snack')}
+                  swapping={isSwapping(activeDay.dayIndex, 'snack')}
+                  onClick={onMealClick ? () => onMealClick(activeDay.dayIndex, 'snack') : undefined}
+                />
+              </div>
             )}
           </div>
 

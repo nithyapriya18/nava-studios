@@ -132,7 +132,7 @@ export function MealCard({ meal, compact = false, onSwap, swapping = false, onCl
           {onSwap && (
             <button
               type="button"
-              onClick={() => setShowSwapPanel((v) => !v)}
+              onClick={(e) => { e.stopPropagation(); setShowSwapPanel((v) => !v) }}
               disabled={swapping}
               title="Swap this meal"
               className="shrink-0 flex items-center gap-1 text-xs text-text-muted hover:text-accent transition-colors px-2 py-1 rounded-lg hover:bg-surface disabled:opacity-40"
@@ -152,7 +152,7 @@ export function MealCard({ meal, compact = false, onSwap, swapping = false, onCl
                 <button
                   key={reason}
                   type="button"
-                  onClick={() => handleSwap(reason)}
+                  onClick={(e) => { e.stopPropagation(); handleSwap(reason) }}
                   className="text-xs px-2.5 py-1 rounded-full border border-border bg-white hover:border-accent hover:text-accent transition-colors"
                 >
                   {reason}

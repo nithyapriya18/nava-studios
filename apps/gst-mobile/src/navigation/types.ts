@@ -10,6 +10,8 @@ export type MoreStackParamList = {
 export type MainTabParamList = {
   Calculate: { presetGst?: string } | undefined
   Lookup: undefined
+  History: undefined
   Invoice: undefined
-  More: NavigatorScreenParams<MoreStackParamList>
+  Settings: undefined
+  More?: NavigatorScreenParams<MoreStackParamList>
 }

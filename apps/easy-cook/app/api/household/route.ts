@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { eq } from 'drizzle-orm'
+import { eq, isNull } from 'drizzle-orm'
 import { db, schema } from '@/lib/db/client'
 import { auth } from '@/auth'
 import type { UserPreferences } from '@/lib/types'
@@ -14,10 +14,36 @@ export async function GET(_req: NextRequest) {
   const userId = await getUserId()
   if (!userId) return NextResponse.json(null, { status: 401 })
 
-  const [household] = await db
-    .select()
-    .from(schema.households)
-    .where(eq(schema.households.userId, userId))
+  let household: typeof schema.households.$inferSelect | undefined
+  try {
+    ;[household] = await db
+      .select()
+      .from(schema.households)
+      .where(eq(schema.households.userId, userId))
+  } catch (err) {
+    // Missing DB column — migration not yet run
+    console.error('[household GET] DB error (run migrations):', err)
+    return NextResponse.json({ error: 'db_migration_needed' }, { status: 503 })
+  }
+
+  // No household found for this Google user — check for an orphaned row (created before OAuth)
+  // and claim it automatically
+  if (!household) {
+    const [orphan] = await db
+      .select()
+      .from(schema.households)
+      .where(isNull(schema.households.userId))
+      .limit(1)
+
+    if (orphan) {
+      // Claim it: stamp this user's ID onto the orphaned household
+      await db
+        .update(schema.households)
+        .set({ userId, updatedAt: new Date() })
+        .where(eq(schema.households.id, orphan.id))
+      household = { ...orphan, userId }
+    }
+  }
 
   if (!household) return NextResponse.json(null)
 
@@ -39,6 +65,7 @@ export async function GET(_req: NextRequest) {
     additionalInstructions: household.additionalInstructions ?? undefined,
     planStartDate: household.planStartDate ?? undefined,
     planStartMeal: (household.planStartMeal as UserPreferences['planStartMeal']) ?? undefined,
+    mealTimes: (household.mealTimes as UserPreferences['mealTimes']) ?? undefined,
     setupComplete: household.setupComplete,
     setupDate: household.setupDate?.toISOString() ?? '',
     members: members.map((m) => ({
@@ -83,6 +110,7 @@ export async function POST(req: NextRequest) {
       additionalInstructions: prefs.additionalInstructions ?? null,
       planStartDate: prefs.planStartDate ?? null,
       planStartMeal: prefs.planStartMeal ?? null,
+      mealTimes: prefs.mealTimes ?? null,
       setupComplete: prefs.setupComplete,
       setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
       updatedAt: new Date(),
@@ -97,6 +125,7 @@ export async function POST(req: NextRequest) {
         additionalInstructions: prefs.additionalInstructions ?? null,
         planStartDate: prefs.planStartDate ?? null,
         planStartMeal: prefs.planStartMeal ?? null,
+        mealTimes: prefs.mealTimes ?? null,
         setupComplete: prefs.setupComplete,
         setupDate: prefs.setupDate ? new Date(prefs.setupDate) : null,
         updatedAt: new Date(),

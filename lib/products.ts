@@ -1,3 +1,5 @@
+import { siteConfig } from '@/config'
+
 export type ProductStatus = 'live' | 'beta' | 'building' | 'planned'
 
 export type ProductFamily =
@@ -508,6 +510,7 @@ export const PRODUCTS: Product[] = [
     ],
     price: 'Free while in beta',
     status: 'beta',
+    href: siteConfig.appLinks.easycook,
   },
   {
     slug: 'snugglefox',
@@ -525,6 +528,7 @@ export const PRODUCTS: Product[] = [
     ],
     price: 'Free while in beta',
     status: 'beta',
+    href: siteConfig.appLinks.snugglefox,
   },
 ]
 

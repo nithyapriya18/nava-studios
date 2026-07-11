@@ -13,38 +13,41 @@ export const appStyles = StyleSheet.create({
   },
   title: {
     fontSize: typography.h1,
-    fontWeight: '800',
+    fontWeight: '900',
     color: colors.text,
-    letterSpacing: -0.2,
+    letterSpacing: -0.6,
   },
   subtitle: {
     marginTop: spacing.xs,
     fontSize: typography.small,
     color: colors.textMuted,
+    lineHeight: 20,
   },
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceAlt,
     borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.lg,
   },
   sectionTitle: {
     fontSize: typography.h2,
-    fontWeight: '800',
+    fontWeight: '900',
     color: colors.text,
     marginBottom: spacing.sm,
+    letterSpacing: 0.3,
   },
   label: {
     fontSize: typography.small,
-    fontWeight: '700',
-    color: colors.text,
+    fontWeight: '800',
+    color: colors.outline,
     marginBottom: spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
   },
   helper: {
     fontSize: typography.small,
     color: colors.textMuted,
     marginTop: spacing.xs,
+    lineHeight: 18,
   },
   row: {
     flexDirection: 'row',
@@ -52,9 +55,8 @@ export const appStyles = StyleSheet.create({
     alignItems: 'center',
   },
   divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: spacing.md,
+    height: spacing.md,
+    marginVertical: spacing.sm,
   },
 })
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Clock, Flame, Users, ChefHat, CheckCircle } from 'lucide-react'
+import { X, Clock, Flame, Users, ChefHat, CheckCircle, RefreshCw } from 'lucide-react'
 import type { Meal } from '@/lib/types'
 
 const MEAL_TYPE_COLORS = {
@@ -25,6 +25,9 @@ export function MealDetail({ meal, dayName, onClose, onMarkCooked }: MealDetailP
   const totalTime = meal.prepTime + meal.cookTime
   const [cooked, setCooked] = useState(false)
   const [marking, setMarking] = useState(false)
+  const [instructions, setInstructions] = useState<string[]>(meal.instructions ?? [])
+  const [loadingInstructions, setLoadingInstructions] = useState(false)
+  const [instructionsError, setInstructionsError] = useState<string | null>(null)
 
   async function handleMarkCooked() {
     if (!onMarkCooked || cooked) return
@@ -32,6 +35,30 @@ export function MealDetail({ meal, dayName, onClose, onMarkCooked }: MealDetailP
     await onMarkCooked()
     setCooked(true)
     setMarking(false)
+  }
+
+  async function loadInstructions() {
+    setLoadingInstructions(true)
+    setInstructionsError(null)
+    try {
+      const res = await fetch('/api/generate-instructions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mealName: meal.name,
+          ingredients: meal.ingredients,
+          servings: meal.servings,
+          cuisine: meal.cuisine,
+        }),
+      })
+      if (!res.ok) throw new Error('Failed')
+      const data = await res.json()
+      setInstructions(data.instructions ?? [])
+    } catch {
+      setInstructionsError('Could not load recipe. Try again.')
+    } finally {
+      setLoadingInstructions(false)
+    }
   }
 
   return (
@@ -134,13 +161,13 @@ export function MealDetail({ meal, dayName, onClose, onMarkCooked }: MealDetailP
           )}
 
           {/* Cooking instructions */}
-          {meal.instructions && meal.instructions.length > 0 && (
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-3 flex items-center gap-1.5">
-                <ChefHat size={12} /> How to make
-              </h3>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-3 flex items-center gap-1.5">
+              <ChefHat size={12} /> How to make
+            </h3>
+            {instructions.length > 0 ? (
               <ol className="space-y-3">
-                {meal.instructions.map((step, i) => (
+                {instructions.map((step, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm">
                     <span className="shrink-0 w-6 h-6 rounded-full bg-accent text-white text-xs font-semibold flex items-center justify-center mt-0.5">
                       {i + 1}
@@ -149,8 +176,23 @@ export function MealDetail({ meal, dayName, onClose, onMarkCooked }: MealDetailP
                   </li>
                 ))}
               </ol>
-            </div>
-          )}
+            ) : (
+              <div className="rounded-xl border border-border p-4 text-center space-y-3">
+                {instructionsError && (
+                  <p className="text-xs text-red-500">{instructionsError}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={loadInstructions}
+                  disabled={loadingInstructions}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 disabled:opacity-60 transition-colors"
+                >
+                  <RefreshCw size={13} className={loadingInstructions ? 'animate-spin' : ''} />
+                  {loadingInstructions ? 'Loading recipe…' : 'Load recipe'}
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Mark as cooked */}
           {onMarkCooked && (

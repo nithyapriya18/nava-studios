@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession, signOut } from 'next-auth/react'
+import { LogOut } from 'lucide-react'
 import { ProgressBar } from './ProgressBar'
 import { WelcomeStep } from './steps/WelcomeStep'
 import { HouseholdStep } from './steps/HouseholdStep'
@@ -10,11 +12,12 @@ import { CuisineStep } from './steps/CuisineStep'
 import { LikesDislikesStep } from './steps/LikesDislikes'
 import { HealthGoalsStep } from './steps/HealthGoalsStep'
 import { PantryStep } from './steps/PantryStep'
+import { MealTimesStep } from './steps/MealTimesStep'
 import { InstructionsStep } from './steps/InstructionsStep'
 import { savePreferences, saveCurrentPlan } from '@/lib/storage'
 import type { UserPreferences } from '@/lib/types'
 
-const TOTAL_STEPS = 8
+const TOTAL_STEPS = 9
 
 const DEFAULT_PREFS: Partial<UserPreferences> = {
   householdName: '',
@@ -28,6 +31,7 @@ const DEFAULT_PREFS: Partial<UserPreferences> = {
 
 export function OnboardingWizard() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [step, setStep] = useState(0)
   const [prefs, setPrefs] = useState<Partial<UserPreferences>>(DEFAULT_PREFS)
   const [generating, setGenerating] = useState(false)
@@ -61,6 +65,7 @@ export function OnboardingWizard() {
       additionalInstructions: prefs.additionalInstructions?.trim() || undefined,
       planStartDate: prefs.planStartDate ?? new Date().toISOString().split('T')[0],
       planStartMeal: prefs.planStartMeal ?? 'breakfast',
+      mealTimes: prefs.mealTimes ?? { breakfast: '08:00', lunch: '13:00', dinner: '20:00' },
       setupComplete: true,
       setupDate: new Date().toISOString(),
     }
@@ -106,11 +111,29 @@ export function OnboardingWizard() {
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-start px-4 py-8">
         <div className="w-full max-w-2xl space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
-              <span className="text-white text-sm font-bold">EC</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
+                <span className="text-white text-sm font-bold">EC</span>
+              </div>
+              <span className="font-display font-semibold text-text-primary">EasyCook</span>
             </div>
-            <span className="font-display font-semibold text-text-primary">EasyCook</span>
+            {session?.user && (
+              <div className="flex items-center gap-2">
+                {session.user.image
+                  ? <img src={session.user.image} alt="" className="w-7 h-7 rounded-full" />
+                  : <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent">{session.user.name?.[0]}</div>
+                }
+                <span className="text-sm text-text-muted hidden sm:block">{session.user.email}</span>
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/login' })}
+                  className="flex items-center gap-1 text-xs text-text-muted hover:text-red-500 border border-border rounded-lg px-2 py-1.5 hover:border-red-200 transition-colors"
+                >
+                  <LogOut size={12} /> Sign out
+                </button>
+              </div>
+            )}
           </div>
 
           {step > 0 && <ProgressBar currentStep={step} totalSteps={TOTAL_STEPS} />}
@@ -153,6 +176,15 @@ export function OnboardingWizard() {
                   <PantryStep prefs={prefs} onChange={update} onNext={next} onBack={back} />
                 )}
                 {step === 7 && (
+                  <MealTimesStep
+                    prefs={prefs}
+                    mealsPerDay={prefs.mealsPerDay ?? 3}
+                    onChange={update}
+                    onNext={next}
+                    onBack={back}
+                  />
+                )}
+                {step === 8 && (
                   <InstructionsStep prefs={prefs} onChange={update} onFinish={finish} onBack={back} />
                 )}
               </>

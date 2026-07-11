@@ -1,25 +1,33 @@
 export const colors = {
-  bg: '#FBF7F0',
+  bg: '#F7F9FB',
   surface: '#FFFFFF',
-  surfaceAlt: '#F3EBDD',
-  text: '#1F1B16',
-  textMuted: '#6B5E52',
-  border: '#E6D9C8',
-  primary: '#2A2E43', // deep ink/indigo
-  accent: '#B85C38', // terracotta
-  accentSoft: '#F2D7C9',
-  success: '#2F6F55',
-  warning: '#A85B00',
+  surfaceAlt: '#F2F4F6',
+  surfaceHigh: '#E6E8EA',
+  surfaceHighest: '#E0E3E5',
+  text: '#191C1E',
+  textMuted: '#53433F',
+  border: '#D9C2BB',
+  outline: '#86736E',
+  primary: '#703321',
+  primaryContainer: '#8D4A36',
+  accent: '#046B5E',
+  accentSoft: '#9DEFDE',
+  secondaryContainer: '#9DEFDE',
+  tertiary: '#334852',
+  tertiaryContainer: '#4B606A',
+  success: '#046B5E',
+  warning: '#8D4A36',
   danger: '#B42318',
-  chip: '#EFE4D6',
-  chipActive: '#2A2E43',
-  chipText: '#1F1B16',
+  chip: '#E6E8EA',
+  chipActive: '#8D4A36',
+  chipText: '#191C1E',
   chipTextActive: '#FFFFFF',
 }
 
 export const radius = {
   card: 18,
   control: 14,
+  lg: 8,
   pill: 999,
 }
 
@@ -29,12 +37,14 @@ export const spacing = {
   md: 14,
   lg: 18,
   xl: 24,
+  xxl: 32,
 }
 
 export const typography = {
-  h1: 26,
-  h2: 18,
+  h1: 34,
+  h2: 24,
   body: 15,
   small: 13,
   mono: 13,
+  display: 44,
 }

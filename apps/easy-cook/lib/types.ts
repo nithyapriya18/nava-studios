@@ -33,6 +33,12 @@ export interface UserPreferences {
   additionalInstructions?: string
   planStartDate?: string    // ISO date, first day of the plan
   planStartMeal?: 'breakfast' | 'lunch' | 'dinner' // first meal of Day 1
+  mealTimes?: {             // when the household typically eats (24h "HH:MM")
+    breakfast: string
+    lunch: string
+    dinner: string
+    snack?: string
+  }
   setupComplete: boolean
   setupDate: string
 }

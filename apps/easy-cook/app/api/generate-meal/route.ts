@@ -66,6 +66,12 @@ export async function POST(req: NextRequest) {
 
     const hint = REASON_HINTS[reason] ?? REASON_HINTS['Different']
 
+    const adults = prefs.members.filter((m) => !m.age || parseInt(m.age) >= 12).length || 2
+    const children = prefs.members.filter((m) => m.age && parseInt(m.age) < 12).length
+    const totalSrv = adults + children
+    const rotiQty = adults * 3 + children * 2
+    const riceQty = adults * 150 + children * 75
+
     const hardRules = [
       allAllergens.length
         ? `NEVER use these allergens (household allergy): ${allAllergens.join(', ')}`
@@ -83,21 +89,30 @@ export async function POST(req: NextRequest) {
 
     const prompt = `Generate ONE replacement ${mealType} for ${dayName}.
 
-HOUSEHOLD: members=[${members}], cuisines=[${prefs.cuisinePreferences.join(',') || 'any'}], goal=${prefs.primaryGoal}
+HOUSEHOLD: ${totalSrv} people (${adults} adult${adults !== 1 ? 's' : ''}, ${children} child${children !== 1 ? 'ren' : ''})
+MEMBERS: ${members}
+CUISINES: ${prefs.cuisinePreferences.join(',') || 'any'}, GOAL: ${prefs.primaryGoal}
 PANTRY: ${pantry}
 OTHER MEALS TODAY: ${siblingList || 'none'}
 REPLACE: "${existingMealName}" — do NOT suggest the same meal again
 REASON: ${reason}. ${hint}
-${hardRules ? `\nHARD RULES (violations are unacceptable):\n${hardRules}` : ''}
+${hardRules ? `\nHARD RULES (non-negotiable):\n${hardRules}` : ''}
 
-Return ONE compact meal JSON (no markdown, no explanation):
-{"id":"d${dayIndex}-${mealType.slice(0,1)}","name":"","cui":"","prep":5,"cook":15,"srv":${prefs.members.length || 2},"desc":"max 10 words","spice":2,"allergy":[],"ing":["Name|qty|unit|cat"],"mac":[cal,protein,carbs,fat,fiber,sugar]}
+SERVING RULES:
+- Quantities must feed ${totalSrv} people
+- NEVER serve a main dish alone — always add accompaniments as ingredients
+- For roti/bread meals: include ${rotiQty} rotis total (whole wheat flour ${Math.round(rotiQty * 30)}g)
+- For rice meals: include ${riceQty}g rice total
+- Example: Paneer Bhurji must list whole wheat flour + ghee for rotis
 
-Category codes: prod dairy meat grain spice oil bev frz can other`
+Return ONE compact meal JSON (no markdown):
+{"id":"d${dayIndex}-${mealType.slice(0,1)}","name":"","cui":"","prep":10,"cook":15,"srv":${totalSrv},"desc":"max 10 words","spice":2,"allergy":[],"sides":"Serve with X (Y per adult, Z for child)","ing":["MainIngredient|qty|unit|cat","WholeWheatFlour|${Math.round(rotiQty * 30)}|g|grain"],"mac":[cal,protein,carbs,fat,fiber,sugar],"ins":["Step 1 max 12 words","Step 2","Step 3","Step 4","Step 5"]}
+
+Category codes: prod=produce dairy=dairy meat=meat-seafood grain=grains-legumes spice=spices-condiments oil=oils-fats bev=beverages frz=frozen can=canned other=other`
 
     const message = await client.messages.create({
       model: 'claude-haiku-4-5',
-      max_tokens: 600,
+      max_tokens: 900,
       messages: [{ role: 'user', content: prompt }],
     })
 
@@ -122,6 +137,8 @@ Category codes: prod dairy meat grain spice oil bev frz can other`
       description: c.desc,
       spiceLevel: (c.spice ?? 3) as SpiceLevel,
       allergens: c.allergy ?? [],
+      sides: c.sides,
+      instructions: c.ins ?? [],
       ingredients: (c.ing ?? []).map((s: string) => {
         const [name, quantity, unit, cat] = s.split('|')
         return { name, quantity, unit, category: CAT[cat] ?? 'other' }

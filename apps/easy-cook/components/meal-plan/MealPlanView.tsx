@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { RefreshCw, CalendarDays, ShoppingCart, Package, ChevronRight, Settings, X } from 'lucide-react'
+import { useSession, signOut } from 'next-auth/react'
+import { RefreshCw, CalendarDays, ShoppingCart, Package, ChevronRight, Settings, X, LogOut, User } from 'lucide-react'
 import { WeekCalendar } from './WeekCalendar'
 import { GroceryList } from './GroceryList'
 import { PantryAlerts } from './PantryAlerts'
@@ -32,7 +33,9 @@ interface SwappingMeal { dayIndex: number; mealType: string }
 
 export function MealPlanView() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [plan, setPlan] = useState<MealPlan | null>(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const [prefs, setPrefs] = useState<UserPreferences | null>(null)
   const [tab, setTab] = useState<Tab>('week')
   const [alerts, setAlerts] = useState<PantryAlert[]>([])
@@ -197,9 +200,6 @@ export function MealPlanView() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => router.push('/settings')}>
-              <Settings size={14} /> Settings
-            </Button>
             <Button
               variant="secondary"
               size="sm"
@@ -209,6 +209,50 @@ export function MealPlanView() {
               <RefreshCw size={14} className={regenerating ? 'animate-spin' : ''} />
               {regenerating ? 'Generating…' : 'New plan'}
             </Button>
+
+            {/* User profile button */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowUserMenu((v) => !v)}
+                className="flex items-center gap-2 rounded-xl border border-border bg-white px-2.5 py-1.5 hover:bg-surface transition-colors"
+              >
+                {session?.user?.image ? (
+                  <img src={session.user.image} alt="" className="w-6 h-6 rounded-full" />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-accent flex items-center justify-center">
+                    <User size={12} className="text-white" />
+                  </div>
+                )}
+                <span className="text-xs font-medium text-text-primary hidden sm:block max-w-[100px] truncate">
+                  {session?.user?.name?.split(' ')[0] ?? 'Account'}
+                </span>
+              </button>
+
+              {showUserMenu && (
+                <div className="absolute right-0 top-full mt-1 w-56 bg-white rounded-xl border border-border shadow-lg z-20 py-1 animate-fade-in">
+                  <div className="px-4 py-3 border-b border-border">
+                    <p className="text-sm font-medium text-text-primary truncate">{session?.user?.name}</p>
+                    <p className="text-xs text-text-muted truncate">{session?.user?.email}</p>
+                    {prefs && <p className="text-xs text-accent mt-0.5">{prefs.householdName}</p>}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setShowUserMenu(false); router.push('/settings') }}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-primary hover:bg-surface transition-colors"
+                  >
+                    <Settings size={14} /> Settings & Household
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut size={14} /> Sign out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -307,6 +351,7 @@ export function MealPlanView() {
             days={currentPlan.days}
             mealsPerDay={prefs.mealsPerDay}
             startDate={currentPlan.startDate}
+            mealTimes={prefs.mealTimes}
             onSwap={swapMeal}
             swappingMeal={swappingMeal}
             onMealClick={handleMealClick}

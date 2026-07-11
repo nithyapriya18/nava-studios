@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { colors, radius, spacing, typography } from '@/src/theme/tokens'
 
 export function Button(props: {
@@ -20,11 +21,24 @@ export function Button(props: {
     variant === 'primary' ? styles.primaryText : variant === 'secondary' ? styles.secondaryText : styles.ghostText
 
   return (
-    <Pressable onPress={props.onPress} disabled={props.disabled} style={({ pressed }) => [style, pressed && styles.pressed, props.disabled && styles.disabled]}>
-      <View style={styles.inner}>
-        {props.iconLeft ? <View style={styles.icon}>{props.iconLeft}</View> : null}
-        <Text style={textStyle}>{props.label}</Text>
-      </View>
+    <Pressable
+      onPress={props.onPress}
+      disabled={props.disabled}
+      style={({ pressed }) => [style, pressed && styles.pressed, props.disabled && styles.disabled]}
+    >
+      {variant === 'primary' ? (
+        <LinearGradient colors={[colors.primary, colors.primaryContainer]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
+          <View style={styles.inner}>
+            {props.iconLeft ? <View style={styles.icon}>{props.iconLeft}</View> : null}
+            <Text style={textStyle}>{props.label}</Text>
+          </View>
+        </LinearGradient>
+      ) : (
+        <View style={styles.inner}>
+          {props.iconLeft ? <View style={styles.icon}>{props.iconLeft}</View> : null}
+          <Text style={textStyle}>{props.label}</Text>
+        </View>
+      )}
     </Pressable>
   )
 }
@@ -40,27 +54,37 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   primary: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.control,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
+    borderRadius: radius.pill,
+    minHeight: 56,
+    overflow: 'hidden',
+    shadowColor: colors.primary,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+  },
+  gradient: {
+    minHeight: 56,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: radius.pill,
+    justifyContent: 'center',
   },
   primaryText: {
     color: '#fff',
-    fontWeight: '800',
+    fontWeight: '900',
     fontSize: typography.body,
+    letterSpacing: 0.2,
   },
   secondary: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.control,
+    backgroundColor: 'transparent',
+    borderRadius: radius.pill,
     paddingVertical: 12,
     paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    minHeight: 56,
   },
   secondaryText: {
-    color: colors.text,
-    fontWeight: '800',
+    color: colors.accent,
+    fontWeight: '900',
     fontSize: typography.body,
   },
   ghost: {
@@ -70,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   ghostText: {
-    color: colors.accent,
+    color: colors.tertiary,
     fontWeight: '800',
     fontSize: typography.body,
   },

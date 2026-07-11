@@ -24,6 +24,7 @@ export function HistoryScreen(props: {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [openId, setOpenId] = useState<string | null>(null)
+  const [kindFilter, setKindFilter] = useState<'all' | 'calc' | 'invoice'>('all')
 
   const kindLabels = useMemo(
     () => ({ calc: t(lang, 'historyKindCalc'), invoice: t(lang, 'historyKindInvoice') }),
@@ -35,11 +36,17 @@ export function HistoryScreen(props: {
     const toTs = to ? parseYmd(to) : null
     const end = toTs !== null ? toTs + 86400000 - 1 : null
     return props.entries.filter((e) => {
+      if (kindFilter !== 'all' && e.kind !== kindFilter) return false
       if (fromTs !== null && e.createdAt < fromTs) return false
       if (end !== null && e.createdAt > end) return false
       return true
     })
-  }, [from, props.entries, to])
+  }, [from, kindFilter, props.entries, to])
+
+  const totalAmount = useMemo(
+    () => filtered.reduce((acc, e) => acc + (typeof e.grandTotal === 'number' ? e.grandTotal : 0), 0),
+    [filtered],
+  )
 
   async function onCopy(text: string) {
     await Clipboard.setStringAsync(text)
@@ -52,9 +59,33 @@ export function HistoryScreen(props: {
   return (
     <ScrollView contentContainerStyle={styles.wrap} keyboardShouldPersistTaps="handled">
       <View style={appStyles.card}>
+        <Text style={styles.archiveOver}>THE ARCHIVES</Text>
         <View style={styles.headerRow}>
           <Text style={appStyles.sectionTitle}>{t(lang, 'historyTitle')}</Text>
           <Button label={t(lang, 'clearAll')} variant="ghost" onPress={props.onClear} disabled={props.entries.length === 0} />
+        </View>
+
+        <View style={styles.summaryGrid}>
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryLabel}>Total Volume</Text>
+            <Text style={styles.summaryValue}>{totalAmount > 0 ? rowAmount(totalAmount) : '₹0.00'}</Text>
+          </View>
+          <View style={styles.summaryCardAlt}>
+            <Text style={styles.summaryLabel}>Records</Text>
+            <Text style={styles.summaryValue}>{filtered.length}</Text>
+          </View>
+        </View>
+
+        <View style={styles.kindFilters}>
+          <Pressable onPress={() => setKindFilter('all')} style={[styles.filterChip, kindFilter === 'all' ? styles.filterChipActive : null]}>
+            <Text style={[styles.filterChipText, kindFilter === 'all' ? styles.filterChipTextActive : null]}>All</Text>
+          </Pressable>
+          <Pressable onPress={() => setKindFilter('invoice')} style={[styles.filterChip, kindFilter === 'invoice' ? styles.filterChipActive : null]}>
+            <Text style={[styles.filterChipText, kindFilter === 'invoice' ? styles.filterChipTextActive : null]}>{t(lang, 'historyKindInvoice')}</Text>
+          </Pressable>
+          <Pressable onPress={() => setKindFilter('calc')} style={[styles.filterChip, kindFilter === 'calc' ? styles.filterChipActive : null]}>
+            <Text style={[styles.filterChipText, kindFilter === 'calc' ? styles.filterChipTextActive : null]}>{t(lang, 'historyKindCalc')}</Text>
+          </Pressable>
         </View>
 
         <Text style={appStyles.helper}>
@@ -115,6 +146,10 @@ export function HistoryScreen(props: {
   )
 }
 
+function rowAmount(amount: number) {
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(amount)
+}
+
 const styles = StyleSheet.create({
   wrap: {
     paddingHorizontal: spacing.xl,
@@ -127,6 +162,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
+  archiveOver: {
+    color: colors.accent,
+    fontWeight: '800',
+    fontSize: 10,
+    letterSpacing: 1.3,
+    marginBottom: spacing.xs,
+  },
+  summaryGrid: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  summaryCard: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    padding: spacing.md,
+  },
+  summaryCardAlt: {
+    flex: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 14,
+    padding: spacing.md,
+  },
+  summaryLabel: {
+    color: colors.outline,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  summaryValue: {
+    color: colors.text,
+    fontWeight: '900',
+    fontSize: 22,
+    marginTop: spacing.xs,
+  },
+  kindFilters: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  filterChip: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 8,
+  },
+  filterChipActive: {
+    backgroundColor: colors.primary,
+  },
+  filterChipText: {
+    color: colors.textMuted,
+    fontWeight: '700',
+    fontSize: 12,
+  },
+  filterChipTextActive: {
+    color: '#fff',
+    fontWeight: '800',
+  },
   filterRow: {
     flexDirection: 'row',
     gap: spacing.sm,
@@ -134,8 +229,6 @@ const styles = StyleSheet.create({
   },
   filterInput: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: spacing.md,
     paddingVertical: 10,
@@ -143,11 +236,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   card: {
-    backgroundColor: colors.surfaceAlt,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: spacing.lg,
+    shadowColor: '#191C1E',
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
   },
   rowTop: {
     flexDirection: 'row',

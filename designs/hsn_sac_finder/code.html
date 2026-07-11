@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSN/SAC Finder | Sovereign Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdbd1",
+                        "outline": "#86736e",
+                        "on-tertiary-container": "#c3dae6",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "on-surface-variant": "#53433f",
+                        "surface": "#f7f9fb",
+                        "on-primary-container": "#ffcabb",
+                        "primary-fixed-dim": "#ffb59f",
+                        "tertiary-fixed-dim": "#b4cad6",
+                        "primary": "#703321",
+                        "on-surface": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-container": "#0f6f62",
+                        "on-primary-fixed-variant": "#723522",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#ffb59f",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-fixed": "#a0f2e1",
+                        "secondary": "#046b5e",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-fixed-variant": "#354a53",
+                        "tertiary": "#334852",
+                        "secondary-container": "#9defde",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed": "#00201b",
+                        "surface-tint": "#8f4c38",
+                        "outline-variant": "#d9c2bb",
+                        "on-primary-fixed": "#3a0b01",
+                        "inverse-surface": "#2d3133",
+                        "on-background": "#191c1e",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#4b606a",
+                        "secondary-fixed-dim": "#84d5c5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eceef0",
+                        "primary-container": "#8d4a36",
+                        "on-tertiary-fixed": "#071e27",
+                        "tertiary-fixed": "#cfe6f2",
+                        "surface-dim": "#d8dadc",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005046"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Work Sans"],
+                        "label": ["Work Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .headline-sm { font-size: 1.5rem; line-height: 2rem; }
+        .body-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .label-sm { font-size: 0.75rem; line-height: 1rem; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#F7F9FB] dark:bg-gray-900 flex justify-between items-center px-6 h-16 w-full fixed top-0 z-50">
+<div class="flex items-center gap-4">
+<button class="hover:bg-[#F2F4F6] dark:hover:bg-gray-800 transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined text-[#8D4A36] dark:text-[#D9C2BB]">menu</span>
+</button>
+<h1 class="font-headline text-xl font-bold tracking-tighter text-[#191C1E] dark:text-white uppercase">Sovereign Ledger</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="User Profile" data-alt="Close up professional portrait of a business person with neutral background, sharp focus, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHciH_LzJIDq2OvVfE5R22QP70du-iL0VJBIvYt1Mw3pzEy0qJ1nBozq1b_49lahqA-FaepifTisuhg0cxl2NC2E9zBkcUj7z84o8spBIgIG4exfxBgVYLodDIxRBJeMkvs1GjmjGFpIJVwR8yc1Y-pSxyBGaBwL-V31YawJxxne3krHIKbDaDkT_Z9d5Bj1W-0Wjy1qFqDj14h51NyQMwMOCcggMjGQpDPZ9oNPKlQzpfeU2_Nn1Hih4NG2HeHAL9kmNyqJYBrZK-"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-6 max-w-2xl mx-auto">
+<!-- Search Header Section -->
+<section class="mb-8">
+<h2 class="font-headline headline-sm font-extrabold tracking-wider text-primary mb-2">HSN/SAC Finder</h2>
+<p class="font-body text-tertiary body-md mb-6 opacity-80">Search for Harmonized System Nomenclature or Services Accounting Codes.</p>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest border-none border-b-2 border-surface-container-highest focus:ring-0 focus:border-primary transition-all rounded-t-xl font-body text-lg" placeholder="Search by code or item description..." type="text"/>
+<div class="absolute bottom-0 left-0 w-full h-[2px] bg-surface-container-highest group-focus-within:bg-primary transition-colors"></div>
+</div>
+</section>
+<!-- Horizontal Categories -->
+<section class="mb-10 -mx-6 overflow-hidden">
+<div class="flex gap-3 px-6 overflow-x-auto hide-scrollbar">
+<button class="flex-shrink-0 px-6 py-3 bg-primary-container text-on-primary font-headline text-sm font-bold rounded-full shadow-lg">
+                    All
+                </button>
+<button class="flex-shrink-0 px-6 py-3 bg-surface-container-low text-on-surface-variant font-headline text-sm font-semibold rounded-full hover:bg-surface-container-high transition-colors">
+                    Textiles
+                </button>
+<button class="flex-shrink-0 px-6 py-3 bg-surface-container-low text-on-surface-variant font-headline text-sm font-semibold rounded-full hover:bg-surface-container-high transition-colors">
+                    Chemicals
+                </button>
+<button class="flex-shrink-0 px-6 py-3 bg-surface-container-low text-on-surface-variant font-headline text-sm font-semibold rounded-full hover:bg-surface-container-high transition-colors">
+                    Electronics
+                </button>
+<button class="flex-shrink-0 px-6 py-3 bg-surface-container-low text-on-surface-variant font-headline text-sm font-semibold rounded-full hover:bg-surface-container-high transition-colors">
+                    Machinery
+                </button>
+<button class="flex-shrink-0 px-6 py-3 bg-surface-container-low text-on-surface-variant font-headline text-sm font-semibold rounded-full hover:bg-surface-container-high transition-colors">
+                    Services
+                </button>
+</div>
+</section>
+<!-- Results List -->
+<section class="space-y-4">
+<div class="flex justify-between items-end mb-4">
+<span class="font-headline label-sm uppercase tracking-widest text-outline">Showing 3 results</span>
+<button class="text-secondary font-bold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                    Refine
+                </button>
+</div>
+<!-- Result Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl relative overflow-hidden group hover:scale-[1.01] transition-transform duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-headline font-extrabold text-2xl tracking-tighter text-primary block">6109</span>
+<span class="font-label label-sm text-outline uppercase tracking-tighter">HSN Code</span>
+</div>
+<div class="text-right">
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-headline font-bold text-sm inline-flex items-center">
+                            12% GST
+                        </div>
+</div>
+</div>
+<p class="font-body text-on-surface text-lg leading-snug mb-4">T-shirts, singlets and other vests, knitted or crocheted.</p>
+<div class="flex items-center gap-4 pt-4 border-t border-surface-container-low">
+<span class="text-secondary font-semibold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">info</span> View Sub-codes
+                    </span>
+<span class="text-outline font-medium text-sm ml-auto">Chapter 61</span>
+</div>
+</div>
+<!-- Result Card 2 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group hover:scale-[1.01] transition-transform duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-headline font-extrabold text-2xl tracking-tighter text-primary block">9983</span>
+<span class="font-label label-sm text-outline uppercase tracking-tighter">SAC Code</span>
+</div>
+<div class="text-right">
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-headline font-bold text-sm inline-flex items-center">
+                            18% GST
+                        </div>
+</div>
+</div>
+<p class="font-body text-on-surface text-lg leading-snug mb-4">Other professional, technical and business services.</p>
+<div class="flex items-center gap-4 pt-4 border-t border-surface-container-lowest">
+<span class="text-secondary font-semibold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">info</span> View Sub-codes
+                    </span>
+<span class="text-outline font-medium text-sm ml-auto">Section 8</span>
+</div>
+</div>
+<!-- Result Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl relative overflow-hidden group hover:scale-[1.01] transition-transform duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-headline font-extrabold text-2xl tracking-tighter text-primary block">8471</span>
+<span class="font-label label-sm text-outline uppercase tracking-tighter">HSN Code</span>
+</div>
+<div class="text-right">
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-headline font-bold text-sm inline-flex items-center">
+                            18% GST
+                        </div>
+</div>
+</div>
+<p class="font-body text-on-surface text-lg leading-snug mb-4">Automatic data processing machines and units thereof; magnetic or optical readers.</p>
+<div class="flex items-center gap-4 pt-4 border-t border-surface-container-low">
+<span class="text-secondary font-semibold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">info</span> View Sub-codes
+                    </span>
+<span class="text-outline font-medium text-sm ml-auto">Chapter 84</span>
+</div>
+</div>
+</section>
+<!-- Bento Style Tip Card -->
+<section class="mt-12">
+<div class="bg-tertiary-container text-on-tertiary-container p-8 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
+<div class="md:w-2/3">
+<h3 class="font-headline text-xl font-extrabold mb-2 text-white">Can't find your code?</h3>
+<p class="font-body text-sm opacity-90 leading-relaxed">Our AI-assisted ledger can help categorize your products based on purchase invoices automatically.</p>
+</div>
+<div class="md:w-1/3 w-full">
+<button class="w-full py-4 bg-white text-primary font-headline font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        Upload Invoice
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-4 px-2 bg-[#F7F9FB]/80 dark:bg-gray-900/80 backdrop-blur-md z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(25,28,30,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">calculate</span>
+<span class="font-work-sans body-sm font-medium">Calculate</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#F2F4F6] dark:bg-gray-800 text-[#00695C] dark:text-[#4DB6AC] rounded-xl px-4 py-1 scale-90 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-work-sans body-sm font-medium">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-work-sans body-sm font-medium">Invoices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#455A64] dark:text-gray-400 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-work-sans body-sm font-medium">Settings</span>
+</a>
+</nav>
+</body></html>

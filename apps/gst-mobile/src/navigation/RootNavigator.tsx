@@ -1,14 +1,12 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect } from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
 import { CalculatorScreen } from '@/src/screens/CalculatorScreen'
 import { HistoryScreen } from '@/src/screens/HistoryScreen'
 import { InvoiceScreen } from '@/src/screens/InvoiceScreen'
-import { MoreMenuScreen } from '@/src/screens/MoreMenuScreen'
-import { RemindersScreen } from '@/src/screens/RemindersScreen'
 import { SettingsScreen } from '@/src/screens/SettingsScreen'
-import type { MainTabParamList, MoreStackParamList } from '@/src/navigation/types'
+import type { MainTabParamList } from '@/src/navigation/types'
 import { colors } from '@/src/theme/tokens'
 import { t } from '@/src/i18n/translations'
 import { useAppSettings } from '@/src/context/AppSettingsContext'
@@ -17,7 +15,6 @@ import { exportHtmlAsPdf } from '@/src/lib/pdf'
 import { isNotificationsSupported, rescheduleGstReminders } from '@/src/lib/reminders'
 
 const Tab = createBottomTabNavigator<MainTabParamList>()
-const MoreStack = createNativeStackNavigator<MoreStackParamList>()
 
 const navTheme = {
   ...DefaultTheme,
@@ -30,25 +27,6 @@ const navTheme = {
 function HistoryRoute() {
   const { entries, clear } = useHistory()
   return <HistoryScreen entries={entries} onClear={clear} />
-}
-
-function MoreNavigator() {
-  const { language } = useAppSettings()
-  const lang = language
-  return (
-    <MoreStack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.surface },
-        headerTintColor: colors.text,
-        headerTitleStyle: { fontWeight: '900' as const },
-      }}
-    >
-      <MoreStack.Screen name="MoreMenu" component={MoreMenuScreen} options={{ headerShown: false }} />
-      <MoreStack.Screen name="History" component={HistoryRoute} options={{ title: t(lang, 'historyTitle') }} />
-      <MoreStack.Screen name="Reminders" component={RemindersScreen} options={{ title: t(lang, 'remindersTitle') }} />
-      <MoreStack.Screen name="Settings" component={SettingsScreen} options={{ title: t(lang, 'settingsTitle') }} />
-    </MoreStack.Navigator>
-  )
 }
 
 function InvoiceRoute() {
@@ -70,27 +48,54 @@ export function RootNavigator() {
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
-          tabBarInactiveTintColor: colors.textMuted,
+          tabBarInactiveTintColor: colors.tertiary,
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '600',
+            marginBottom: 2,
+          },
           tabBarStyle: {
             backgroundColor: colors.surface,
-            borderTopColor: colors.border,
+            borderTopColor: 'transparent',
+            borderTopWidth: 0,
+            elevation: 0,
+            height: 72,
+            paddingTop: 6,
+            paddingBottom: 8,
           },
         }}
       >
         <Tab.Screen
           name="Calculate"
           component={CalculatorScreen}
-          options={{ tabBarLabel: t(lang, 'tabCalculate'), tabBarIcon: () => null }}
+          options={{
+            tabBarLabel: t(lang, 'tabCalculate'),
+            tabBarIcon: ({ color, size }) => <MaterialIcons name="calculate" size={size} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="History"
+          component={HistoryRoute}
+          options={{
+            tabBarLabel: t(lang, 'historyTitle'),
+            tabBarIcon: ({ color, size }) => <MaterialIcons name="history" size={size} color={color} />,
+          }}
         />
         <Tab.Screen
           name="Invoice"
           component={InvoiceRoute}
-          options={{ tabBarLabel: t(lang, 'tabInvoice'), tabBarIcon: () => null }}
+          options={{
+            tabBarLabel: t(lang, 'tabInvoice'),
+            tabBarIcon: ({ color, size }) => <MaterialIcons name="description" size={size} color={color} />,
+          }}
         />
         <Tab.Screen
-          name="More"
-          component={MoreNavigator}
-          options={{ tabBarLabel: t(lang, 'tabMore'), tabBarIcon: () => null }}
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: t(lang, 'settingsTitle'),
+            tabBarIcon: ({ color, size }) => <MaterialIcons name="settings" size={size} color={color} />,
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>
