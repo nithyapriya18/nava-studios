@@ -34,11 +34,19 @@ export function QuoteWidget({ config }: { config: QuoteConfig }) {
   const [qty, setQty] = useState(1)
   const [chosen, setChosen] = useState<number[]>([])
 
+  // Selected indices go stale when the builder edits extras — reset them.
+  useEffect(() => {
+    setChosen([])
+  }, [config.extras])
+
+  const validChosen = chosen.filter((i) => config.extras[i])
+
   const total = useMemo(
     () =>
       config.basePrice +
       qty * config.perUnitPrice +
-      chosen.reduce((s, i) => s + (config.extras[i]?.price ?? 0), 0),
+      validChosen.reduce((s, i) => s + config.extras[i].price, 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [config, qty, chosen],
   )
 
@@ -48,7 +56,7 @@ export function QuoteWidget({ config }: { config: QuoteConfig }) {
       ``,
       `${config.baseLabel}: ${formatINR(config.basePrice)}`,
       `${qty} × ${config.perUnitLabel}: ${formatINR(qty * config.perUnitPrice)}`,
-      ...chosen.map((i) => `+ ${config.extras[i].label}: ${formatINR(config.extras[i].price)}`),
+      ...validChosen.map((i) => `+ ${config.extras[i].label}: ${formatINR(config.extras[i].price)}`),
       ``,
       `Estimated total: ${formatINR(total)}`,
       ``,

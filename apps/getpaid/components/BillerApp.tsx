@@ -279,6 +279,16 @@ export function BillerApp() {
                         Send
                       </button>
                     )}
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`Delete invoice ${inv.number}? This cannot be undone.`)) {
+                          setInvoices((prev) => prev.filter((i) => i.id !== inv.id))
+                        }
+                      }}
+                      className="rounded-full border border-border px-2.5 py-1 text-xs text-text-muted transition-colors hover:border-red-300 hover:text-red-600"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </li>
               )

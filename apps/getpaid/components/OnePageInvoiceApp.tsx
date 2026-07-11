@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Printer, Link2, MessageCircle, Check } from 'lucide-react'
 import { InvoiceForm } from './InvoiceForm'
 import { InvoiceDoc, computeInvoice } from './InvoiceDoc'
@@ -36,19 +36,20 @@ function freshInvoice(business: BusinessProfile): Invoice {
 
 export function OnePageInvoiceApp() {
   // Business profile persists across invoices; the invoice itself is ephemeral.
-  const [savedBusiness, setSavedBusiness] = useLocalState<BusinessProfile>(
-    'getpaid:business',
-    EMPTY_BUSINESS,
-  )
+  const [savedBusiness, setSavedBusiness, businessHydrated] =
+    useLocalState<BusinessProfile>('getpaid:business', EMPTY_BUSINESS)
   const [invoice, setInvoice] = useState<Invoice>(() => freshInvoice(EMPTY_BUSINESS))
-  const [hydratedBusiness, setHydratedBusiness] = useState(false)
   const [copied, setCopied] = useState(false)
 
   // Pull the saved business profile in once storage hydrates.
-  if (!hydratedBusiness && savedBusiness.name && !invoice.business.name) {
-    setInvoice((inv) => ({ ...inv, business: savedBusiness }))
-    setHydratedBusiness(true)
-  }
+  useEffect(() => {
+    if (businessHydrated && savedBusiness.name) {
+      setInvoice((inv) =>
+        inv.business.name ? inv : { ...inv, business: savedBusiness },
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [businessHydrated])
 
   const { totals } = useMemo(() => computeInvoice(invoice), [invoice])
 

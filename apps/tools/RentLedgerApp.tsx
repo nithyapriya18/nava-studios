@@ -148,8 +148,7 @@ export function RentLedgerApp() {
                     {u.label} <span className="text-text-muted">· {u.tenant}</span>
                   </p>
                   <p className="text-xs text-text-muted">
-                    {formatINR(u.rent)} · due {u.dueDay}
-                    {['st', 'nd', 'rd'][u.dueDay % 10 - 1] ?? 'th'} ·{' '}
+                    {formatINR(u.rent)} · due day {u.dueDay} ·{' '}
                     {isPaid ? (
                       <span className="text-emerald-700">paid this month</span>
                     ) : isLate ? (

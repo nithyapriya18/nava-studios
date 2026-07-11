@@ -24,7 +24,7 @@ export function buildUpiLink(args: {
 
 /** wa.me links need digits only (country code + number, no + or spaces). */
 export function normalizePhone(phone: string): string {
-  const digits = phone.replace(/\D/g, '')
+  const digits = phone.replace(/\D/g, '').replace(/^0+/, '')
   // Assume Indian numbers when 10 digits are given without a country code.
   return digits.length === 10 ? `91${digits}` : digits
 }
