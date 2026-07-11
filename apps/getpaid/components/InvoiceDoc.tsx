@@ -47,7 +47,7 @@ export function InvoiceDoc({ invoice }: { invoice: Invoice }) {
         </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-widest text-stone-400">
-            {invoice.gstMode ? 'Tax Invoice' : 'Invoice'}
+            {invoice.heading ?? (invoice.gstMode ? 'Tax Invoice' : 'Invoice')}
           </p>
           <p className="mt-1 font-semibold">{invoice.number}</p>
           <p className="mt-1 text-xs text-stone-500">Date: {invoice.date}</p>

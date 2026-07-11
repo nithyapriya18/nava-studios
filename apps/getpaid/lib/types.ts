@@ -31,6 +31,8 @@ export type InvoiceStatus = 'draft' | 'sent' | 'paid'
 
 export interface Invoice {
   id: string
+  /** Document heading override, e.g. "Quotation". Defaults to (Tax) Invoice. */
+  heading?: string
   number: string
   date: string // ISO yyyy-mm-dd
   dueDate: string

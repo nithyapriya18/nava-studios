@@ -145,7 +145,7 @@ export const PRODUCTS: Product[] = [
       'Quote → invoice in one tap',
     ],
     price: 'Free for 3 quotes/mo · ₹249/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/trade-quote',
   },
   {
@@ -164,7 +164,7 @@ export const PRODUCTS: Product[] = [
       'Reusable templates per service',
     ],
     price: 'Free for 2 proposals/mo · ₹299/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/proposal-forge',
   },
   {
@@ -240,7 +240,7 @@ export const PRODUCTS: Product[] = [
       'No integration, just your CSV',
     ],
     price: 'Free for 1 month back · ₹199/mo or ₹999/yr',
-    status: 'building',
+    status: 'beta',
     href: '/tools/etsy-ledger',
   },
   {
@@ -335,7 +335,7 @@ export const PRODUCTS: Product[] = [
       'Ten-minute setup, honestly',
     ],
     price: 'Free for 20 bookings/mo · ₹299/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/nudge-book',
   },
   {
@@ -430,7 +430,7 @@ export const PRODUCTS: Product[] = [
       '“Who’s missing what” board',
     ],
     price: 'Free for 3 clients · ₹399/mo unlimited',
-    status: 'building',
+    status: 'beta',
     href: '/tools/doc-chaser',
   },
   {
