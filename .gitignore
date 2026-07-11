@@ -12,4 +12,3 @@ apps/gst-mobile/web-build
 *.log
 *.tsbuildinfo
 private/
-apps/snugglefox/

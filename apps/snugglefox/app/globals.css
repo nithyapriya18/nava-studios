@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-fraunces: 'Fraunces', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-night text-text-primary font-sans antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid #e9a860;
+  outline-offset: 2px;
+}
+
+/* ---------- Night sky: twinkling stars ---------- */
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--star-dim, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    opacity: var(--star-bright, 0.9);
+    transform: scale(1.15);
+  }
+}
+
+.star-dot {
+  animation: twinkle var(--star-dur, 5s) ease-in-out infinite;
+  animation-delay: var(--star-delay, 0s);
+}
+
+/* ---------- Wizard: "weaving the story" rotating copy ---------- */
+
+@keyframes weaveLine {
+  0%,
+  3% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  8%,
+  22% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  28%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.weave-line {
+  opacity: 0;
+  animation: weaveLine 12s linear infinite;
+}
+.weave-line:nth-child(2) {
+  animation-delay: 3s;
+}
+.weave-line:nth-child(3) {
+  animation-delay: 6s;
+}
+.weave-line:nth-child(4) {
+  animation-delay: 9s;
+}
+
+/* ---------- Story reader: drop cap on the opening paragraph ---------- */
+
+.story-body > p:first-child::first-letter {
+  font-family: var(--font-fraunces);
+  font-size: 3.1em;
+  line-height: 0.82;
+  float: left;
+  padding-right: 0.14em;
+  padding-top: 0.06em;
+  color: #e9a860;
+  font-weight: 600;
+}
+
+/* ---------- Audio scrubber ---------- */
+
+.scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    #e9a860 var(--progress, 0%),
+    #2a2237 var(--progress, 0%)
+  );
+}
+
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: #faf8f3;
+  border: none;
+  box-shadow: 0 0 10px rgba(233, 168, 96, 0.55);
+  cursor: pointer;
+}
+
+.scrub::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: #faf8f3;
+  border: none;
+  box-shadow: 0 0 10px rgba(233, 168, 96, 0.55);
+  cursor: pointer;
+}
+
+.scrub::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: #2a2237;
+}
+
+.scrub::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: #e9a860;
+}
+
+/* ---------- Reduced motion: hold every ambient animation still ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-slow,
+  .animate-drift,
+  .animate-step-in,
+  .animate-slide-up,
+  .animate-fade-in,
+  .star-dot {
+    animation: none;
+  }
+  .animate-step-in,
+  .animate-slide-up,
+  .animate-fade-in {
+    opacity: 1;
+    transform: none;
+  }
+  .weave-line {
+    animation: none;
+  }
+  .weave-line:first-child {
+    opacity: 1;
+  }
+}
