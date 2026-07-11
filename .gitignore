@@ -11,3 +11,4 @@ apps/gst-mobile/dist
 apps/gst-mobile/web-build
 *.log
 *.tsbuildinfo
+private/
