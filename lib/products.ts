@@ -185,7 +185,8 @@ export const PRODUCTS: Product[] = [
       'No per-student pricing',
     ],
     price: '₹499/mo flat · no revenue share',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/course-ship',
   },
   {
     slug: 'member-gate',
@@ -203,7 +204,8 @@ export const PRODUCTS: Product[] = [
       'Works alongside whatever you already use',
     ],
     price: 'Free + 5% per transaction',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/member-gate',
   },
 
   // ─── Know Your Numbers ───────────────────────────────────────
@@ -299,7 +301,8 @@ export const PRODUCTS: Product[] = [
       'Bulk paste, zero setup',
     ],
     price: 'Free for 20 shipments/mo · ₹249/mo unlimited',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/ship-watch',
   },
   {
     slug: 'uptime-peek',
@@ -317,7 +320,8 @@ export const PRODUCTS: Product[] = [
       'Watches all Verity products too — we dogfood it',
     ],
     price: 'Free for 3 monitors · ₹199/mo for 25',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/uptime-peek',
   },
 
   // ─── Win Customers ───────────────────────────────────────────
@@ -394,7 +398,8 @@ export const PRODUCTS: Product[] = [
       'Trend line over time',
     ],
     price: 'Free for 1 source · ₹299/mo for 5',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/review-radar',
   },
   {
     slug: 'report-snap',
@@ -412,7 +417,8 @@ export const PRODUCTS: Product[] = [
       'Flat price — not per client',
     ],
     price: '₹499/mo flat, unlimited clients',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/report-snap',
   },
 
   // ─── Run the Day ─────────────────────────────────────────────
@@ -489,7 +495,8 @@ export const PRODUCTS: Product[] = [
       'Per-crew flat pricing',
     ],
     price: '₹99/mo per crew member',
-    status: 'planned',
+    status: 'beta',
+    href: '/tools/crew-board',
   },
 
   // ─── Verity Home ─────────────────────────────────────────────
