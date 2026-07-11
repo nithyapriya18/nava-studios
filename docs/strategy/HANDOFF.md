@@ -52,13 +52,24 @@ EasyCook and SnuggleFox are separate apps in `apps/` with their own `npm run dev
 - Contact email everywhere is `siteConfig.email` in `config.ts` — currently the
   personal Gmail. **Change to hello@your-domain before deploying** (one line).
 
+## Update — 11 July 2026
+
+The queue below is DONE (commit 37b5b49). Five more tools shipped, same
+client-first pattern: **Etsy Ledger** (/tools/etsy-ledger — CSV upload/paste,
+fee categorization, accountant summary), **Trade Quote** (/tools/trade-quote —
+price list → quote → converts into the Biller's invoice list), **Proposal
+Forge** (/tools/proposal-forge — 6 answers → proposal + accept-link),
+**Nudge Book** (/tools/nudge-book — booking link + one-tap reminders),
+**Doc Chaser** (/tools/doc-chaser — client checklists + chase messages).
+**Total: 16 working tools.** Remaining 7 products stay `planned` until wedge
+traction (Course Ship, Member Gate, Ship Watch, Uptime Peek, Review Radar,
+Report Snap, Crew Board — all need a server layer or external APIs).
+
 ## Next build queue (in order)
 
-1. Etsy Ledger (CSV parser exists as pattern in Margin Lens)
-2. Trade Quote (reuse invoice engine + quote→invoice)
-3. Proposal Forge (template-based v1)
-4. Nudge Book, Doc Chaser (share-link pattern, same as Quote Card)
-5. Server layer: Neon schema + email auth + paid tiers (Razorpay)
+1. Server layer: Neon schema + email auth + paid tiers (Razorpay) — unlocks
+   cross-device sync and the subscription prices on the product pages
+2. Then the 7 `planned` products, re-ranked by the /products request form
 
 ## Review status
 
