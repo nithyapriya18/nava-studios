@@ -1,4 +1,5 @@
 export const siteConfig = {
+  url: 'https://nithyapriya.com',
   name: 'Nava Studios',
   spoken: 'NAH-vuh',
   tagline: 'From idea to a first product you can use.',
