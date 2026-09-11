@@ -2,7 +2,7 @@
 
 ## Core Identity
 
-- App Name: `GST Calculator - Verity`
+- App Name: `GST Calculator — Nava Studios`
 - Category: `Finance` (or `Business`)
 - Target Audience: Indian small businesses, freelancers, accountants
 

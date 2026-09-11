@@ -8,7 +8,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Verity Studio, after dark — deep night with a warm plum undertone,
+        // Nava Studios, after dark — deep night with a warm plum undertone,
         // cream-toned text, terracotta-to-candlelight-gold accents.
         background: '#16121F40',
         night: '#16121F',

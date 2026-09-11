@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4f1ee;
+  --surface: #e8e3df;
+  --text-primary: #1a1716;
+  --text-muted: #3d3835;
+  --accent: #6e3c37;
+  --accent-light: #e8d9d5;
+  --border: #c9c2bc;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* GitHub Primer-like buttons: 8px radius, hairline border, quiet hover */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-[14px] py-[7px] text-sm font-medium leading-5 no-underline transition-colors duration-100;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn border border-transparent bg-accent text-white hover:bg-[#5a302c];
+  }
+  .btn-default {
+    @apply btn border border-border bg-background text-text-primary hover:bg-surface;
+  }
+  .btn-on-accent {
+    @apply btn border border-transparent bg-white text-accent hover:bg-[#f7f3f1];
+  }
+}
+
+.prose {
+  color: var(--text-primary);
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+.prose code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
+@media print {
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}

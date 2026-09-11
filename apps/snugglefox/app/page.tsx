@@ -7,7 +7,7 @@ import { FoxMark } from '@/components/brand/FoxMark'
 import { CrescentMoon, NightSky } from '@/components/brand/NightSky'
 import type { Story } from '@/lib/types'
 
-const DEVICE_ID_KEY = 'snugglefox.deviceId'
+import { getOrCreateDeviceId } from '@/lib/device'
 
 function formatDate(value: Story['createdAt']): string {
   if (!value) return ''
@@ -24,11 +24,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const deviceId = localStorage.getItem(DEVICE_ID_KEY)
-    if (!deviceId) {
-      setLoading(false)
-      return
-    }
+    const deviceId = getOrCreateDeviceId()
     fetch(`/api/stories?deviceId=${encodeURIComponent(deviceId)}`)
       .then((res) => (res.ok ? res.json() : []))
       .then((rows: Story[]) => setStories(Array.isArray(rows) ? rows : []))
@@ -143,7 +139,7 @@ export default function HomePage() {
         <footer className="mt-16 pb-2 pt-8 text-center">
           <p className="text-xs tracking-wide text-text-muted/60">
             made with care by{' '}
-            <span className="font-display font-medium text-text-muted/80">Verity Studio</span>
+            <span className="font-display font-medium text-text-muted/80">Nava Studios</span>
           </p>
         </footer>
       </div>

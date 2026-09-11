@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { ArrowUpDown, Check, Copy, LogOut, Plus, RotateCcw, Trash2 } from 'lucide-react'
-import { INDIAN_STATES, getStateName } from '@/apps/gst-calculator/lib/states'
+import { INDIAN_STATES, getStateName } from '@nava-studios/kit'
 import {
   computeFromGstAmount,
   computeFromInclusiveTotal,
@@ -12,7 +12,7 @@ import {
   getSupplyType,
   roundMoney,
   type InvoiceItemInput,
-} from '@/apps/gst-calculator/lib/gst'
+} from '@nava-studios/kit'
 
 type Tab = 'gst' | 'bill'
 type GstMode = 'forward' | 'reverse'
@@ -308,7 +308,7 @@ export function GstCalculatorApp() {
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' })
-    window.location.href = '/login?next=/gst-calculator'
+    window.location.href = '/login?next=/'
   }
 
   return (

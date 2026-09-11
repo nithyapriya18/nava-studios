@@ -1,4 +1,4 @@
-# Inversal (veritystudio site) — Revamp Plan
+# Inversal (veritystudios site) — Revamp Plan
 
 Goal: the site stops being a portfolio and becomes a **storefront + story**. Every page
 answers one of: *What is this? Can I trust it? Where's my tool?*
@@ -25,7 +25,7 @@ selling products shouldn't lead with services, it splits the positioning.
 1. **Hero:** tagline + subline ("One-person studio. 25 tools. Each does one job,
    priced so you don't think twice.") + two CTAs: *Browse tools* / *Read the story*.
 2. **Family grid:** 5 cards (Get Paid / Know Your Numbers / Win Customers /
-   Run the Day / Verity Home) with product counts.
+   Run the Day / Home) with product counts.
 3. **Featured tools:** 3 live products with one-line pain statements.
 4. **Founder strip:** photo + 2 sentences + link to /about.
 5. **Latest writing:** 3 posts (existing pattern).
@@ -48,10 +48,10 @@ selling products shouldn't lead with services, it splits the positioning.
 
 ## Design system (Wave 0 dependency)
 
-One shared token package consumed by site + all apps: Verity palette, type scale,
+One shared token package consumed by site + all apps: Nava palette, type scale,
 spacing, radius, button/card/badge components. Family accent colors:
 Get Paid = green family, Know Your Numbers = blue, Win Customers = amber,
-Run the Day = violet, Verity Home = warm rose. Same neutrals everywhere.
+Run the Day = violet, Home = warm rose. Same neutrals everywhere.
 
 ## SEO plan (free traffic engine)
 

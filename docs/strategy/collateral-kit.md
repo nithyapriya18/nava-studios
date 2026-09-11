@@ -39,7 +39,7 @@ I'm a solo founder and just built [Tool] — [one-liner]. I'm taking 10 founding
 customers: free setup + half price for 3 months, in exchange for blunt feedback.
 
 Worth a 15-min look? [link] — no pressure either way.
-— Nithya, Verity Studio
+— Nithya, Nava Studios
 ```
 
 ## 4. Community answer pattern (Reddit/forums — 3/week)

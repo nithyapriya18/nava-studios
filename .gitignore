@@ -5,6 +5,7 @@
 .env*.local
 .claude
 node_modules
+apps/*/.next
 apps/gst-mobile/node_modules
 apps/gst-mobile/.expo
 apps/gst-mobile/dist

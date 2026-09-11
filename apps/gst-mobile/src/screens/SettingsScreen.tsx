@@ -11,8 +11,8 @@ import { useAppSettings, type LanguageCode } from '@/src/context/AppSettingsCont
 import { sanitizeNumberText } from '@/src/lib/sanitize'
 import { isNotificationsSupported, requestNotificationPermissions, rescheduleGstReminders } from '@/src/lib/reminders'
 
-const PRIVACY_POLICY_URL = 'https://verity-studios.vercel.app/privacy'
-const SUPPORT_URL = 'https://verity-studios.vercel.app/support'
+const PRIVACY_POLICY_URL = 'https://nava-studios.vercel.app/privacy'
+const SUPPORT_URL = 'https://nava-studios.vercel.app/support'
 
 export function SettingsScreen() {
   const {

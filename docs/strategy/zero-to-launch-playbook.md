@@ -92,7 +92,7 @@ to release more products.
 
 ### 3.1 The only sentence you need to memorise
 
-> "I run Verity Studio — I build small, fair-priced tools that help small
+> "I run Nava Studios — I build small, fair-priced tools that help small
 > businesses get paid. One job each, no bloat, no enterprise pricing."
 
 That's your answer at every meetup, in every bio, in every DM.
@@ -103,7 +103,7 @@ That's your answer at every meetup, in every bio, in every DM.
 credibility and a network full of product people. Post 3×/week: one build-in-public
 update (screenshot + what you learned), one small-business-pain observation, one
 milestone with real numbers. Headline: *"Building 25 small, fair-priced tools for
-small businesses — solo, in public | Verity Studio"*. Your network reshares → their
+small businesses — solo, in public | Nava Studios"*. Your network reshares → their
 founder friends see it → early users.
 
 **2. WhatsApp + CA channel (for the GST products — India-specific).** CAs and

@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Localization from 'expo-localization'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-const STORAGE_KEY = 'gst_mobile_settings_v1'
+const STORAGE_KEY = 'nava-studios:gst_mobile_settings_v1'
+const LEGACY_STORAGE_KEY = 'gst_mobile_settings_v1'
 
 export type LanguageCode = 'en' | 'hi'
 export type FilingFrequency = 'monthly' | 'quarterly'
@@ -55,7 +56,9 @@ export function AppSettingsProvider(props: { children: React.ReactNode }) {
     let cancelled = false
     ;(async () => {
       try {
-        const raw = await AsyncStorage.getItem(STORAGE_KEY)
+        const raw =
+          (await AsyncStorage.getItem(STORAGE_KEY)) ??
+          (await AsyncStorage.getItem(LEGACY_STORAGE_KEY))
         if (raw) {
           const parsed = JSON.parse(raw) as Partial<AppSettings>
           setSettings({

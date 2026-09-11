@@ -10,12 +10,13 @@ import { ChildStep } from './steps/ChildStep'
 import { ScenarioStep } from './steps/ScenarioStep'
 import { DeliveryStep } from './steps/DeliveryStep'
 import type { IntakePrefs, Story } from '@/lib/types'
+import { getOrCreateDeviceId } from '@/lib/device'
 
 const STEP_NAMES = ['The hero', 'The adventure', 'The telling']
 
 const TOTAL_STEPS = 3
-const DEVICE_ID_KEY = 'snugglefox.deviceId'
-const PREFS_KEY = 'snugglefox.prefs'
+const PREFS_KEY = 'nava-studios:snugglefox.prefs'
+const LEGACY_PREFS_KEY = 'snugglefox.prefs'
 
 const DEFAULT_PREFS: IntakePrefs = {
   childName: '',
@@ -25,15 +26,6 @@ const DEFAULT_PREFS: IntakePrefs = {
   lengthKey: 'medium',
   deliveryMode: 'text-audio',
   voiceKey: null,
-}
-
-export function getOrCreateDeviceId(): string {
-  let deviceId = localStorage.getItem(DEVICE_ID_KEY)
-  if (!deviceId) {
-    deviceId = crypto.randomUUID()
-    localStorage.setItem(DEVICE_ID_KEY, deviceId)
-  }
-  return deviceId
 }
 
 // Exported so each step component checks the exact same rule the Enter-key
@@ -64,7 +56,7 @@ export function IntakeWizard() {
   useEffect(() => {
     getOrCreateDeviceId()
     try {
-      const saved = localStorage.getItem(PREFS_KEY)
+      const saved = localStorage.getItem(PREFS_KEY) ?? localStorage.getItem(LEGACY_PREFS_KEY)
       if (saved) {
         const parsed = JSON.parse(saved) as Partial<IntakePrefs>
         setPrefs((prev) => ({ ...prev, ...parsed, prompt: '' }))

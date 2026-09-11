@@ -17,7 +17,7 @@ Forge, Course Ship, Member Gate, and all other families.
 ## Products page (honest version)
 
 - **Get Paid:** 4 tiles, honestly labeled Live / Beta / Coming soon
-- **Verity Home:** EasyCook, SnuggleFox ("made for my own family")
+- **Home:** EasyCook, SnuggleFox ("made for my own household")
 - One line + form: "More tools coming — tell me what's slowing you down."
   (free product discovery; replaces the 25-tile wall)
 

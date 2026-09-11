@@ -5,7 +5,7 @@ Note: never publish personal phone/email on the site — contact goes to hello@ 
 
 ## /about — hero intro (first person)
 
-Hi, I'm Nithya. I run Verity Studio — a one-person software studio in Bengaluru.
+Hi, I'm Nithya. I run Nava Studios — a one-person software studio in Bengaluru.
 
 I've spent the last decade building AI products inside some very big rooms:
 data science and healthcare AI at Novartis, supply chain platforms serving 500,000+
@@ -21,7 +21,7 @@ small to be worth a big company's time.
 
 I think they're exactly the right size for one person's time.
 
-So Verity Studio builds small software: single-purpose tools for getting paid,
+So Nava Studios builds small software: single-purpose tools for getting paid,
 knowing your numbers, winning customers, and running your day. Each one does one
 job, costs less than the problem it solves, and takes minutes to start using. No
 demos with a sales rep. No "contact us" pricing. And when you email support, I'm
@@ -40,14 +40,14 @@ job, and when you email support, it's me who replies.
 
 ## Short bio (social profiles, press, PH maker comment)
 
-Nithya Veeraraghavan — founder of Verity Studio, a one-person software studio in
+Nithya Veeraraghavan — founder of Nava Studios, a one-person software studio in
 Bengaluru. Ex-enterprise AI product leader (Novartis, supply chain AI, multi-agent
 systems); now shipping small, fair-priced tools for small businesses. One job each.
 
 ## One-liner (X/LinkedIn headline)
 
 Building 25 small, fair-priced tools for small businesses — solo, in public.
-Verity Studio.
+Nava Studios.
 
 ## Notes for the /about build (Wave 0)
 

@@ -1,0 +1,16 @@
+{
+  "name": "@nava-studios/kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "dependencies": {
+    "@nava-studios/catalog": "*",
+    "lucide-react": "^0.441.0"
+  }
+}

@@ -1,4 +1,4 @@
-# Verity Studio — Marketing & Sales Plan (solo, near-zero budget)
+# Nava Studios — Marketing & Sales Plan (solo, near-zero budget)
 
 Strategy in one line: **your story + free tools bring people in; honest pricing and
 one-job simplicity convert them; every product cross-links to the others.**

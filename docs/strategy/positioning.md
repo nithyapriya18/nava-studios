@@ -1,8 +1,8 @@
-# Verity Studio — Positioning
+# Nava Studios — Positioning
 
 ## What am I? (the one-line answer)
 
-**Verity Studio is a one-person software studio that builds small, fair-priced tools
+**Nava Studios is a one-person software studio that builds small, fair-priced tools
 for small businesses — the problems too small for big software companies to bother with.**
 
 You are not "a SaaS company with 25 products." You are **the small-software studio**.
@@ -12,7 +12,7 @@ problem it solves, and takes minutes to start using.*
 ## Positioning statement
 
 > For small business owners drowning in overpriced, overcomplicated software,
-> Verity Studio makes single-purpose tools that pay for themselves in the first week —
+> Nava Studios makes single-purpose tools that pay for themselves in the first week —
 > priced so you never have to think twice.
 
 ## Taglines (pick one, use everywhere)
@@ -49,10 +49,10 @@ Nudge Book · Quote Card · Testimonial Jar · Review Radar · Report Snap
 ### 4. Run the Day (4) — "stop drowning in busywork"
 Doc Chaser · Scope Guard · Tiny CRM · Crew Board
 
-### 5. Verity Home (2) — "made for my own family"
+### 5. Home (2) — "made for my own household"
 EasyCook · SnuggleFox
 
-**Verity Home is deliberate, not an inconsistency.** These two humanize the brand:
+**Home is deliberate, not an inconsistency.** These two humanize the brand:
 "I build tools for your business, and I build software for my own family with the
 same care." Never present them as part of the business thesis; present them as
 proof of craft.
@@ -69,12 +69,12 @@ proof of craft.
 
 ## Boilerplate (copy-paste)
 
-**Short (bio):** I run Verity Studio — a one-person software studio building small,
+**Short (bio):** I run Nava Studios — a one-person software studio building small,
 fair-priced tools for small businesses. One job each. No bloat, no enterprise pricing.
 
-**Medium (about page / press):** Verity Studio is a one-person software studio.
+**Medium (about page / press):** Nava Studios is a one-person software studio.
 Big software companies chase enterprise deals and leave small businesses with tools
-that are too expensive, too complex, or both. Verity builds the small stuff they
+that are too expensive, too complex, or both. Nava builds the small stuff they
 won't: single-purpose tools for getting paid, knowing your numbers, winning customers,
 and running the day — each priced so a small business never has to think twice.
 

@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-const HISTORY_KEY = 'gst_mobile_history_v3'
+const HISTORY_KEY = 'nava-studios:gst_mobile_history_v3'
+const LEGACY_HISTORY_KEY = 'gst_mobile_history_v3'
 
 export type HistoryEntry = {
   id: string
@@ -32,10 +33,17 @@ export function HistoryProvider(props: { children: React.ReactNode }) {
     let cancelled = false
     ;(async () => {
       try {
-        const raw = await AsyncStorage.getItem(HISTORY_KEY)
+        const raw =
+          (await AsyncStorage.getItem(HISTORY_KEY)) ??
+          (await AsyncStorage.getItem(LEGACY_HISTORY_KEY))
         if (raw) {
           const parsed = JSON.parse(raw) as HistoryEntry[]
-          if (Array.isArray(parsed)) setEntries(parsed)
+          if (Array.isArray(parsed)) {
+            setEntries(parsed)
+            if (!(await AsyncStorage.getItem(HISTORY_KEY))) {
+              await AsyncStorage.setItem(HISTORY_KEY, raw)
+            }
+          }
         }
       } catch {
         /* ignore */
