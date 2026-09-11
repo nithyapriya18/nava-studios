@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { ArrowRight, Copy, Check, RotateCcw } from 'lucide-react'
+import posthog from 'posthog-js'
 import { contactHref, contactLabel, contactIsExternal, siteConfig } from '@/config'
 
 interface RoastResult {
@@ -25,7 +26,14 @@ export default function RoastPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!input.trim() || loading) return
+    const trimmedInput = input.trim()
+    if (!trimmedInput || loading) return
+
+    posthog.capture('roast_submitted', {
+      input_type: /^https?:\/\//i.test(trimmedInput) ? 'url' : 'text',
+      input_length: trimmedInput.length,
+    })
+
     setLoading(true)
     setError(null)
     setResult(null)
@@ -33,7 +41,7 @@ export default function RoastPage() {
       const res = await fetch('/api/roast', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ input: input.trim() }),
+        body: JSON.stringify({ input: trimmedInput }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -41,6 +49,7 @@ export default function RoastPage() {
         return
       }
       setResult(data)
+      posthog.capture('roast_generated', { score: data.score })
     } catch {
       setError('Could not reach the roast engine. Try again.')
     } finally {
@@ -54,11 +63,13 @@ export default function RoastPage() {
       .map((r) => `• ${r}`)
       .join('\n')}\n\nWhat's working: ${result.goodThing}\n\nFix this first: ${result.fix}\n\n— roasted at nithyapriya.com/roast`
     navigator.clipboard.writeText(text)
+    posthog.capture('roast_copied', { score: result.score })
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
   function reset() {
+    posthog.capture('roast_another_started')
     setResult(null)
     setError(null)
     setInput('')
