@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nava-studios/catalog": "*",
-    "@nava-studios/ui": "*",
     "@supabase/supabase-js": "^2.45.4",
     "framer-motion": "^11.3.30",
     "gray-matter": "^4.0.3",

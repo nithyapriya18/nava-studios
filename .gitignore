@@ -7,11 +7,6 @@
 .agents
 skills-lock.json
 node_modules
-apps/*/.next
-apps/gst-mobile/node_modules
-apps/gst-mobile/.expo
-apps/gst-mobile/dist
-apps/gst-mobile/web-build
 *.log
 *.tsbuildinfo
 private/

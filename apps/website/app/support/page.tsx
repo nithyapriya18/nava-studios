@@ -25,8 +25,7 @@ export default function SupportPage() {
                 Support
               </h1>
               <p className="text-text-muted text-lg leading-relaxed mb-10">
-                Questions about a project, the GST Calculator, or this site. I
-                answer these myself.
+                Questions about a project, or this site. I answer these myself.
               </p>
 
               <div className="space-y-6 mb-12">
@@ -43,8 +42,7 @@ export default function SupportPage() {
                       {contactLabel}
                     </h2>
                     <p className="text-text-muted text-sm mt-2">
-                      Best for a new product. For a bug or a tool question, email
-                      is fine.
+                      Best for a new product. For anything else, email is fine.
                     </p>
                   </div>
                 </a>
@@ -67,19 +65,6 @@ export default function SupportPage() {
                     </p>
                   </div>
                 </a>
-
-                <div className="flex items-start gap-4 rounded-2xl border border-border/60 bg-surface/80 p-6">
-                  <div>
-                    <h2 className="font-display font-semibold text-lg text-text-primary mb-1">
-                      GST Calculator
-                    </h2>
-                    <p className="text-text-muted text-sm leading-relaxed">
-                      For App Store or Play Store questions, mention your device
-                      and app version. The app is a helper — confirm important
-                      figures with your accountant.
-                    </p>
-                  </div>
-                </div>
               </div>
 
               <div className="rounded-2xl bg-surface/60 border border-border/40 p-6 md:p-8">
@@ -98,9 +83,9 @@ export default function SupportPage() {
                     </Link>
                   </li>
                   <li>
-                    <a href="/gst-calculator" className="text-accent hover:underline">
-                      GST Calculator (web)
-                    </a>
+                    <Link href="/lab" className="text-accent hover:underline">
+                      Personal projects
+                    </Link>
                   </li>
                 </ul>
               </div>

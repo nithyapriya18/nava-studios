@@ -1,7 +1,7 @@
 # Nava Studios website — copy and positioning plan
 
-**Status:** grilled and locked. No site copy changes until you say execute.  
-**Remote:** [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios) (renamed; GitHub About still shows `verity-studios.vercel.app`).  
+**Status:** executed. The 25-tool storefront (apps, `packages/catalog`, `docs/strategy`) has been removed; the repo is website-only. Public copy matches this plan.
+**Remote:** [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios)
 **This file is for:** rewrite every public line so the site sounds like a senior operator, not a manifesto.
 
 ---
@@ -280,4 +280,4 @@ Home never teaches this list. It lives on `/start`. Footer can still say Nava is
 
 ---
 
-*Next: grill-me on this plan. Implementation waits on execute.*
+*Executed. See git history on `chore/nava-services-studio-execute` for what changed.*
