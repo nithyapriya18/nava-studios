@@ -27,7 +27,12 @@ const DAILY_LIMIT = Number(process.env.ROAST_DAILY_LIMIT ?? 500)
 const DAILY_WINDOW_SECONDS = 24 * 60 * 60
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+// The publishable (anon) key is enough here — check_rate_limit is a
+// `security definer` function, so it runs with the privileges it needs
+// regardless of which key called it. No reason to use the more powerful
+// service_role key for a simple counter.
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 const hasSupabase = Boolean(supabaseUrl && supabaseKey)
 
 const supabase = hasSupabase ? createClient(supabaseUrl!, supabaseKey!) : null

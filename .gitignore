@@ -4,6 +4,8 @@
 .env.local
 .env*.local
 .claude
+.agents
+skills-lock.json
 node_modules
 apps/*/.next
 apps/gst-mobile/node_modules
