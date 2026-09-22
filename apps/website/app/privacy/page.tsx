@@ -42,6 +42,13 @@ export default function PrivacyPage() {
                       hosting provider (Vercel) and analytics provider (PostHog).
                     </li>
                     <li>
+                      <strong className="text-text-primary">Session replay:</strong> PostHog also records a replay of
+                      how you use this site (mouse movement, clicks, and on-screen content, including anything shown
+                      in results from tools like Roast My Launch) to help me spot bugs and confusing moments. Inputs
+                      like password fields are masked automatically. You can opt out in your browser (see &ldquo;Your
+                      choices&rdquo; below).
+                    </li>
+                    <li>
                       <strong className="text-text-primary">Roast My Launch:</strong> Text or a URL you paste into the{' '}
                       <Link href="/roast" className="text-accent hover:underline">
                         Roast My Launch
@@ -86,7 +93,11 @@ export default function PrivacyPage() {
                 <section>
                   <h2 className="font-display text-xl font-semibold text-text-primary mb-3">Your choices</h2>
                   <ul className="list-disc pl-5 space-y-2 text-text-muted">
-                    <li>You may disable cookies or analytics in your browser where applicable.</li>
+                    <li>
+                      You may disable cookies, analytics, or session replay in your browser where applicable (for
+                      example, ad-blockers and tracking-protection settings that block PostHog will also block
+                      replay).
+                    </li>
                     <li>You may contact me to ask questions about this policy (see Support).</li>
                   </ul>
                 </section>

@@ -13,7 +13,7 @@ export const siteConfig = {
   },
   calendlyUrl: 'https://calendly.com/[your-handle]',
   email: 'nava.blr@zohomail.in',
-  linkedin: 'https://linkedin.com/in/[your-handle]',
+  linkedin: 'https://linkedin.com/in/npv',
   resumeFile: '/Nithyapriya-Veeraraghavan.pdf',
   showMarqueeStrip: false,
 }
