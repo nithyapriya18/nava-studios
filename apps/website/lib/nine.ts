@@ -70,6 +70,6 @@ export const CAREER = [
   { year: '2018', role: 'Data scientist', place: 'Novartis' },
   { year: '2020', role: 'Healthcare AI PM', place: 'Novartis' },
   { year: '2024', role: 'Lead PM, supply chain AI', place: 'Resilinc · 500K+ users' },
-  { year: '2025', role: 'Founding PM, multi-agent', place: 'Opura · PetaSight' },
+  { year: '2025', role: 'Founding PM, multi-agent systems', place: 'Early-stage' },
   { year: '2026', role: 'Founder, Nava Studios', place: 'First products, one engagement at a time' },
 ]
