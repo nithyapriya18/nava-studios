@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
 import { CAREER } from '@/lib/process'
+import { reviewHref } from '@/lib/products'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -68,7 +69,7 @@ export default function AboutPage() {
               </p>
               <p className="text-text-muted">
                 If you want to see how I think about a product before we talk, try{' '}
-                <Link href="/review" className="text-link">
+                <Link href={reviewHref} className="text-link">
                   the free landing page review
                 </Link>
                 . I also hold the PSPO I certification from

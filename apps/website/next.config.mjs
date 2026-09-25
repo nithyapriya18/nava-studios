@@ -5,12 +5,12 @@ const nextConfig = {
   transpilePackages: ['next-mdx-remote'],
   async redirects() {
     return [
-      { source: '/products/:slug', destination: '/', permanent: false },
-      { source: '/work', destination: '/review', permanent: false },
-      { source: '/work/:slug', destination: '/review', permanent: false },
-      { source: '/lab', destination: '/review', permanent: false },
-      { source: '/lab/:slug', destination: '/review', permanent: false },
-      { source: '/roast', destination: '/review', permanent: true },
+      { source: '/work', destination: '/products', permanent: false },
+      { source: '/work/:slug', destination: '/products', permanent: false },
+      { source: '/lab', destination: '/products', permanent: false },
+      { source: '/lab/:slug', destination: '/products', permanent: false },
+      { source: '/roast', destination: '/products/landing-page-review', permanent: false },
+      { source: '/review', destination: '/products/landing-page-review', permanent: false },
     ]
   },
 }

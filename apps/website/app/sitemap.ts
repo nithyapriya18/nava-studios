@@ -5,7 +5,8 @@ import { getAllPosts } from '@/lib/mdx'
 const STATIC_ROUTES = [
   { path: '', priority: 1 },
   { path: '/about', priority: 0.8 },
-  { path: '/review', priority: 0.9 },
+  { path: '/products', priority: 0.8 },
+  { path: '/products/landing-page-review', priority: 0.9 },
   { path: '/contact', priority: 0.9 },
   { path: '/start', priority: 0.7 },
   { path: '/writing', priority: 0.6 },

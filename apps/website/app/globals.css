@@ -292,6 +292,22 @@ body {
     0 40px 70px -30px rgb(1 41 135 / 0.6);
 }
 
+/* Review app: gradient spinner and the score ring drawing in. */
+.review-spinner {
+  background: conic-gradient(from 0deg, #012987, #006278, #11ab8c, transparent 75%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5px));
+  animation: ha-spin 0.9s linear infinite;
+}
+.score-ring-arc {
+  animation: score-ring 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes score-ring {
+  from {
+    stroke-dasharray: 0 400;
+  }
+}
+
 /* Mobile menu entrance. */
 .menu-in {
   animation: menu-in 0.16s ease-out;
@@ -318,7 +334,8 @@ body {
   .ha-orb,
   .ha-ring,
   .ha-drop,
-  .ha-bob {
+  .ha-bob,
+  .score-ring-arc {
     animation: none;
   }
 }

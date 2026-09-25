@@ -11,6 +11,7 @@ import { StackSection } from '@/components/ui/stack-section'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { ContactBand } from '@/components/contact-band'
 import { HeroVisual } from '@/components/hero-visual'
+import { reviewHref } from '@/lib/products'
 
 const facts = [
   { title: 'Fixed price', body: 'Agreed before any work starts' },
@@ -99,7 +100,7 @@ export default function Home() {
               >
                 {contactLabel}
               </a>
-              <Link href="/review" className="text-[0.9375rem] text-link">
+              <Link href={reviewHref} className="text-[0.9375rem] text-link">
                 Get a free landing page review
               </Link>
             </div>
@@ -245,7 +246,7 @@ export default function Home() {
               </p>
             </div>
             <div className="md:justify-self-end">
-              <Link href="/review" className="btn-primary !px-6 !py-3">
+              <Link href={reviewHref} className="btn-primary !px-6 !py-3">
                 Review my landing page
               </Link>
               <p className="mt-3 text-sm text-text-muted">

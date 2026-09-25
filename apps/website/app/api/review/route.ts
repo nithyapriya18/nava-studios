@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkIpLimit, checkDailyLimit, clientIp, PER_IP_LIMIT } from '@/lib/rate-limit'
 import type { Review } from '@/lib/review'
+import { REVIEW_PRODUCT } from '@/lib/products'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -8,7 +9,7 @@ export const maxDuration = 60
 const MODEL = 'claude-haiku-4-5-20251001'
 const MAX_INPUT_CHARS = 6000
 
-const SYSTEM_PROMPT = `You write the reviews for "Landing Page Review", a free tool on a software studio's website. Someone has pasted their landing page copy, pitch or product description. Review it the way an experienced product consultant would for a client: direct, specific, constructive and professional in tone. Be honest about weaknesses without being harsh or sarcastic.
+const SYSTEM_PROMPT = `You write the reviews for "${REVIEW_PRODUCT.name}", a free tool on a software studio's website. Someone has pasted their landing page copy, pitch or product description. Review it the way an experienced product consultant would for a client: direct, specific, constructive and professional in tone. Be honest about weaknesses without being harsh or sarcastic.
 
 Rules:
 - Every point must be about THIS submission. Quote their exact words wherever you can. Never give generic startup advice.

@@ -4,7 +4,7 @@ import { Wordmark } from '@/components/wordmark'
 
 const links = [
   { href: '/start', label: 'How it works' },
-  { href: '/review', label: 'Page review' },
+  { href: '/products', label: 'Products' },
   { href: '/writing', label: 'Writing' },
   { href: '/about', label: 'About' },
   { href: '/support', label: 'Support' },

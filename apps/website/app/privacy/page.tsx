@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { siteConfig } from '@/config'
+import { REVIEW_PRODUCT, reviewHref } from '@/lib/products'
 
 export const metadata: Metadata = {
   title: 'Privacy policy',
@@ -33,14 +34,14 @@ export default function PrivacyPage() {
         <p>
           PostHog also records a replay of how you use the site: mouse movement,
           clicks, and what&apos;s on screen, including results shown by tools like
-          Landing Page Review. I use it to find bugs and confusing moments. Inputs such as
+          {REVIEW_PRODUCT.name}. I use it to find bugs and confusing moments. Inputs such as
           password fields are masked automatically. You can opt out in your browser,
           as described under &ldquo;Your choices&rdquo; below.
         </p>
-        <h3>Landing Page Review</h3>
+        <h3>{REVIEW_PRODUCT.name}</h3>
         <p>
           Text or a link you paste into{' '}
-          <Link href="/review">Landing Page Review</Link> is sent to Anthropic&apos;s API to
+          <Link href={reviewHref}>{REVIEW_PRODUCT.name}</Link> is sent to Anthropic&apos;s API to
           generate the review. I don&apos;t store it beyond what&apos;s needed to serve
           that one request and apply basic rate limiting.
         </p>
@@ -62,7 +63,7 @@ export default function PrivacyPage() {
         <p>
           I don&apos;t sell your personal information. A small set of providers process
           data on my behalf: Vercel for hosting, PostHog for analytics, Anthropic for
-          the model behind Landing Page Review, Resend for delivering contact form
+          the model behind {REVIEW_PRODUCT.name}, Resend for delivering contact form
           messages, and Supabase for the rate-limiting database. Each has its own privacy policy.
         </p>
 
@@ -70,7 +71,7 @@ export default function PrivacyPage() {
         <p>
           I keep email correspondence as long as I need it for support and ordinary
           business records. I don&apos;t keep a permanent copy of what you paste into
-          Landing Page Review.
+          {REVIEW_PRODUCT.name}.
         </p>
 
         <h2>Your choices</h2>

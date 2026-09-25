@@ -1,5 +1,7 @@
+import { REVIEW_PRODUCT, reviewUrl } from '@/lib/products'
+
 /**
- * Shape of a Landing Page Review, plus the two exports built from it.
+ * Shape of a review from the landing page review product, plus the two exports built from it.
  * The exports are assembled here in the browser from the review the API
  * already returned, so they cost no extra API calls.
  */
@@ -74,7 +76,7 @@ export function toPlan(review: Review, input: string) {
   return [
     '# Landing page plan',
     '',
-    `Reviewed with Landing Page Review (https://nithyapriya.com/review) on ${date}.`,
+    `Reviewed with ${REVIEW_PRODUCT.name} (${reviewUrl}) on ${date}.`,
     `Source: ${url ?? 'pasted copy'}`,
     '',
     '## Summary',
@@ -131,6 +133,6 @@ export function toText(review: Review) {
     "What's working:",
     ...review.strengths.map((s) => `- ${s}`),
     '',
-    'Reviewed with Landing Page Review at nithyapriya.com/review',
+    `Reviewed with ${REVIEW_PRODUCT.name} at ${reviewUrl.replace('https://', '')}`,
   ].join('\n')
 }
