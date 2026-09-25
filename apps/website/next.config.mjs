@@ -9,8 +9,9 @@ const nextConfig = {
       { source: '/work/:slug', destination: '/products', permanent: false },
       { source: '/lab', destination: '/products', permanent: false },
       { source: '/lab/:slug', destination: '/products', permanent: false },
-      { source: '/roast', destination: '/products/landing-page-review', permanent: false },
-      { source: '/review', destination: '/products/landing-page-review', permanent: false },
+      { source: '/roast', destination: '/products/second-opinion', permanent: false },
+      { source: '/review', destination: '/products/second-opinion', permanent: false },
+      { source: '/products/landing-page-review', destination: '/products/second-opinion', permanent: false },
     ]
   },
 }

@@ -101,7 +101,7 @@ export default function Home() {
                 {contactLabel}
               </a>
               <Link href={reviewHref} className="text-[0.9375rem] text-link">
-                Get a free landing page review
+                Get a free second opinion on your landing page
               </Link>
             </div>
             <ul className="mt-14 grid max-w-3xl gap-6 border-t border-border pt-8 sm:grid-cols-3">
