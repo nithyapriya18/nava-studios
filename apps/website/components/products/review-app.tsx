@@ -86,7 +86,7 @@ const SECTIONS = [
 ]
 
 export function ReviewApp() {
-  const [mode, setMode] = useState<Mode>('text')
+  const [mode, setMode] = useState<Mode>('url')
   const [text, setText] = useState('')
   const [url, setUrl] = useState(URL_PREFIX)
   const urlRef = useRef<HTMLInputElement>(null)
@@ -120,8 +120,14 @@ export function ReviewApp() {
     }
   }, [msLeft])
 
-  // On switching to Page link, put the cursor after the prefix.
+  // On switching to Page link, put the cursor after the prefix. Not on first
+  // load, so phones don't open the keyboard before the visitor asks.
+  const firstRender = useRef(true)
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
     if (mode !== 'url') return
     const el = urlRef.current
     if (!el) return
@@ -253,8 +259,8 @@ export function ReviewApp() {
             <div role="tablist" aria-label="Input type" className="inline-flex rounded-full bg-surface p-1 text-sm">
               {(
                 [
-                  ['text', 'Paste copy', Type],
                   ['url', 'Page link', Link2],
+                  ['text', 'Paste copy', Type],
                 ] as const
               ).map(([value, label, Icon]) => (
                 <button
