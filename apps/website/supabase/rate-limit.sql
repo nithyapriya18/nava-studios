@@ -7,6 +7,11 @@ create table if not exists public.rate_limits (
   count int not null default 0
 );
 
+-- Lock the table: with RLS on and no policies, the public (anon) key can't
+-- read or reset the counters directly. check_rate_limit still works because
+-- it is `security definer` and runs as the table's owner.
+alter table public.rate_limits enable row level security;
+
 -- Atomic check-and-increment: one round trip, safe under concurrent requests.
 -- Returns true (allowed) if the caller is still within p_max_count for the
 -- current window; false if they've hit the limit. Resets the window
