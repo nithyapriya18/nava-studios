@@ -51,7 +51,7 @@ function normalisePastedUrl(pasted: string) {
   return null
 }
 
-type Quota = { remaining: number; limit: number; resetsAt: string | null }
+type Quota = { remaining: number; limit: number; resetsAt: string | null; owner?: boolean }
 
 /** Milliseconds until `iso`, ticking every second. Null when there's no time. */
 function useCountdown(iso: string | null) {
@@ -234,7 +234,9 @@ export function ReviewApp() {
             }`}
             aria-live="polite"
           >
-            {outOfReviews && msLeft
+            {quota?.owner
+              ? 'Unlimited reviews (owner)'
+              : outOfReviews && msLeft
               ? `Next review in ${clock(msLeft)}`
               : quota
                 ? `${quota.remaining} of ${quota.limit} reviews left today`
