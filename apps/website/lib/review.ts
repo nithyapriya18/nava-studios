@@ -24,44 +24,39 @@ function sourceLine(input: string) {
     : null
 }
 
-/** A prompt to paste into Claude, ChatGPT, Cursor, Lovable or similar. */
+/**
+ * A prompt to paste into Claude, ChatGPT, Cursor, Lovable or similar. Written
+ * as the founder's own brief: it carries the findings, not the rules or the
+ * structure the review was produced with.
+ */
 export function toPrompt(review: Review, input: string) {
   const url = sourceLine(input)
   const lines = [
-    "I'm improving the copy on my landing page. A detailed review found the problems below. Please rewrite the page to fix them.",
+    url
+      ? `Please help me rewrite the copy on my landing page, ${url}.`
+      : 'Please help me rewrite the copy on my landing page. The current copy is at the end of this message.',
     '',
-    'Rules:',
-    '- Keep everything factual about my product. Do not invent numbers, customers, features or results.',
-    '- Where proof is missing, leave a clearly marked placeholder such as [number of customers] for me to fill in.',
-    '- Keep the parts listed under "Keep what works".',
+    `It's for: ${review.audience}`,
     '',
-    url ? `Page: ${url}` : 'My current copy is at the end of this message.',
-    `Who the page is for: ${review.audience}`,
-    '',
-    'Problems to fix, most important first:',
+    'What I want to change, most important first:',
     ...review.problems.map((p, i) =>
-      [
-        `${i + 1}. ${p.title}.`,
-        p.quote ? ` Current text: "${p.quote}".` : '',
-        ` Why it matters: ${p.why}`,
-        ` Fix: ${p.fix}`,
-      ].join(''),
+      [`${i + 1}. ${p.title}.`, p.quote ? ` Right now it says "${p.quote}".` : '', ` ${p.fix}`].join(''),
     ),
     '',
-    'Keep what works:',
+    'What I want to keep:',
     ...review.strengths.map((s) => `- ${s}`),
     '',
-    'Suggested direction for the top of the page:',
+    'A starting point for the top of the page:',
     `- Headline: ${review.rewrite.headline}`,
     `- Subheadline: ${review.rewrite.subheadline}`,
-    `- Main button: ${review.rewrite.cta}`,
+    `- Button: ${review.rewrite.cta}`,
     '',
-    'Changes to make, in order:',
-    ...review.nextSteps.map((s, i) => `${i + 1}. ${s}`),
+    'Also:',
+    ...review.nextSteps.map((s) => `- ${s}`),
     '',
-    'Return the full revised page copy, section by section, followed by a short list of the placeholders I need to fill in.',
+    "Please give me the revised copy section by section. Keep it accurate to what I've told you, and where you'd need a fact or number I haven't given, leave a placeholder in [square brackets] and list those at the end.",
   ]
-  if (!url) lines.push('', 'My current copy:', '"""', input.trim(), '"""')
+  if (!url) lines.push('', 'Current copy:', '"""', input.trim(), '"""')
   return lines.join('\n')
 }
 
@@ -85,7 +80,7 @@ export function toPlan(review: Review, input: string) {
     '',
     review.summary,
     '',
-    `**Who it seems to be for:** ${review.audience}`,
+    `**Audience:** ${review.audience}`,
     '',
     '## Scores',
     '',
@@ -93,21 +88,21 @@ export function toPlan(review: Review, input: string) {
     '| --- | --- | --- |',
     ...review.breakdown.map((b) => `| ${b.area} | ${b.score}/10 | ${b.note.replace(/\|/g, '/')} |`),
     '',
-    '## Problems to fix',
+    '## What to change',
     '',
     ...review.problems.flatMap((p, i) => [
       `### ${i + 1}. ${p.title}`,
       '',
       ...(p.quote ? [`- **Current:** "${p.quote}"`] : []),
-      `- **Why it matters:** ${p.why}`,
+      `- **Why:** ${p.why}`,
       `- **Fix:** ${p.fix}`,
       '',
     ]),
-    '## Keep what works',
+    '## What to keep',
     '',
     ...review.strengths.map((s) => `- ${s}`),
     '',
-    '## Suggested copy',
+    '## A starting point for the copy',
     '',
     `- **Headline:** ${review.rewrite.headline}`,
     `- **Subheadline:** ${review.rewrite.subheadline}`,

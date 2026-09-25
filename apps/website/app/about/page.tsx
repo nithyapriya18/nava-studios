@@ -1,9 +1,15 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
+import {
+  siteConfig,
+  contactHref,
+  contactLabel,
+  contactIsExternal,
+} from '@/config'
 import { CAREER } from '@/lib/process'
 import { reviewHref } from '@/lib/products'
+import { TrackedLink } from '@/components/tracked-link'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -31,7 +37,9 @@ export default function AboutPage() {
               />
             </div>
             <p className="mt-3 font-sans text-sm leading-snug">
-              <span className="block text-text-primary">{siteConfig.founderFull}</span>
+              <span className="block text-text-primary">
+                {siteConfig.founderFull}
+              </span>
               <span className="text-text-muted">{siteConfig.title}</span>
             </p>
           </aside>
@@ -43,37 +51,39 @@ export default function AboutPage() {
 
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-text-primary">
               <p>
-                I run {siteConfig.name} from Bengaluru, where I design and build software
-                for founders and small businesses. NPV are my initials.
+                I run {siteConfig.name} from Bengaluru, where I design and build
+                software for founders and small businesses. NPV are my initials.
               </p>
               <p className="text-text-muted">
-                I started as a software engineer at Tech Mahindra in 2014. At Novartis I
-                moved into data science and then into product for healthcare AI, where I
-                worked on an NLP redaction platform with $6.4M in documented cost impact.
-                At Resilinc I led product for supply chain AI used by more than 500,000
-                enterprise users. After that I was a founding product manager on
-                multi-agent systems at early-stage companies.
+                I started as a software engineer at Tech Mahindra in 2014. At
+                Novartis I moved into data science and then into product for
+                healthcare AI, where I worked on an NLP redaction platform with
+                $6.4M in documented cost impact. At Resilinc I led product for
+                supply chain AI used by more than 500,000 enterprise users.
+                After that I was a founding product manager on multi-agent
+                systems at early-stage companies.
               </p>
               <p className="text-text-muted">
-                Most of that time was spent on the product side: talking to users,
-                deciding what to build first, and working closely with engineers to ship
-                it. Because I started as an engineer, I build as well. For a founder, that
-                means the person scoping your product is also the one building it,
-                and the trade-offs between what you want and what it takes are made with
-                both in view.
+                Most of that time was spent on the product side: talking to
+                users, deciding what to build first, and working closely with
+                engineers to ship it. Because I started as an engineer, I build
+                as well. For a founder, that means the person scoping your
+                product is also the one building it, and the trade-offs between
+                what you want and what it takes are made with both in view.
               </p>
               <p className="text-text-muted">
-                I build for the team and the users you have today. If you need a system
-                designed for very large scale from the start, I&apos;ll say so on our first
-                call and tell you what kind of team to look for instead.
+                I build for the team and the users you have today. If you need a
+                system designed for very large scale from the start, I&apos;ll
+                say so on our first call and tell you what kind of team to look
+                for instead.
               </p>
               <p className="text-text-muted">
-                If you want to see how I think about a product before we talk, try{' '}
+                If you want to see how I think about a product before we talk,
+                try{' '}
                 <Link href={reviewHref} className="text-link">
                   the free landing page review
                 </Link>
-                . I also hold the PSPO I certification from
-                Scrum.org.
+                . I also hold the PSPO I certification from Scrum.org.
               </p>
             </div>
 
@@ -81,9 +91,15 @@ export default function AboutPage() {
               <a href={contactHref} className="btn-primary" {...ctaProps}>
                 {contactLabel}
               </a>
-              <a href={siteConfig.resumeFile} download className="font-sans text-[0.9375rem] text-link">
+              <TrackedLink
+                href={siteConfig.resumeFile}
+                download
+                event="resume_downloaded"
+                properties={{ location: 'about' }}
+                className="font-sans text-[0.9375rem] text-link"
+              >
                 Download my resume (PDF)
-              </a>
+              </TrackedLink>
             </div>
           </div>
         </div>
@@ -100,7 +116,9 @@ export default function AboutPage() {
                 key={`${c.year}-${c.role}`}
                 className="fade-up grid grid-cols-[4rem_1fr] gap-4 border-b border-border py-5 md:grid-cols-[6rem_1fr_auto]"
               >
-                <span className="text-grad font-semibold tabular-nums">{c.year}</span>
+                <span className="text-grad font-semibold tabular-nums">
+                  {c.year}
+                </span>
                 <span className="text-lg text-text-primary">{c.role}</span>
                 <span className="col-start-2 text-text-muted md:col-start-auto md:text-right">
                   {c.place}

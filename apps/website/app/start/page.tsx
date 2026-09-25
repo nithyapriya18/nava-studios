@@ -1,7 +1,13 @@
 import type { Metadata } from 'next'
-import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
+import {
+  siteConfig,
+  contactHref,
+  contactLabel,
+  contactIsExternal,
+} from '@/config'
 import { STEPS } from '@/lib/process'
 import { StickySteps } from '@/components/ui/sticky-steps'
+import { TrackedLink } from '@/components/tracked-link'
 
 export const metadata: Metadata = {
   title: 'How it works',
@@ -48,9 +54,10 @@ export default function StartPage() {
             How a project runs
           </h1>
           <p className="mt-6 text-xl leading-relaxed text-text-primary">
-            Every project follows the same five steps, from the first conversation to
-            the day the product is live and yours. At each point you know what happens
-            next, what it costs and what you will have at the end of it.
+            Every project follows the same five steps, from the first
+            conversation to the day the product is live and yours. At each point
+            you know what happens next, what it costs and what you will have at
+            the end of it.
           </p>
         </header>
 
@@ -66,8 +73,8 @@ export default function StartPage() {
               Common questions
             </h2>
             <p className="fade-up mt-5 text-lg leading-relaxed text-text-muted">
-              If yours isn&apos;t here, send it over. It&apos;s usually a good thing to
-              talk about on the first call.
+              If yours isn&apos;t here, send it over. It&apos;s usually a good
+              thing to talk about on the first call.
             </p>
           </div>
           <div className="border-t border-border">
@@ -82,7 +89,9 @@ export default function StartPage() {
                     +
                   </span>
                 </summary>
-                <p className="max-w-xl pb-6 leading-relaxed text-text-muted">{item.a}</p>
+                <p className="max-w-xl pb-6 leading-relaxed text-text-muted">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
@@ -103,9 +112,15 @@ export default function StartPage() {
             <a href={contactHref} className="btn-primary" {...ctaProps}>
               {contactLabel}
             </a>
-            <a href={siteConfig.resumeFile} download className="font-sans text-[0.9375rem] text-link">
+            <TrackedLink
+              href={siteConfig.resumeFile}
+              download
+              event="resume_downloaded"
+              properties={{ location: 'how_it_works' }}
+              className="font-sans text-[0.9375rem] text-link"
+            >
               Read my resume first
-            </a>
+            </TrackedLink>
           </div>
         </div>
       </section>

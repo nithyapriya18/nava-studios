@@ -1,5 +1,6 @@
 import { siteConfig, mailtoHref } from '@/config'
 import { ContactForm } from '@/components/contact-form'
+import { TrackedLink } from '@/components/tracked-link'
 
 const next = [
   'I reply by email, usually with a few questions.',
@@ -36,9 +37,14 @@ export function ContactBand({ heading = 'h2' }: { heading?: 'h1' | 'h2' }) {
           </ol>
           <p className="mt-10 text-[0.9375rem] text-white/70">
             Prefer email?{' '}
-            <a href={mailtoHref} className="text-white underline underline-offset-4">
+            <TrackedLink
+              href={mailtoHref}
+              event="email_clicked"
+              properties={{ location: 'contact_panel' }}
+              className="text-white underline underline-offset-4"
+            >
               {siteConfig.email}
-            </a>
+            </TrackedLink>
           </p>
         </div>
         <ContactForm />

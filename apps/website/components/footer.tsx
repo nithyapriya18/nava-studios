@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { siteConfig, linkedinHref } from '@/config'
 import { Wordmark } from '@/components/wordmark'
+import { TrackedLink } from '@/components/tracked-link'
 
 const links = [
   { href: '/start', label: 'How it works' },
@@ -36,21 +37,39 @@ export function Footer() {
           </ul>
           <ul className="flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
             <li>
-              <a href={`mailto:${siteConfig.email}`} className="text-link">
+              <TrackedLink
+                href={`mailto:${siteConfig.email}`}
+                event="email_clicked"
+                properties={{ location: 'footer' }}
+                className="text-link"
+              >
                 {siteConfig.email}
-              </a>
+              </TrackedLink>
             </li>
             {linkedinHref ? (
               <li>
-                <a href={linkedinHref} target="_blank" rel="noopener noreferrer" className="text-link">
+                <TrackedLink
+                  href={linkedinHref}
+                  event="linkedin_opened"
+                  properties={{ location: 'footer' }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-link"
+                >
                   LinkedIn
-                </a>
+                </TrackedLink>
               </li>
             ) : null}
             <li>
-              <a href={siteConfig.resumeFile} download className="text-link">
+              <TrackedLink
+                href={siteConfig.resumeFile}
+                download
+                event="resume_downloaded"
+                properties={{ location: 'footer' }}
+                className="text-link"
+              >
                 Resume (PDF)
-              </a>
+              </TrackedLink>
             </li>
           </ul>
           <p className="text-sm text-text-muted">
