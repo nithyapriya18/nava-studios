@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { checkIpLimit, checkDailyLimit, clientIp, reviewQuota, PER_IP_LIMIT } from '@/lib/rate-limit'
 import type { Review } from '@/lib/review'
 import { REVIEW_PRODUCT } from '@/lib/products'
+import { logReview, requestMeta, type ReviewOutcome } from '@/lib/review-log'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -164,6 +165,12 @@ export async function POST(req: NextRequest) {
   }
 
   let textToReview = raw
+  const ip = clientIp(req.headers)
+  const meta = requestMeta(req.headers)
+  const inputType = looksLikeUrl(raw) ? 'link' : 'text'
+  // Saved after the response is sent, so it never slows a review down.
+  const log = (outcome: ReviewOutcome, extra: { score?: number; verdict?: string; review?: unknown } = {}) =>
+    after(() => logReview({ outcome, input_type: inputType, input: raw, ip, ...meta, ...extra }))
 
   // Fetch the page before counting against the limit, so a site that blocks
   // us doesn't use up one of the visitor's reviews.
@@ -180,6 +187,7 @@ export async function POST(req: NextRequest) {
       if (text.length < 40) throw new Error('too little text')
       textToReview = text
     } catch {
+      log('unreadable_link')
       return NextResponse.json(
         {
           error:
@@ -198,9 +206,9 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const ip = clientIp(req.headers)
   const perIp = await checkIpLimit(ip)
   if (!perIp.success) {
+    log('limit_visitor')
     const quota = await reviewQuota(ip)
     return NextResponse.json(
       {
@@ -214,6 +222,7 @@ export async function POST(req: NextRequest) {
 
   const daily = await checkDailyLimit()
   if (!daily.success) {
+    log('limit_site')
     return NextResponse.json(
       {
         error: 'The review service has reached its limit for today. Try again tomorrow.',
@@ -246,6 +255,7 @@ export async function POST(req: NextRequest) {
     if (!anthropicRes.ok) {
       const errText = await anthropicRes.text()
       console.error('Anthropic API error', anthropicRes.status, errText)
+      log('error')
       return NextResponse.json({ error: 'The review service hiccuped. Try again.' }, { status: 502 })
     }
 
@@ -258,10 +268,12 @@ export async function POST(req: NextRequest) {
     const review = normalise(toolUse.input)
     if (!review.verdict || review.problems.length === 0) throw new Error('incomplete review')
 
+    log('reviewed', { score: review.score, verdict: review.verdict, review })
     const quota = await reviewQuota(ip)
     return NextResponse.json({ ...review, quota })
   } catch (err) {
     console.error('Review route failure', err)
+    log('error')
     return NextResponse.json({ error: 'The review service hiccuped. Try again.' }, { status: 500 })
   }
 }

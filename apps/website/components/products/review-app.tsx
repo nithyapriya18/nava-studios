@@ -389,6 +389,13 @@ export function ReviewApp() {
                 <ScanIcon />
                 Review my page
               </button>
+              <p className="mt-4 text-xs leading-relaxed text-text-muted">
+                * What you submit is saved and seen only by me, so I can improve{' '}
+                {REVIEW_PRODUCT.name}.{' '}
+                <Link href="/privacy" className="underline underline-offset-2 hover:text-text-primary">
+                  Privacy policy
+                </Link>
+              </p>
             </div>
 
             <aside className="border-t border-border bg-background/60 p-5 md:border-l md:border-t-0 md:p-8">

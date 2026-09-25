@@ -73,6 +73,24 @@ as $$
   left join public.rate_limits r on r.key = p_key;
 $$;
 
+-- Private log of every Second Opinion attempt, for the site owner. RLS on
+-- with no policies: only the server's secret key can read or write it.
+create table if not exists public.review_log (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  outcome text not null,
+  input_type text,
+  input text,
+  score int,
+  verdict text,
+  review jsonb,
+  ip text,
+  country text,
+  city text,
+  user_agent text
+);
+alter table public.review_log enable row level security;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:
