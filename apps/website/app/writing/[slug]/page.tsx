@@ -7,7 +7,7 @@ import { ReadingProgress } from '@/components/reading-progress'
 import type { Metadata } from 'next'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -20,18 +20,20 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   try {
-    const post = getPostBySlug('writing', params.slug)
+    const post = getPostBySlug('writing', slug)
     return { title: post.title, description: post.excerpt }
   } catch {
     return { title: 'Post' }
   }
 }
 
-export default function PostPage({ params }: Props) {
+export default async function PostPage({ params }: Props) {
+  const { slug } = await params
   let post
   try {
-    post = getPostBySlug('writing', params.slug)
+    post = getPostBySlug('writing', slug)
   } catch {
     notFound()
   }
