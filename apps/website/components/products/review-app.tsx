@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ClipboardEvent, type FormEvent } from 'react'
 import Link from 'next/link'
 import {
   AlertCircle,
@@ -40,6 +40,20 @@ const INCLUDES = [
   { icon: Sparkles, title: 'Take it with you', body: 'Copy the fixes as an AI prompt, or download them as a plan.md.' },
 ]
 
+// The link box starts with this so people only type their domain.
+const URL_PREFIX = 'https://www.'
+
+/** A pasted address replaces the prefix instead of being added after it. */
+function normalisePastedUrl(pasted: string) {
+  const t = pasted.trim()
+  if (/^https?:\/\//i.test(t)) return t
+  if (/^www\./i.test(t)) return `https://${t}`
+  return null
+}
+
+/** True once there's a real address, not just the prefix. */
+const hasAddress = (value: string) => /^(https?:\/\/)?[^\s/.]+(\.[^\s/.]+)+/i.test(value.trim())
+
 const SECTIONS = [
   { id: 'overview', label: 'Overview' },
   { id: 'scores', label: 'Scores' },
@@ -52,7 +66,8 @@ const SECTIONS = [
 export function ReviewApp() {
   const [mode, setMode] = useState<Mode>('text')
   const [text, setText] = useState('')
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState(URL_PREFIX)
+  const urlRef = useRef<HTMLInputElement>(null)
   const [submitted, setSubmitted] = useState('')
   const [loading, setLoading] = useState(false)
   const [stage, setStage] = useState(0)
@@ -61,6 +76,26 @@ export function ReviewApp() {
   const [copied, setCopied] = useState<Copied>(null)
 
   const input = (mode === 'text' ? text : url).trim()
+  const ready = mode === 'text' ? input.length > 0 : hasAddress(url)
+
+  // On switching to Page link, put the cursor after the prefix.
+  useEffect(() => {
+    if (mode !== 'url') return
+    const el = urlRef.current
+    if (!el) return
+    el.focus()
+    el.setSelectionRange(el.value.length, el.value.length)
+  }, [mode])
+
+  function onUrlPaste(e: ClipboardEvent<HTMLInputElement>) {
+    const full = normalisePastedUrl(e.clipboardData.getData('text'))
+    const el = e.currentTarget
+    const onlyPrefix = el.value === URL_PREFIX || (el.selectionStart === 0 && el.selectionEnd === el.value.length)
+    if (full && onlyPrefix) {
+      e.preventDefault()
+      setUrl(full)
+    }
+  }
 
   // Move through the progress stages while the review is being written.
   useEffect(() => {
@@ -72,7 +107,7 @@ export function ReviewApp() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!input || loading) return
+    if (!ready || loading) return
 
     track('roast_submitted', { input_type: mode, input_length: input.length })
     setLoading(true)
@@ -229,14 +264,24 @@ export function ReviewApp() {
                   </label>
                   <input
                     id="review-url"
-                    type="url"
+                    ref={urlRef}
+                    type="text"
                     inputMode="url"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    spellCheck={false}
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://yourproduct.com"
+                    onPaste={onUrlPaste}
+                    placeholder="https://www.yourproduct.com"
                     className="mt-3 w-full rounded-2xl border border-border bg-background px-4 py-3.5 text-text-primary placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25"
                   />
                   <p className="mt-3 text-sm leading-relaxed text-text-muted">
+                    Type the rest of your address, such as <span className="text-text-primary">yourproduct.com</span>{' '}
+                    or <span className="text-text-primary">yourproduct.in</span>. You can edit the start
+                    if your site uses http or doesn&apos;t use www.
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-text-muted">
                     Some sites block automatic reading. If yours does, switch to Paste copy.
                     A link that can&apos;t be read doesn&apos;t use up a review.
                   </p>
@@ -259,7 +304,7 @@ export function ReviewApp() {
 
               <button
                 type="submit"
-                disabled={!input}
+                disabled={!ready}
                 className="btn-primary mt-6 w-full !py-3 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:!px-7"
               >
                 <ScanIcon />
