@@ -113,8 +113,9 @@ export default function StartPage() {
               {contactLabel}
             </a>
             <TrackedLink
-              href={siteConfig.resumeFile}
+              href="/resume?from=how_it_works"
               download
+              rel="nofollow"
               event="resume_downloaded"
               properties={{ location: 'how_it_works' }}
               className="font-sans text-[0.9375rem] text-link"

@@ -49,11 +49,11 @@ export function Footer() {
             {linkedinHref ? (
               <li>
                 <TrackedLink
-                  href={linkedinHref}
+                  href="/linkedin?from=footer"
                   event="linkedin_opened"
                   properties={{ location: 'footer' }}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-link"
                 >
                   LinkedIn
@@ -62,8 +62,9 @@ export function Footer() {
             ) : null}
             <li>
               <TrackedLink
-                href={siteConfig.resumeFile}
+                href="/resume?from=footer"
                 download
+                rel="nofollow"
                 event="resume_downloaded"
                 properties={{ location: 'footer' }}
                 className="text-link"

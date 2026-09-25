@@ -92,8 +92,9 @@ export default function AboutPage() {
                 {contactLabel}
               </a>
               <TrackedLink
-                href={siteConfig.resumeFile}
+                href="/resume?from=about"
                 download
+                rel="nofollow"
                 event="resume_downloaded"
                 properties={{ location: 'about' }}
                 className="font-sans text-[0.9375rem] text-link"

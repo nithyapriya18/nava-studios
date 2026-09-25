@@ -113,6 +113,37 @@ as $$
   );
 $$;
 
+-- Private record of key visitor actions (resume downloads, LinkedIn visits),
+-- written server-side so ad blockers don't hide them. Same lock as above.
+create table if not exists public.event_log (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  event text not null,
+  source text,
+  referrer text,
+  ip text,
+  country text,
+  city text,
+  user_agent text
+);
+alter table public.event_log enable row level security;
+
+create or replace function public.log_event(p_entry jsonb) returns void
+language sql
+security definer
+as $$
+  insert into public.event_log (event, source, referrer, ip, country, city, user_agent)
+  values (
+    left(p_entry->>'event', 40),
+    left(p_entry->>'source', 40),
+    left(p_entry->>'referrer', 300),
+    left(p_entry->>'ip', 100),
+    left(p_entry->>'country', 10),
+    left(p_entry->>'city', 100),
+    left(p_entry->>'user_agent', 500)
+  );
+$$;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:
