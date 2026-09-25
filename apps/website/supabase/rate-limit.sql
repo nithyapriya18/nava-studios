@@ -91,6 +91,28 @@ create table if not exists public.review_log (
 );
 alter table public.review_log enable row level security;
 
+-- The only way in: the site calls this with its publishable key. It can add
+-- a row but never read one back.
+create or replace function public.log_review(p_entry jsonb) returns void
+language sql
+security definer
+as $$
+  insert into public.review_log
+    (outcome, input_type, input, score, verdict, review, ip, country, city, user_agent)
+  values (
+    left(p_entry->>'outcome', 40),
+    left(p_entry->>'input_type', 10),
+    left(p_entry->>'input', 6000),
+    (p_entry->>'score')::int,
+    left(p_entry->>'verdict', 500),
+    p_entry->'review',
+    left(p_entry->>'ip', 100),
+    left(p_entry->>'country', 10),
+    left(p_entry->>'city', 100),
+    left(p_entry->>'user_agent', 500)
+  );
+$$;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:
