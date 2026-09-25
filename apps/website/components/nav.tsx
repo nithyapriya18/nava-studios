@@ -1,137 +1,135 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
 import { Logo } from '@/components/logo'
 
-const navLinks = [
+const links = [
+  { href: '/start', label: 'How it works' },
   { href: '/lab', label: 'Lab' },
-  { href: '/about', label: 'About' },
   { href: '/writing', label: 'Writing' },
+  { href: '/about', label: 'About' },
 ]
 
+/**
+ * Full width at the top of the page; after a little scroll it narrows into a
+ * floating pill. Adapted from Aceternity's Resizable Navbar, but animated with
+ * CSS transitions so the nav (on every page) doesn't pull in a motion library.
+ */
 export function Nav() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const [floating, setFloating] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    let frame = 0
+    const update = () => {
+      frame = 0
+      setFloating(window.scrollY > 80)
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
   }, [])
 
-  useEffect(() => {
-    setMobileOpen(false)
-  }, [pathname])
+  useEffect(() => setOpen(false), [pathname])
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = open ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [mobileOpen])
+  }, [open])
+
+  const ctaProps = contactIsExternal
+    ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+    : {}
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
 
   return (
-    <header
-      className={`sticky top-0 z-40 transition-colors duration-200 ${
-        scrolled ? 'bg-background/95 border-b border-border' : 'bg-background'
-      }`}
-    >
-      <div className="max-w-layout mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <Logo size={40} />
-
-        <nav className="hidden md:flex items-center gap-7">
-          {navLinks.map((link) => (
+    <header className="sticky top-0 z-50 px-4 pt-3 md:px-6">
+      {/* Desktop */}
+      <div
+        className={`mx-auto hidden items-center justify-between rounded-full px-5 py-2 transition-[max-width,transform,background-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex ${
+          floating
+            ? 'max-w-[760px] translate-y-1.5 bg-background/85 shadow-[0_10px_30px_-12px_rgba(33,26,27,0.18),0_0_0_1px_rgba(33,26,27,0.06)] backdrop-blur-md'
+            : 'max-w-[1080px] bg-transparent'
+        }`}
+      >
+        <Logo size={30} direction="row" />
+        <nav className="flex items-center gap-1">
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm transition-colors hover:text-text-primary ${
-                pathname.startsWith(link.href)
-                  ? 'text-text-primary font-medium'
-                  : 'text-text-muted'
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              className={`rounded-full px-3 py-1.5 text-[0.9375rem] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                isActive(link.href)
+                  ? 'text-text-primary'
+                  : 'text-text-muted hover:text-text-primary'
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <Link
-            href={contactHref}
-            {...(contactIsExternal
-              ? { target: '_blank', rel: 'noopener noreferrer' }
-              : {})}
-            className="btn-primary"
-          >
+          <a href={contactHref} className="btn-primary ml-2 !py-2" {...ctaProps}>
             {contactLabel}
-          </Link>
+          </a>
         </nav>
+      </div>
 
+      {/* Mobile */}
+      <div
+        className={`flex items-center justify-between rounded-full px-4 py-2 transition-colors md:hidden ${
+          floating || open
+            ? 'bg-background/90 shadow-[0_0_0_1px_rgba(33,26,27,0.06)] backdrop-blur'
+            : ''
+        }`}
+      >
+        <Logo size={28} direction="row" />
         <button
-          className="md:hidden p-2 -mr-2 text-text-muted hover:text-text-primary"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
+          type="button"
+          className="-mr-1 rounded-full p-2 text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? 'Close menu' : 'Open menu'}
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 top-16 bg-text-primary/20 z-30"
-              onClick={() => setMobileOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, x: '100%' }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: '100%' }}
-              transition={{ duration: 0.2 }}
-              className="fixed top-16 right-0 bottom-0 w-72 bg-background border-l border-border z-40 flex flex-col p-8 gap-1"
+      {open && (
+        <nav
+          id="mobile-menu"
+          className="menu-in absolute inset-x-4 top-[4.25rem] rounded-3xl border border-border bg-background p-3 shadow-[0_20px_40px_-20px_rgba(33,26,27,0.25)] md:hidden"
+        >
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              className={`block rounded-2xl px-4 py-3 text-lg ${
+                isActive(link.href) ? 'bg-surface text-text-primary' : 'text-text-muted'
+              }`}
             >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`py-3 text-lg border-b border-border ${
-                    pathname.startsWith(link.href)
-                      ? 'text-text-primary font-medium'
-                      : 'text-text-muted'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <Link
-                href={contactHref}
-                {...(contactIsExternal
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-                className="btn-primary mt-6 w-full"
-              >
-                {contactLabel}
-              </Link>
-              <Link
-                href="/start"
-                className="mt-3 block text-center py-3 text-sm text-text-muted"
-              >
-                How an engagement works
-              </Link>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              {link.label}
+            </Link>
+          ))}
+          <a href={contactHref} className="btn-primary mt-2 w-full" {...ctaProps}>
+            {contactLabel}
+          </a>
+        </nav>
+      )}
     </header>
   )
 }

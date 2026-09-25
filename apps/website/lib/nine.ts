@@ -3,73 +3,71 @@ export type NineStep = {
   verb: string
   title: string
   body: string
-  arrow?: boolean
 }
 
-/** How an engagement at Nava typically moves. Quiet list — used on /start. */
+/** How a project with Nava moves, start to finish. Shown on /start only. */
 export const NINE: NineStep[] = [
   {
     n: 1,
     verb: 'Call',
     title: 'We talk through the idea',
-    body: 'The call is unpaid. Bring what you have — a note, a deck, a spec, or just the idea. I ask enough to know what a first version would be.',
+    body: 'Bring whatever you have, from a single paragraph to a full spec. I ask enough to understand what a first version would be. This call is unpaid.',
   },
   {
     n: 2,
     verb: 'Scope',
-    title: 'We agree what v1 includes',
-    body: 'What ships now, and what waits. You can arrive with a full brief or with almost nothing. The point is a list we both understand.',
+    title: 'We agree what version one includes',
+    body: 'What ships now and what waits for later, written as a list we both understand.',
   },
   {
     n: 3,
     verb: 'Quote',
-    title: 'You see a number before I write code',
-    body: 'A fixed fee for that scope. Paid work does not start until you accept it.',
+    title: 'You see a number before any code',
+    body: 'A fixed fee for that scope. Nothing starts until you accept it.',
   },
   {
     n: 4,
     verb: 'Kickoff',
-    title: 'The build begins',
-    body: 'Accounts, access, and the first slice of the product. This is where the engagement is live.',
+    title: 'Paid work begins',
+    body: 'We set up accounts and access, and I start on the first slice of the product.',
   },
   {
     n: 5,
     verb: 'Build',
     title: 'A first version you can use',
-    body: 'Typically a few weeks. Something in the browser (or on a phone), not a deck of screens.',
+    body: 'Usually a few weeks. At the end there is something running in a browser or on a phone.',
   },
   {
     n: 6,
     verb: 'Review',
-    title: 'You use it',
-    body: 'You click through the real thing and tell me what is off. That is expected. First versions are not finished arguments.',
+    title: 'You try the real thing',
+    body: 'You click through it and tell me what feels off. First versions always have some of that.',
   },
   {
     n: 7,
     verb: 'Feedback',
-    title: 'We change what is in scope',
-    body: 'Your notes go back into the product. If something is outside the quote, we name it and price it separately.',
+    title: 'I fold your notes back in',
+    body: 'Changes inside the scope are part of the job. If something falls outside the quote, I name it and price it separately.',
   },
   {
     n: 8,
     verb: 'Handoff',
-    title: 'It is yours to run',
-    body: 'By default the repo and hosting sit on your accounts. I can keep hosting it if you prefer. Either way, you get enough notes to keep going.',
+    title: 'It moves to your accounts',
+    body: 'The repository and hosting go to you, with enough notes to keep going. If you would rather I keep hosting it, I can.',
   },
   {
     n: 9,
     verb: 'Continue',
-    title: 'Keep this running, or build the next thing',
-    body: 'Maintenance, a new feature, or a second product — if you want it. Each piece is quoted. Nothing is assumed.',
-    arrow: true,
+    title: 'Keep it running, or build the next thing',
+    body: 'Maintenance, a new feature, or a second product, if you want any of them. Each gets its own quote.',
   },
 ]
 
 export const CAREER = [
   { year: '2014', role: 'Software engineer', place: 'Tech Mahindra' },
   { year: '2018', role: 'Data scientist', place: 'Novartis' },
-  { year: '2020', role: 'Healthcare AI PM', place: 'Novartis' },
-  { year: '2024', role: 'Lead PM, supply chain AI', place: 'Resilinc · 500K+ users' },
-  { year: '2025', role: 'Founding PM, multi-agent systems', place: 'Early-stage' },
-  { year: '2026', role: 'Founder, Nava Studios', place: 'First products, one engagement at a time' },
+  { year: '2020', role: 'Product manager, healthcare AI', place: 'Novartis' },
+  { year: '2024', role: 'Lead product manager, supply chain AI', place: 'Resilinc' },
+  { year: '2025', role: 'Founding product manager, multi-agent systems', place: 'Early-stage companies' },
+  { year: '2026', role: 'Founder', place: 'Nava Studios' },
 ]

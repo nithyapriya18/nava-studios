@@ -1,22 +1,16 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
-import { getAllPosts, getPostBySlug } from '@/lib/mdx'
-import { ReadingProgress } from '@/components/reading-progress'
 import type { Metadata } from 'next'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import { getAllPosts, getPostBySlug } from '@/lib/mdx'
+import { contactHref, contactLabel, contactIsExternal } from '@/config'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  try {
-    const posts = getAllPosts('writing')
-    return posts.map((p) => ({ slug: p.slug }))
-  } catch {
-    return []
-  }
+  return getAllPosts('writing').map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -25,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const post = getPostBySlug('writing', slug)
     return { title: post.title, description: post.excerpt }
   } catch {
-    return { title: 'Post' }
+    return { title: 'Writing' }
   }
 }
 
@@ -38,77 +32,41 @@ export default async function PostPage({ params }: Props) {
     notFound()
   }
 
-  const formatted = new Date(post.date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
+  const date = new Date(post.date).toLocaleDateString('en-IN', {
     day: 'numeric',
+    month: 'long',
+    year: 'numeric',
   })
+  const ctaProps = contactIsExternal
+    ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+    : {}
 
   return (
-    <article className="bg-background min-h-screen">
-      <ReadingProgress />
+    <article className="mx-auto max-w-content px-6 pt-12 md:px-8 md:pt-16">
+      <Link href="/writing" className="font-sans text-[0.9375rem] text-link">
+        All writing
+      </Link>
 
-      {/* Back link */}
-      <div className="max-w-content mx-auto px-6 md:px-8 pt-12">
-        <Link
-          href="/writing"
-          className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={14} />
-          Back to writing
-        </Link>
-      </div>
-
-      {/* Header */}
-      <header className="max-w-content mx-auto px-6 md:px-8 py-12">
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex gap-2 mb-5">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs font-medium text-accent bg-accent-light px-2.5 py-1 rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <h1 className="font-display font-semibold text-3xl md:text-4xl text-text-primary leading-tight mb-6">
-          {post.title}
-        </h1>
-
-        <div className="flex flex-wrap items-center gap-5 text-sm text-text-muted mb-6">
-          <span className="flex items-center gap-1.5">
-            <Calendar size={13} />
-            {formatted}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock size={13} />
-            {post.readingTime}
-          </span>
-          <span className="text-text-muted">by Nithya</span>
-        </div>
-
-        <div className="h-px bg-border" />
+      <header className="mt-10 border-b border-border pb-8">
+        <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{post.title}</h1>
+        <p className="mt-4 font-sans text-sm text-text-muted">
+          <time dateTime={post.date}>{date}</time>, {post.readingTime}
+        </p>
       </header>
 
-      {/* Body */}
-      <div className="max-w-content mx-auto px-6 md:px-8 pb-24 prose">
+      <div className="prose pt-8">
         <MDXRemote source={post.content} />
       </div>
 
-      {/* Back link (bottom) */}
-      <div className="max-w-content mx-auto px-6 md:px-8 pb-16 border-t border-border pt-8">
-        <Link
-          href="/writing"
-          className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={14} />
-          Back to writing
-        </Link>
-      </div>
+      <aside className="mt-12 rounded-3xl bg-surface p-6 md:p-8">
+        <p className="font-sans text-lg font-medium text-text-primary">
+          Have an idea for a first version?
+        </p>
+        <p className="mt-1 text-text-muted">Send me a few lines about it.</p>
+        <a href={contactHref} className="btn-primary mt-5" {...ctaProps}>
+          {contactLabel}
+        </a>
+      </aside>
     </article>
   )
 }

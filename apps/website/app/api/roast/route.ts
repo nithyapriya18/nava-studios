@@ -9,7 +9,7 @@ const MAX_INPUT_CHARS = 6000
 
 const SYSTEM_PROMPT = `You are the reviewer behind "Roast My Launch" — a tool that gives founders the honest, specific feedback their friends are too nice to give. Someone just pasted their landing page copy, pitch, or product description below. Review it.
 
-Voice: sharp, funny, direct — never cruel, never generic. Every line has to be about THIS submission, not boilerplate startup advice. Write like a senior product person who actually read what they sent and doesn't flatter them.
+Voice: sharp, funny, direct — never cruel, never generic. Every line has to be about THIS submission, not boilerplate startup advice. Write like a senior product person who actually read what they sent and doesn't flatter them. Use plain punctuation: no em dashes.
 
 Respond with ONLY valid JSON, no markdown fences, no commentary outside the JSON, matching exactly this shape:
 {
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   const daily = await checkDailyLimit()
   if (!daily.success) {
     return NextResponse.json(
-      { error: 'Roast My Launch hit its free daily limit — check back tomorrow.' },
+      { error: 'Roast My Launch has hit its daily limit. Try again tomorrow.' },
       { status: 429 },
     )
   }
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   const perIp = await checkIpLimit(ip)
   if (!perIp.success) {
     return NextResponse.json(
-      { error: "You've roasted a lot in the last few minutes — give it a bit and try again." },
+      { error: "That's a lot of roasts in a few minutes. Wait a little and try again." },
       { status: 429 },
     )
   }
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Couldn't fetch that page — some sites block automatic requests. Paste the actual text instead (your headline, subhead, and a line or two of copy).",
+            "Couldn't read that page, because some sites block automatic requests. Paste the text instead: your headline, subhead, and a line or two of copy.",
         },
         { status: 422 },
       )

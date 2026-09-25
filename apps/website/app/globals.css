@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #f4f1ee;
-  --surface: #e8e3df;
-  --text-primary: #1a1716;
-  --text-muted: #3d3835;
+  --background: #faf9f7;
+  --surface: #f3f0ec;
+  --text-primary: #211a1b;
+  --text-muted: #5f5658;
   --accent: #6e3c37;
-  --accent-light: #e8d9d5;
-  --border: #c9c2bc;
+  --accent-light: #efe3df;
+  --border: #e6e0db;
 }
 
 html {
@@ -19,52 +19,120 @@ html {
 body {
   background-color: var(--background);
   color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* GitHub Primer-like buttons: 8px radius, hairline border, quiet hover */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  button,
+  nav,
+  label {
+    font-family: var(--font-display), system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-[14px] py-[7px] text-sm font-medium leading-5 no-underline transition-colors duration-100;
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-sans text-[0.9375rem] font-medium leading-5 no-underline transition-colors duration-150;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
   .btn-primary {
-    @apply btn border border-transparent bg-accent text-white hover:bg-[#5a302c];
+    @apply btn bg-accent text-white hover:bg-[#5a302c];
   }
   .btn-default {
-    @apply btn border border-border bg-background text-text-primary hover:bg-surface;
+    @apply btn border border-border bg-transparent text-text-primary hover:border-text-primary;
   }
   .btn-on-accent {
-    @apply btn border border-transparent bg-white text-accent hover:bg-[#f7f3f1];
+    @apply btn bg-background text-accent hover:bg-white;
+  }
+  .text-link {
+    @apply text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent;
+  }
+}
+
+/* Home hero: words arrive one at a time on first paint. Pure CSS, no JS. */
+.reveal-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  animation: reveal-word 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes reveal-word {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Mobile menu entrance. */
+.menu-in {
+  animation: menu-in 0.16s ease-out;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal-word {
+    animation: none;
+    opacity: 1;
+    filter: none;
+  }
+  .menu-in {
+    animation: none;
   }
 }
 
 .prose {
   color: var(--text-primary);
+  font-size: 1.125rem;
   line-height: 1.75;
-  font-size: 1.0625rem;
 }
 
-.prose h1,
 .prose h2,
 .prose h3 {
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
   color: var(--text-primary);
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 .prose h2 {
   font-size: 1.5rem;
   margin-top: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .prose h3 {
   font-size: 1.25rem;
   margin-top: 2rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .prose p {
@@ -84,11 +152,15 @@ body {
 }
 
 .prose li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.prose li::marker {
+  color: var(--accent);
 }
 
 .prose blockquote {
-  border-left: 3px solid var(--accent);
+  border-left: 2px solid var(--accent);
   padding-left: 1.25rem;
   color: var(--text-muted);
   font-style: italic;
@@ -97,8 +169,7 @@ body {
 
 .prose code {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 0.15em 0.4em;
   font-size: 0.9em;
 }

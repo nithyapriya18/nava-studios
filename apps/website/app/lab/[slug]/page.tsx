@@ -1,16 +1,15 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react'
-import { getAllPosts, getPostBySlug } from '@/lib/mdx'
 import type { Metadata } from 'next'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import { getAllPosts, getPostBySlug } from '@/lib/mdx'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts('work')
-  return posts.map((p) => ({ slug: p.slug }))
+  return getAllPosts('work').map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -32,105 +31,22 @@ export default async function LabItemPage({ params }: Props) {
     notFound()
   }
 
-  const formatted = new Date(post.date).toLocaleDateString('en-IN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-
   return (
-    <article className="bg-background min-h-screen">
-      <div className="max-w-content mx-auto px-6 md:px-8 pt-12">
-        <Link
-          href="/lab"
-          className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={14} />
-          Back to lab
-        </Link>
-      </div>
+    <article className="mx-auto max-w-content px-6 pt-12 md:px-8 md:pt-16">
+      <Link href="/lab" className="font-sans text-[0.9375rem] text-link">
+        Back to the lab
+      </Link>
 
-      <header className="max-w-content mx-auto px-6 md:px-8 py-12">
-        <span className="text-xs font-medium uppercase tracking-widest text-accent bg-accent-light px-2.5 py-1 rounded-full mb-5 inline-block">
-          Personal project
-        </span>
-        <h1 className="font-display font-semibold text-3xl md:text-4xl text-text-primary leading-tight mb-5">
+      <header className="mt-10 border-b border-border pb-8">
+        <p className="font-sans text-sm text-text-muted">Personal project</p>
+        <h1 className="mt-2 text-4xl font-semibold text-text-primary md:text-5xl">
           {post.title}
         </h1>
-
-        {slug === 'gst-calculator' && (
-          <div className="mb-7">
-            <a
-              href="/gst-calculator"
-              className="inline-flex items-center gap-2 text-sm px-5 py-2.5 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-all duration-200"
-            >
-              Open live app
-              <ArrowRight size={14} />
-            </a>
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-5 text-sm text-text-muted">
-          <span className="flex items-center gap-1.5">
-            <Calendar size={13} />
-            {formatted}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock size={13} />
-            {post.readingTime}
-          </span>
-        </div>
-
-        <div className="h-px bg-border mt-8" />
+        <p className="mt-4 text-xl leading-relaxed text-text-muted">{post.excerpt}</p>
       </header>
 
-      <div className="max-w-content mx-auto px-6 md:px-8 pb-24 prose">
-        {post.content
-          .trim()
-          .split(/\n{2,}/)
-          .map((block, index) => {
-            if (block.startsWith('## ')) {
-              return (
-                <h2 key={index} className="font-display font-semibold text-2xl mt-10 mb-4">
-                  {block.replace('## ', '')}
-                </h2>
-              )
-            }
-
-            if (block.startsWith('- ')) {
-              const items = block
-                .split('\n')
-                .map((line) => line.trim())
-                .filter((line) => line.startsWith('- '))
-                .map((line) => line.replace(/^- /, ''))
-
-              return (
-                <ul key={index} className="list-disc pl-6 space-y-2 mb-5">
-                  {items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )
-            }
-
-            const linkOnly = block.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
-            if (linkOnly) {
-              const [, label, href] = linkOnly
-              return (
-                <p key={index}>
-                  <Link href={href} className="text-accent underline underline-offset-4">
-                    {label}
-                  </Link>
-                </p>
-              )
-            }
-
-            return (
-              <p key={index} className="mb-5">
-                {block}
-              </p>
-            )
-          })}
+      <div className="prose pt-8">
+        <MDXRemote source={post.content} />
       </div>
     </article>
   )

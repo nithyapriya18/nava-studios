@@ -1,23 +1,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
 import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
+import { TextReveal } from '@/components/ui/text-reveal'
 
-const process = [
+const beats = [
   {
-    name: 'Call',
-    time: 'Unpaid',
-    text: 'You describe the idea. I ask what a first version has to do. After the call I send a scope and a quote.',
+    title: 'We talk',
+    body: 'You tell me the idea. I ask what the first version has to do, then send you a scope and a fixed quote.',
   },
   {
-    name: 'Build',
-    time: 'Typically a few weeks',
-    text: 'Paid work starts when you accept the quote. You get a product you can use, not a slide deck.',
+    title: 'I build',
+    body: 'Work starts when you accept the quote. Most first versions are ready to use within a few weeks.',
   },
   {
-    name: 'Handoff',
-    time: 'Yours to run',
-    text: 'By default the code and hosting sit on your accounts. We can keep going from there if you want more — quoted again.',
+    title: 'You run it',
+    body: 'The code and hosting sit on your accounts by default. If you want more later, I quote that separately.',
   },
 ]
 
@@ -27,117 +24,116 @@ export default function Home() {
     : {}
 
   return (
-    <div>
-      <section id="main" className="bg-background pt-12 pb-16 md:pt-16 md:pb-20">
-        <div className="max-w-layout mx-auto px-6 md:px-8 grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-10 md:gap-14 items-start">
-          <div>
-            <p className="text-sm font-medium text-text-primary">
-              <span className="inline-block w-2 h-2 bg-accent mr-2 align-middle" aria-hidden />
-              Available for new work · Bengaluru, worldwide
-            </p>
-            <h1 className="mt-5 text-[2rem] md:text-[2.75rem] font-medium tracking-tight leading-[1.2] text-text-primary">
-              I build the first version of your product.
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-text-muted max-w-xl">
-              {siteConfig.name} is Nithya — one person. You bring the idea, a
-              brief, or both. I turn it into something you can put in front of
-              people, typically in a few weeks.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-text-muted max-w-xl">
-              I also build software for a process you already run, when that is
-              the need. Ten years shipping as an engineer, data scientist, and
-              product manager.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a href={contactHref} className="btn-primary" {...ctaProps}>
-                {contactLabel}
-                <ArrowRight size={14} aria-hidden />
-              </a>
-              <Link
-                href="/start"
-                className="text-sm font-medium text-text-primary underline underline-offset-4 hover:text-accent"
-              >
-                How an engagement works
-              </Link>
-            </div>
-          </div>
-          <div>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border">
-              <Image
-                src="/nithya.jpeg"
-                alt="Nithya, founder of Nava Studios"
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 768px) 100vw, 420px"
-                priority
-              />
-            </div>
-            <p className="mt-3 text-sm text-text-muted">
-              Nithyapriya Veeraraghavan · {siteConfig.title}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-surface py-16 md:py-20">
-        <div className="max-w-layout mx-auto px-6 md:px-8">
-          <p className="text-sm font-medium text-text-muted mb-2">How it works</p>
-          <h2 className="text-2xl font-medium text-text-primary mb-3 max-w-xl">
-            A call, a quote, then a product.
-          </h2>
-          <p className="text-text-muted max-w-2xl mb-8 leading-relaxed">
-            The call is to understand the idea and send you a number. The build
-            is paid. You work with me throughout.
+    <>
+      <section className="mx-auto grid max-w-layout items-end gap-12 px-6 pb-20 pt-16 md:grid-cols-[minmax(0,1fr)_300px] md:gap-16 md:px-8 md:pb-28 md:pt-24">
+        <div>
+          <h1 className="max-w-[14ch] text-[2.75rem] font-semibold leading-[1.02] text-text-primary [font-variation-settings:'opsz'_96] sm:text-6xl md:text-7xl">
+            <TextReveal text={siteConfig.tagline} />
+          </h1>
+          <p className="mt-8 max-w-xl text-xl leading-relaxed text-text-primary">
+            Nava Studios is me, Nithya. Bring the idea as it is today, even if it&apos;s
+            one paragraph, and I&apos;ll turn it into something people can use. Most
+            first versions take a few weeks.
           </p>
-          <div className="grid md:grid-cols-3 gap-px bg-border border border-border">
-            {process.map((o) => (
-              <div key={o.name} className="bg-background p-6 md:p-8">
-                <p className="text-sm font-medium text-accent mb-2">{o.time}</p>
-                <h3 className="text-xl font-medium text-text-primary mb-3">{o.name}</h3>
-                <p className="text-sm leading-relaxed text-text-muted">{o.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-background py-16 md:py-20">
-        <div className="max-w-layout mx-auto px-6 md:px-8">
-          <p className="text-sm font-medium text-text-muted mb-2">Who this is for</p>
-          <h2 className="text-2xl font-medium text-text-primary mb-4 max-w-xl">
-            Founders who need a first product, for a small or mid-size team.
-          </h2>
-          <p className="text-text-muted max-w-2xl leading-relaxed">
-            If you have an idea and need a version people can actually use, that
-            is the work. I size it for the team you have now. I am not selling a
-            large engineering organisation or a scale-out from day one.
+          <p className="mt-4 max-w-xl leading-relaxed text-text-muted">
+            I also build tools for processes a team already runs. Before this I spent
+            ten years shipping software, first as an engineer and then in data science
+            and product.
           </p>
-        </div>
-      </section>
-
-      <section className="bg-accent py-16 md:py-20 text-white">
-        <div className="max-w-layout mx-auto px-6 md:px-8">
-          <h2 className="text-3xl md:text-4xl font-medium max-w-xl leading-tight">
-            If you have an idea for a first version, write to me.
-          </h2>
-          <p className="mt-4 max-w-lg text-white leading-relaxed">
-            We will talk through what v1 has to do. If we go ahead, you see a
-            quote before I write code.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a href={contactHref} className="btn-on-accent" {...ctaProps}>
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <a href={contactHref} className="btn-primary" {...ctaProps}>
               {contactLabel}
-              <ArrowRight size={14} aria-hidden />
             </a>
-            <Link
-              href="/lab"
-              className="inline-flex items-center px-5 py-3 text-sm text-white underline underline-offset-4"
-            >
-              Personal projects
+            <Link href="/start" className="font-sans text-[0.9375rem] text-link">
+              How a project works
             </Link>
           </div>
         </div>
+
+        <figure className="max-w-[300px]">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem]">
+            <Image
+              src="/nithya.jpeg"
+              alt="Nithyapriya Veeraraghavan"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 300px, 300px"
+              priority
+            />
+          </div>
+          <figcaption className="mt-3 font-sans text-sm leading-snug">
+            <span className="block text-text-primary">{siteConfig.founderFull}</span>
+            <span className="text-text-muted">{siteConfig.title}</span>
+          </figcaption>
+        </figure>
       </section>
-    </div>
+
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-layout px-6 py-20 md:px-8 md:py-24">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">
+              How it works
+            </h2>
+            <Link href="/start" className="font-sans text-[0.9375rem] text-link">
+              All nine steps
+            </Link>
+          </div>
+          <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-12">
+            {beats.map((beat, i) => (
+              <li key={beat.title}>
+                <p className="font-sans text-sm tabular-nums text-accent">{i + 1}</p>
+                <h3 className="mt-2 text-xl font-semibold text-text-primary">{beat.title}</h3>
+                <p className="mt-2 leading-relaxed text-text-muted">{beat.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="border-t border-border">
+        <div className="mx-auto grid max-w-layout gap-10 px-6 py-20 md:grid-cols-2 md:gap-16 md:px-8 md:py-24">
+          <div>
+            <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">
+              Who I build for
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-text-muted">
+              Founders who need a first product in front of real users, and teams that
+              want software for a process they already run. I size the first version
+              for the team you have now, and I don&apos;t take on large scale-out work.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">
+              What I&apos;ve built
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-text-muted">
+              Apps I built for my own use are in the{' '}
+              <Link href="/lab" className="text-link">
+                lab
+              </Link>
+              . If you already have a landing page,{' '}
+              <Link href="/roast" className="text-link">
+                Roast My Launch
+              </Link>{' '}
+              will give you a blunt review of it in about 20 seconds.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 md:px-6">
+        <div className="mx-auto max-w-layout rounded-[2rem] bg-accent px-6 py-16 text-white md:px-12 md:py-20">
+          <h2 className="max-w-xl text-3xl font-semibold leading-tight md:text-5xl">
+            Have an idea for a first version?
+          </h2>
+          <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/80">
+            Send me a few lines about what you want to build and who it&apos;s for.
+          </p>
+          <a href={contactHref} className="btn-on-accent mt-8" {...ctaProps}>
+            {contactLabel}
+          </a>
+        </div>
+      </section>
+    </>
   )
 }

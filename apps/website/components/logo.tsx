@@ -5,7 +5,8 @@ interface LogoMarkProps {
   size?: number
 }
 
-const CRESCENT: { x: number; y: number; r: number }[] = [
+/** The nine beads of the mark. /start reuses these radii for its timeline. */
+export const CRESCENT: { x: number; y: number; r: number }[] = [
   { x: 22, y: 44, r: 2.0 },
   { x: 18, y: 35, r: 2.5 },
   { x: 19, y: 26.5, r: 3.1 },
@@ -76,6 +77,8 @@ interface LogoProps {
   className?: string
   href?: string
   nameClassName?: string
+  /** 'column' stacks the name under the mark; 'row' sets it beside. */
+  direction?: 'row' | 'column'
 }
 
 export function Logo({
@@ -84,15 +87,17 @@ export function Logo({
   className = '',
   href = '/',
   nameClassName = '',
+  direction = 'column',
 }: LogoProps) {
+  const layout = direction === 'row' ? 'flex-row gap-2' : 'flex-col gap-1'
   const inner = (
-    <span className={`inline-flex flex-col items-center gap-1 group ${className}`}>
+    <span className={`inline-flex items-center group ${layout} ${className}`}>
       <span className="text-accent">
         <LogoMark size={size} />
       </span>
       {showName && (
         <span
-          className={`whitespace-nowrap text-[11px] font-medium tracking-[0.16em] text-text-primary ${nameClassName}`}
+          className={`whitespace-nowrap font-sans text-[13px] font-medium tracking-[0.12em] text-text-primary ${nameClassName}`}
         >
           nava studios
         </span>

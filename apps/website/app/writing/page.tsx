@@ -1,52 +1,43 @@
 import type { Metadata } from 'next'
 import { getAllPosts } from '@/lib/mdx'
-import { PostCard } from '@/components/post-card'
-import { AnimateIn } from '@/components/animate-in'
+import { HoverList } from '@/components/ui/hover-list'
 
 export const metadata: Metadata = {
   title: 'Writing',
-  description: 'Notes on first products: what belongs in v1, and how an engagement starts.',
+  description: 'Notes on building first versions: what belongs in one, and how a project starts.',
 }
 
-export default async function WritingPage() {
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+export default function WritingPage() {
   const posts = getAllPosts('writing')
 
   return (
-    <div>
-      <section className="bg-background py-24 md:py-32">
-        <div className="max-w-layout mx-auto px-6 md:px-8">
-          <AnimateIn>
-            <h1 className="text-4xl md:text-5xl font-medium text-text-primary mb-4">
-              Writing
-            </h1>
-          </AnimateIn>
-          <AnimateIn delay={0.1}>
-            <p className="text-text-muted text-lg md:text-xl max-w-xl leading-relaxed">
-              Notes from building first versions for small and mid-size work.
-            </p>
-          </AnimateIn>
-        </div>
-      </section>
+    <div className="mx-auto max-w-layout px-6 pt-16 md:px-8 md:pt-24">
+      <header className="max-w-2xl">
+        <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Writing</h1>
+        <p className="mt-6 text-xl leading-relaxed text-text-primary">
+          Short notes on building first versions.
+        </p>
+      </header>
 
-      <section className="bg-surface py-16 md:py-20">
-        <div className="max-w-layout mx-auto px-6 md:px-8">
-          <div className="flex flex-col gap-4">
-            {posts.map((post) => (
-              <AnimateIn key={post.slug}>
-                <PostCard
-                  slug={post.slug}
-                  title={post.title}
-                  date={post.date}
-                  excerpt={post.excerpt}
-                  readingTime={post.readingTime}
-                  tags={post.tags}
-                  variant="horizontal"
-                />
-              </AnimateIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="mt-14 max-w-3xl">
+        <HoverList
+          id="writing"
+          items={posts.map((post) => ({
+            href: `/writing/${post.slug}`,
+            title: post.title,
+            description: post.excerpt,
+            meta: `${formatDate(post.date)}, ${post.readingTime}`,
+          }))}
+        />
+      </div>
     </div>
   )
 }
