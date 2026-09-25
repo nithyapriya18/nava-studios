@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PRODUCTS, reviewHref } from '@/lib/products'
 import { AppIcon } from '@/components/products/app-icon'
-import { ScoreRing } from '@/components/products/score-ring'
+import { LensVisual } from '@/components/products/lens-visual'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 
 export const metadata: Metadata = {
@@ -46,26 +46,8 @@ export default function ProductsPage() {
             </Link>
           </div>
 
-          <div aria-hidden className="theme-dark relative hidden overflow-hidden md:block">
-            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#006278]/40 blur-3xl" />
-            <div className="absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-[#012987]/70 blur-3xl" />
-            <div className="relative flex h-full flex-col justify-center gap-5 p-10">
-              <div className="flex items-center gap-4 rounded-2xl bg-card/80 p-4">
-                <ScoreRing score={7} size={84} />
-                <div className="space-y-2">
-                  <span className="block h-2 w-36 rounded-full bg-white/25" />
-                  <span className="block h-2 w-24 rounded-full bg-white/15" />
-                </div>
-              </div>
-              {[8, 5, 7].map((w, i) => (
-                <div key={i} className="rounded-2xl bg-card/80 p-4">
-                  <span className="block h-2 rounded-full bg-white/10">
-                    <span className="block h-2 rounded-full" style={{ width: `${w * 10}%`, backgroundImage: 'var(--grad-button)' }} />
-                  </span>
-                  <span className="mt-3 block h-2 w-3/4 rounded-full bg-white/15" />
-                </div>
-              ))}
-            </div>
+          <div className="theme-dark relative hidden md:block">
+            <LensVisual />
           </div>
         </div>
       </SpotlightCard>

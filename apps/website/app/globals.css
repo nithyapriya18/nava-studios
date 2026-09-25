@@ -308,6 +308,37 @@ body {
   }
 }
 
+/* Second Opinion art: a slow sweep across a lens; points glow as it passes. */
+.lens-sweep {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 290deg,
+    rgb(87 224 184 / 0.05) 320deg,
+    rgb(87 224 184 / 0.35) 359deg,
+    transparent 360deg
+  );
+  animation: ha-spin linear infinite;
+}
+.lens-dot {
+  opacity: 0.35;
+  animation: lens-dot ease-out infinite;
+}
+@keyframes lens-dot {
+  0% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--glow), 0 0 16px 4px var(--glow);
+  }
+  40% {
+    opacity: 0.5;
+    box-shadow: 0 0 0 10px transparent, 0 0 8px 0 transparent;
+  }
+  100% {
+    opacity: 0.35;
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 /* Mobile menu entrance. */
 .menu-in {
   animation: menu-in 0.16s ease-out;
@@ -335,7 +366,9 @@ body {
   .ha-ring,
   .ha-drop,
   .ha-bob,
-  .score-ring-arc {
+  .score-ring-arc,
+  .lens-sweep,
+  .lens-dot {
     animation: none;
   }
 }
