@@ -1,14 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { NineStep } from '@/lib/nine'
+import type { Step } from '@/lib/process'
 
 /**
  * Steps scroll on the left while the card on the right stays put and
  * changes to match the step in the middle of the screen. On phones the
  * card is hidden and each step shows its own number.
  */
-export function StickySteps({ steps }: { steps: NineStep[] }) {
+export function StickySteps({ steps }: { steps: Step[] }) {
   const [active, setActive] = useState(0)
   const refs = useRef<(HTMLLIElement | null)[]>([])
 

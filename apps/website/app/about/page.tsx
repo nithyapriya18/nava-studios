@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
-import { CAREER } from '@/lib/nine'
+import { CAREER } from '@/lib/process'
 
 export const metadata: Metadata = {
   title: 'About',

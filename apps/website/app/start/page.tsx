@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
-import { NINE } from '@/lib/nine'
+import { STEPS } from '@/lib/process'
 import { StickySteps } from '@/components/ui/sticky-steps'
 
 export const metadata: Metadata = {
@@ -48,14 +48,14 @@ export default function StartPage() {
             How a project runs
           </h1>
           <p className="mt-6 text-xl leading-relaxed text-text-primary">
-            Every project follows the same nine steps, from the first conversation to
+            Every project follows the same five steps, from the first conversation to
             the day the product is live and yours. At each point you know what happens
             next, what it costs and what you will have at the end of it.
           </p>
         </header>
 
-        <section className="mt-16 md:mt-20" aria-label="The nine steps">
-          <StickySteps steps={NINE} />
+        <section className="mt-16 md:mt-20" aria-label="The five steps">
+          <StickySteps steps={STEPS} />
         </section>
       </div>
 
