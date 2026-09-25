@@ -14,8 +14,8 @@ export default function NotFound() {
         <Link href="/" className="text-link">
           Go to the home page
         </Link>
-        <Link href="/lab" className="text-link">
-          See the lab
+        <Link href="/start" className="text-link">
+          See how a project runs
         </Link>
       </div>
     </div>

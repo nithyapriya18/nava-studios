@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { siteConfig, linkedinHref } from '@/config'
-import { Logo } from '@/components/logo'
+import { Wordmark } from '@/components/wordmark'
 
 const links = [
   { href: '/start', label: 'How it works' },
-  { href: '/lab', label: 'Lab' },
+  { href: '/review', label: 'Page review' },
   { href: '/writing', label: 'Writing' },
   { href: '/about', label: 'About' },
   { href: '/support', label: 'Support' },
@@ -14,13 +14,13 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border">
-      <div className="mx-auto grid max-w-layout gap-10 px-6 py-12 font-sans md:grid-cols-[1fr_auto] md:px-8">
+    <footer className="theme-dark relative z-10 mt-24">
+      <div className="mx-auto grid max-w-layout gap-10 px-6 py-14 font-sans md:grid-cols-[1fr_auto] md:px-8">
         <div>
-          <Logo size={34} direction="row" />
-          <p className="mt-4 max-w-xs text-[0.9375rem] leading-relaxed text-text-muted">
-            A one-person product studio in {siteConfig.location}. Nava (NAH-vuh) is
-            Sanskrit for new. It also means nine.
+          <Wordmark className="text-2xl" />
+          <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-text-muted">
+            A product studio in {siteConfig.location}, run by {siteConfig.founderFull}. It
+            designs and builds software for founders and small businesses.
           </p>
         </div>
 

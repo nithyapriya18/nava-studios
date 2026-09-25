@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
-import { Logo } from '@/components/logo'
+import { Wordmark } from '@/components/wordmark'
 
 const links = [
   { href: '/start', label: 'How it works' },
-  { href: '/lab', label: 'Lab' },
+  { href: '/review', label: 'Page review' },
   { href: '/writing', label: 'Writing' },
   { href: '/about', label: 'About' },
 ]
@@ -59,13 +59,13 @@ export function Nav() {
     <header className="sticky top-0 z-50 px-4 pt-3 md:px-6">
       {/* Desktop */}
       <div
-        className={`mx-auto hidden items-center justify-between rounded-full px-5 py-2 transition-[max-width,transform,background-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex ${
+        className={`mx-auto hidden items-center justify-between rounded-full py-2.5 pl-5 pr-2.5 transition-[max-width,transform,background-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex ${
           floating
             ? 'max-w-[760px] translate-y-1.5 bg-background/85 shadow-[0_10px_30px_-12px_rgba(33,26,27,0.18),0_0_0_1px_rgba(33,26,27,0.06)] backdrop-blur-md'
             : 'max-w-[1080px] bg-transparent'
         }`}
       >
-        <Logo size={30} direction="row" />
+        <Wordmark className="text-[1.3rem]" />
         <nav className="flex items-center gap-1">
           {links.map((link) => (
             <Link
@@ -95,7 +95,7 @@ export function Nav() {
             : ''
         }`}
       >
-        <Logo size={28} direction="row" />
+        <Wordmark className="text-[1.25rem]" />
         <button
           type="button"
           className="-mr-1 rounded-full p-2 text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"

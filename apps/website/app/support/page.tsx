@@ -12,7 +12,7 @@ export default function SupportPage() {
     <div className="mx-auto max-w-content px-6 pt-16 md:px-8 md:pt-24">
       <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Support</h1>
       <p className="mt-6 text-xl leading-relaxed text-text-primary">
-        Questions about a project, one of the tools in the lab, or this site come
+        Questions about a project, the landing page review, or this site come
         straight to me.
       </p>
 
@@ -21,7 +21,7 @@ export default function SupportPage() {
           <h2 className="text-xl font-semibold text-text-primary">Email</h2>
           <p className="mt-2 leading-relaxed text-text-muted">
             <a
-              href={`mailto:${siteConfig.email}?subject=${encodeURIComponent('Nava Studios support')}`}
+              href={`mailto:${siteConfig.email}?subject=${encodeURIComponent('Studio NPV support')}`}
               className="text-link"
             >
               {siteConfig.email}

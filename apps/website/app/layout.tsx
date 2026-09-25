@@ -1,23 +1,14 @@
 import type { Metadata } from 'next'
-import { Bricolage_Grotesque, Newsreader } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { siteConfig } from '@/config'
 
-const display = Bricolage_Grotesque({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-display',
+  variable: '--font-inter',
   display: 'swap',
-  axes: ['opsz'],
-})
-
-const serif = Newsreader({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  style: ['normal', 'italic'],
-  axes: ['opsz'],
 })
 
 export const metadata: Metadata = {
@@ -43,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${serif.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body className="bg-background text-text-primary antialiased">
         <a
           href="#content"

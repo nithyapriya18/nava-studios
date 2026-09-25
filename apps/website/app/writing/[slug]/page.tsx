@@ -60,7 +60,7 @@ export default async function PostPage({ params }: Props) {
 
       <aside className="mt-12 rounded-3xl bg-surface p-6 md:p-8">
         <p className="font-sans text-lg font-medium text-text-primary">
-          Have an idea for a first version?
+          Have an idea you want built?
         </p>
         <p className="mt-1 text-text-muted">Send me a few lines about it.</p>
         <a href={contactHref} className="btn-primary mt-5" {...ctaProps}>

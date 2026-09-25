@@ -1,5 +1,9 @@
 import type { Config } from 'tailwindcss'
 
+// Colours are CSS variables so a section can switch to the dark theme with a
+// single class (.theme-dark in globals.css) and everything inside follows.
+const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`
+
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,23 +13,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#FAF9F7',
-        surface: '#F3F0EC',
-        'text-primary': '#211A1B',
-        'text-muted': '#5F5658',
-        accent: '#6E3C37',
-        'accent-light': '#EFE3DF',
-        bead: '#D9C8C3',
-        border: '#E6E0DB',
+        background: v('bg'),
+        surface: v('surface'),
+        card: v('card'),
+        'text-primary': v('fg'),
+        'text-muted': v('muted'),
+        accent: v('accent'),
+        'accent-light': v('accent-soft'),
+        border: v('border'),
       },
       fontFamily: {
-        sans: ['var(--font-display)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       maxWidth: {
         content: '680px',
-        layout: '1080px',
+        layout: '1120px',
       },
     },
   },

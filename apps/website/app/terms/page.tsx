@@ -16,9 +16,9 @@ export default function TermsPage() {
       <div className="prose mt-10">
         <h2>1. Who I am</h2>
         <p>
-          Nava Studios (&ldquo;I&rdquo;, &ldquo;me&rdquo;) is a one-person software studio run
+          Studio NPV (&ldquo;I&rdquo;, &ldquo;me&rdquo;) is a one-person software studio run
           by {siteConfig.founderFull} in Bengaluru, India. These terms cover this
-          website, the free tools on it (such as Roast My Launch), and custom product
+          website, the free tools on it (such as Landing Page Review), and custom product
           work I agree to in writing.
         </p>
 
@@ -33,7 +33,7 @@ export default function TermsPage() {
 
         <h2>3. Free tools on this site</h2>
         <p>
-          Tools like Roast My Launch are free and provided as is, with reasonable use
+          Tools like Landing Page Review are free and provided as is, with reasonable use
           limits so they stay available for everyone. I may change or retire a free
           tool at any time.
         </p>

@@ -5,61 +5,61 @@ export type NineStep = {
   body: string
 }
 
-/** How a project with Nava moves, start to finish. Shown on /start only. */
+/** How a project runs, start to finish. Shown on /start. */
 export const NINE: NineStep[] = [
   {
     n: 1,
     verb: 'Call',
     title: 'We talk through the idea',
-    body: 'Bring whatever you have, from a single paragraph to a full spec. I ask enough to understand what a first version would be. This call is unpaid.',
+    body: "You tell me what you want to build, who it's for and what you already have, whether that's a paragraph, a deck or a full spec. You don't pay for this call, and it doesn't commit you to anything.",
   },
   {
     n: 2,
     verb: 'Scope',
-    title: 'We agree what version one includes',
-    body: 'What ships now and what waits for later, written as a list we both understand.',
+    title: 'I write down what the project includes',
+    body: "You get a short document that lists what the product will do at launch, what can come later, and anything I'll need from you. We adjust it together until it matches what you had in mind.",
   },
   {
     n: 3,
     verb: 'Quote',
-    title: 'You see a number before any code',
-    body: 'A fixed fee for that scope. Nothing starts until you accept it.',
+    title: 'You get a fixed price',
+    body: 'The price covers everything in the scope. Nothing starts, and nothing is billed, until you accept it.',
   },
   {
     n: 4,
     verb: 'Kickoff',
     title: 'Paid work begins',
-    body: 'We set up accounts and access, and I start on the first slice of the product.',
+    body: 'I set up the project and everything it needs, and we agree how you would like to follow progress during the build.',
   },
   {
     n: 5,
     verb: 'Build',
-    title: 'A first version you can use',
-    body: 'Usually a few weeks. At the end there is something running in a browser or on a phone.',
+    title: 'I design and build the product',
+    body: 'I take it from designs through to working software. Most projects take a few weeks, and you can try the product while it is being built.',
   },
   {
     n: 6,
     verb: 'Review',
-    title: 'You try the real thing',
-    body: 'You click through it and tell me what feels off. First versions always have some of that.',
+    title: 'You use it the way your users will',
+    body: 'You work through the real product and note anything that feels wrong, slow or unclear. Every new product has a few of these, and this is the point to catch them.',
   },
   {
     n: 7,
     verb: 'Feedback',
-    title: 'I fold your notes back in',
-    body: 'Changes inside the scope are part of the job. If something falls outside the quote, I name it and price it separately.',
+    title: 'I make the changes',
+    body: "Changes within the agreed scope are included in the price. If something falls outside it, I'll tell you what it would take before doing any of the work.",
   },
   {
     n: 8,
     verb: 'Handoff',
-    title: 'It moves to your accounts',
-    body: 'The repository and hosting go to you, with enough notes to keep going. If you would rather I keep hosting it, I can.',
+    title: 'The product goes live',
+    body: "I launch it and hand over the product, the code and notes that let you, or any developer, keep it running. If you'd rather I host it for you, I can.",
   },
   {
     n: 9,
     verb: 'Continue',
-    title: 'Keep it running, or build the next thing',
-    body: 'Maintenance, a new feature, or a second product, if you want any of them. Each gets its own quote.',
+    title: 'You decide what comes next',
+    body: 'You can run it yourself, ask me for fixes and improvements, or plan the next version together. Any new work is quoted separately.',
   },
 ]
 
@@ -69,5 +69,5 @@ export const CAREER = [
   { year: '2020', role: 'Product manager, healthcare AI', place: 'Novartis' },
   { year: '2024', role: 'Lead product manager, supply chain AI', place: 'Resilinc' },
   { year: '2025', role: 'Founding product manager, multi-agent systems', place: 'Early-stage companies' },
-  { year: '2026', role: 'Founder', place: 'Nava Studios' },
+  { year: '2026', role: 'Founder', place: 'Studio NPV' },
 ]

@@ -23,7 +23,7 @@ export default function RefundsPage() {
 
         <h2>Free tools</h2>
         <p>
-          The tools on this site, such as Roast My Launch, are free, so there&apos;s
+          The tools on this site, such as Landing Page Review, are free, so there&apos;s
           nothing to refund. If that ever changes for a tool, this page will say so.
         </p>
 

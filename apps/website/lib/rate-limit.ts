@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 /**
- * Two limits protect /api/roast:
- *  - per-IP: stops one person/script from hammering the endpoint
+ * Limits for /api/review (and a light one for /api/contact):
+ *  - per-IP: two reviews per visitor per day
  *  - daily global: a hard ceiling on total Anthropic spend per day
  *
  * Backed by a Postgres function (`check_rate_limit`, see supabase/rate-limit.sql)
@@ -15,15 +15,18 @@ import { createClient } from '@supabase/supabase-js'
  * Supabase project's SQL editor, then add the two env vars, before pointing
  * real traffic at this.
  *
- * If the Supabase call itself errors (network blip, etc.) this fails OPEN —
- * the request is allowed through rather than the roast feature breaking. That
- * means the daily cap isn't a 100%-airtight guarantee during a Supabase
- * outage, which is the right trade-off for a free tool.
+ * If the Supabase call itself errors (network blip, or a free project that
+ * Supabase has paused for inactivity), this falls back to the in-memory
+ * limiter rather than allowing every request. That fallback is per server
+ * instance, so it is looser than the Supabase limit, but it never leaves the
+ * reviews (which cost API credits) unlimited.
  */
 
-const PER_IP_LIMIT = 5
-const PER_IP_WINDOW_SECONDS = 10 * 60 // 10 minutes
-const DAILY_LIMIT = Number(process.env.ROAST_DAILY_LIMIT ?? 500)
+// Each review costs roughly one US cent in API credits, so each visitor gets
+// two a day and the whole site is capped (override with ROAST_DAILY_LIMIT).
+export const PER_IP_LIMIT = 2
+const PER_IP_WINDOW_SECONDS = 24 * 60 * 60
+const DAILY_LIMIT = Number(process.env.ROAST_DAILY_LIMIT ?? 60)
 const DAILY_WINDOW_SECONDS = 24 * 60 * 60
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -65,8 +68,8 @@ async function check(key: string, maxCount: number, windowSeconds: number) {
       p_window_seconds: windowSeconds,
     })
     if (error) {
-      console.error('[rate-limit] Supabase RPC failed, failing open:', error.message)
-      return true
+      console.error('[rate-limit] Supabase RPC failed, using in-memory limit:', error.message)
+      return memoryCheck(key, maxCount, windowSeconds * 1000)
     }
     return Boolean(data)
   }
@@ -74,12 +77,18 @@ async function check(key: string, maxCount: number, windowSeconds: number) {
 }
 
 export async function checkIpLimit(ip: string) {
-  const success = await check(`ip:${ip}`, PER_IP_LIMIT, PER_IP_WINDOW_SECONDS)
+  const success = await check(`roast-ip:${ip}`, PER_IP_LIMIT, PER_IP_WINDOW_SECONDS)
   return { success }
 }
 
 export async function checkDailyLimit() {
   const success = await check('daily:global', DAILY_LIMIT, DAILY_WINDOW_SECONDS)
+  return { success }
+}
+
+/** Contact form: a handful of messages per visitor per day, to stop spam. */
+export async function checkContactLimit(ip: string) {
+  const success = await check(`contact-ip:${ip}`, 5, 24 * 60 * 60)
   return { success }
 }
 

@@ -33,21 +33,22 @@ export default function PrivacyPage() {
         <p>
           PostHog also records a replay of how you use the site: mouse movement,
           clicks, and what&apos;s on screen, including results shown by tools like
-          Roast My Launch. I use it to find bugs and confusing moments. Inputs such as
+          Landing Page Review. I use it to find bugs and confusing moments. Inputs such as
           password fields are masked automatically. You can opt out in your browser,
           as described under &ldquo;Your choices&rdquo; below.
         </p>
-        <h3>Roast My Launch</h3>
+        <h3>Landing Page Review</h3>
         <p>
           Text or a link you paste into{' '}
-          <Link href="/roast">Roast My Launch</Link> is sent to Anthropic&apos;s API to
+          <Link href="/review">Landing Page Review</Link> is sent to Anthropic&apos;s API to
           generate the review. I don&apos;t store it beyond what&apos;s needed to serve
           that one request and apply basic rate limiting.
         </p>
         <h3>Messages</h3>
         <p>
-          If you email me or book a call, I receive your contact details and whatever
-          you write.
+          If you use the contact form, email me or book a call, I receive your name,
+          email address, company if you give it, and whatever you write. Messages from
+          the contact form are delivered to my inbox by Resend, an email service.
         </p>
 
         <h2>How I use it</h2>
@@ -61,15 +62,15 @@ export default function PrivacyPage() {
         <p>
           I don&apos;t sell your personal information. A small set of providers process
           data on my behalf: Vercel for hosting, PostHog for analytics, Anthropic for
-          the model behind Roast My Launch, and Supabase for the rate-limiting
-          database. Each has its own privacy policy.
+          the model behind Landing Page Review, Resend for delivering contact form
+          messages, and Supabase for the rate-limiting database. Each has its own privacy policy.
         </p>
 
         <h2>How long I keep it</h2>
         <p>
           I keep email correspondence as long as I need it for support and ordinary
           business records. I don&apos;t keep a permanent copy of what you paste into
-          Roast My Launch.
+          Landing Page Review.
         </p>
 
         <h2>Your choices</h2>
