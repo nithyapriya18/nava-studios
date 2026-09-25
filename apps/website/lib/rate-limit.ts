@@ -86,6 +86,44 @@ export async function checkDailyLimit() {
   return { success }
 }
 
+export type Quota = { remaining: number; limit: number; resetsAt: string | null }
+
+/** Reads a limit without using it up. Needs rate_limit_status (supabase/rate-limit.sql). */
+async function status(key: string, maxCount: number, windowSeconds: number) {
+  if (supabase) {
+    const { data, error } = await supabase.rpc('rate_limit_status', {
+      p_key: key,
+      p_max_count: maxCount,
+      p_window_seconds: windowSeconds,
+    })
+    const row = Array.isArray(data) ? data[0] : null
+    if (!error && row) {
+      return { remaining: Number(row.remaining), resetsAt: (row.resets_at as string | null) ?? null }
+    }
+    if (error) console.error('[rate-limit] status lookup failed, using in-memory count:', error.message)
+  }
+  const now = Date.now()
+  const hits = (memoryHits.get(key) ?? []).filter((t) => now - t < windowSeconds * 1000)
+  return {
+    remaining: Math.max(0, maxCount - hits.length),
+    resetsAt: hits.length ? new Date(hits[0] + windowSeconds * 1000).toISOString() : null,
+  }
+}
+
+/** How many reviews this visitor can still run today (also capped by the site-wide limit). */
+export async function reviewQuota(ip: string): Promise<Quota> {
+  const [mine, site] = await Promise.all([
+    status(`roast-ip:${ip}`, PER_IP_LIMIT, PER_IP_WINDOW_SECONDS),
+    status('daily:global', DAILY_LIMIT, DAILY_WINDOW_SECONDS),
+  ])
+  const siteIsTighter = site.remaining < mine.remaining
+  return {
+    remaining: Math.min(mine.remaining, site.remaining),
+    limit: PER_IP_LIMIT,
+    resetsAt: siteIsTighter ? site.resetsAt : mine.resetsAt,
+  }
+}
+
 /** Contact form: a handful of messages per visitor per day, to stop spam. */
 export async function checkContactLimit(ip: string) {
   const success = await check(`contact-ip:${ip}`, 5, 24 * 60 * 60)

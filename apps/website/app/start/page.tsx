@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: 'How much does it cost?',
-    a: 'Each project has a fixed price based on its scope, so there are no hourly bills. I send the price after our first call, and nothing is billed until you accept it.',
+    a: 'Each project has a fixed price based on its scope, so there are no hourly bills. I send it after our first call, once we have agreed what to build, and nothing is billed until you accept it.',
   },
   {
     q: 'What if my idea is still rough?',

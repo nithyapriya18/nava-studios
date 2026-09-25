@@ -47,6 +47,32 @@ begin
 end;
 $$;
 
+-- Read-only: how many uses are left in the current window, and when it
+-- resets. Lets the site show "1 of 2 reviews left today" without using one.
+create or replace function public.rate_limit_status(
+  p_key text,
+  p_max_count int,
+  p_window_seconds int
+) returns table (remaining int, resets_at timestamptz)
+language sql
+security definer
+stable
+as $$
+  select
+    case
+      when r.key is null or now() - r.window_start > (p_window_seconds || ' seconds')::interval
+        then p_max_count
+      else greatest(p_max_count - r.count, 0)
+    end,
+    case
+      when r.key is null or now() - r.window_start > (p_window_seconds || ' seconds')::interval
+        then null
+      else r.window_start + (p_window_seconds || ' seconds')::interval
+    end
+  from (select 1) as one
+  left join public.rate_limits r on r.key = p_key;
+$$;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:

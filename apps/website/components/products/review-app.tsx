@@ -51,6 +51,28 @@ function normalisePastedUrl(pasted: string) {
   return null
 }
 
+type Quota = { remaining: number; limit: number; resetsAt: string | null }
+
+/** Milliseconds until `iso`, ticking every second. Null when there's no time. */
+function useCountdown(iso: string | null) {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!iso) return
+    setNow(Date.now())
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [iso])
+  return iso ? Math.max(0, new Date(iso).getTime() - now) : null
+}
+
+const two = (n: number) => String(n).padStart(2, '0')
+
+/** 17:42:09 */
+function clock(ms: number) {
+  const total = Math.ceil(ms / 1000)
+  return `${two(Math.floor(total / 3600))}:${two(Math.floor((total % 3600) / 60))}:${two(total % 60)}`
+}
+
 /** True once there's a real address, not just the prefix. */
 const hasAddress = (value: string) => /^(https?:\/\/)?[^\s/.]+(\.[^\s/.]+)+/i.test(value.trim())
 
@@ -74,9 +96,29 @@ export function ReviewApp() {
   const [error, setError] = useState<{ message: string; limited?: boolean } | null>(null)
   const [review, setReview] = useState<Review | null>(null)
   const [copied, setCopied] = useState<Copied>(null)
+  const [quota, setQuota] = useState<Quota | null>(null)
 
   const input = (mode === 'text' ? text : url).trim()
-  const ready = mode === 'text' ? input.length > 0 : hasAddress(url)
+  const outOfReviews = quota?.remaining === 0
+  const msLeft = useCountdown(outOfReviews ? quota?.resetsAt ?? null : null)
+  const ready = !outOfReviews && (mode === 'text' ? input.length > 0 : hasAddress(url))
+
+  // Ask the server how many reviews this visitor has left today.
+  function refreshQuota() {
+    fetch('/api/review', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((q: Quota | null) => q && setQuota(q))
+      .catch(() => {})
+  }
+  useEffect(refreshQuota, [])
+
+  // When the countdown runs out, the reviews are back: unlock the form.
+  useEffect(() => {
+    if (msLeft === 0) {
+      setError(null)
+      refreshQuota()
+    }
+  }, [msLeft])
 
   // On switching to Page link, put the cursor after the prefix.
   useEffect(() => {
@@ -120,6 +162,7 @@ export function ReviewApp() {
         body: JSON.stringify({ input }),
       })
       const data = await res.json()
+      if (data.quota) setQuota(data.quota)
       if (!res.ok) {
         setError({ message: data.error ?? 'Something went wrong. Try again.', limited: data.limited })
         return
@@ -184,11 +227,20 @@ export function ReviewApp() {
           <p className="mt-1 text-text-muted">{REVIEW_PRODUCT.tagline}</p>
         </div>
         <ul className="flex flex-wrap gap-2 text-sm">
-          {['Free', '2 reviews a day', 'About 30 seconds'].map((b) => (
-            <li key={b} className="rounded-full border border-border bg-card px-3 py-1 text-text-muted">
-              {b}
-            </li>
-          ))}
+          <li className="rounded-full border border-border bg-card px-3 py-1 text-text-muted">Free</li>
+          <li
+            className={`rounded-full border px-3 py-1 ${
+              outOfReviews ? 'border-accent/30 bg-accent-light text-accent' : 'border-border bg-card text-text-muted'
+            }`}
+            aria-live="polite"
+          >
+            {outOfReviews && msLeft
+              ? `Next review in ${clock(msLeft)}`
+              : quota
+                ? `${quota.remaining} of ${quota.limit} reviews left today`
+                : '2 free reviews a day'}
+          </li>
+          <li className="rounded-full border border-border bg-card px-3 py-1 text-text-muted">About 30 seconds</li>
         </ul>
       </header>
 
@@ -288,7 +340,7 @@ export function ReviewApp() {
                 </>
               )}
 
-              {error && (
+              {error && !(error.limited && outOfReviews) && (
                 <div className="mt-5 flex gap-3 rounded-2xl bg-accent-light p-4 text-[0.9375rem] text-text-primary" role="alert">
                   <AlertCircle size={18} className="mt-0.5 shrink-0 text-accent" aria-hidden />
                   <div>
@@ -299,6 +351,33 @@ export function ReviewApp() {
                       </Link>
                     )}
                   </div>
+                </div>
+              )}
+
+              {outOfReviews && (
+                <div className="theme-dark mt-5 rounded-2xl p-5 md:p-6" role="status">
+                  <p className="font-medium text-text-primary">You&apos;ve used today&apos;s 2 free reviews.</p>
+                  {msLeft ? (
+                    <>
+                      <p className="mt-1 text-sm text-text-muted">Your next review unlocks in</p>
+                      <p className="text-grad mt-3 text-5xl font-bold tabular-nums tracking-tight" aria-live="off">
+                        {clock(msLeft)}
+                      </p>
+                      <p className="mt-1 flex gap-7 text-xs text-text-muted">
+                        <span>hours</span>
+                        <span>minutes</span>
+                        <span>seconds</span>
+                      </p>
+                    </>
+                  ) : (
+                    <p className="mt-1 text-sm text-text-muted">They reset within 24 hours.</p>
+                  )}
+                  <p className="mt-5 text-[0.9375rem] text-text-muted">
+                    Want to talk your page through before then?{' '}
+                    <Link href="/contact" className="text-link">
+                      Get in touch
+                    </Link>
+                  </p>
                 </div>
               )}
 

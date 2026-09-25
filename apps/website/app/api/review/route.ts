@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { checkIpLimit, checkDailyLimit, clientIp, PER_IP_LIMIT } from '@/lib/rate-limit'
+import { checkIpLimit, checkDailyLimit, clientIp, reviewQuota, PER_IP_LIMIT } from '@/lib/rate-limit'
 import type { Review } from '@/lib/review'
 import { REVIEW_PRODUCT } from '@/lib/products'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
+export const dynamic = 'force-dynamic'
+
+/** How many reviews the visitor has left today. Doesn't use one up. */
+export async function GET(req: NextRequest) {
+  const quota = await reviewQuota(clientIp(req.headers))
+  return NextResponse.json(quota, { headers: { 'Cache-Control': 'no-store' } })
+}
 
 const MODEL = 'claude-haiku-4-5-20251001'
 const MAX_INPUT_CHARS = 6000
@@ -191,12 +198,15 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const perIp = await checkIpLimit(clientIp(req.headers))
+  const ip = clientIp(req.headers)
+  const perIp = await checkIpLimit(ip)
   if (!perIp.success) {
+    const quota = await reviewQuota(ip)
     return NextResponse.json(
       {
-        error: `You've used your ${PER_IP_LIMIT} free reviews for today. Come back tomorrow, or get in touch if you'd like to talk the page through.`,
+        error: `You've used your ${PER_IP_LIMIT} free reviews for today. Get in touch if you'd like to talk the page through.`,
         limited: true,
+        quota: { ...quota, remaining: 0 },
       },
       { status: 429 },
     )
@@ -208,6 +218,7 @@ export async function POST(req: NextRequest) {
       {
         error: 'The review service has reached its limit for today. Try again tomorrow.',
         limited: true,
+        quota: { ...(await reviewQuota(ip)), remaining: 0 },
       },
       { status: 429 },
     )
@@ -247,7 +258,8 @@ export async function POST(req: NextRequest) {
     const review = normalise(toolUse.input)
     if (!review.verdict || review.problems.length === 0) throw new Error('incomplete review')
 
-    return NextResponse.json(review)
+    const quota = await reviewQuota(ip)
+    return NextResponse.json({ ...review, quota })
   } catch (err) {
     console.error('Review route failure', err)
     return NextResponse.json({ error: 'The review service hiccuped. Try again.' }, { status: 500 })
