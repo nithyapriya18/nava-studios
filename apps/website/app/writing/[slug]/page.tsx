@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getAllPosts, getPostBySlug } from '@/lib/mdx'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
+import { Comments } from '@/components/comments'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -72,6 +73,8 @@ export default async function PostPage({ params }: Props) {
           {contactLabel}
         </a>
       </aside>
+
+      <Comments slug={slug} />
     </article>
   )
 }

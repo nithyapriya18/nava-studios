@@ -144,6 +144,53 @@ as $$
   );
 $$;
 
+-- Blog comments. New comments wait for approval (approved = false); tick
+-- approved in the Table Editor to publish one. The public key can only add a
+-- comment through add_comment and read approved ones through
+-- approved_comments, which never returns email addresses.
+create table if not exists public.post_comments (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  post_slug text not null,
+  name text not null,
+  email text,
+  body text not null,
+  approved boolean not null default false,
+  ip text,
+  country text,
+  user_agent text
+);
+alter table public.post_comments enable row level security;
+create index if not exists post_comments_slug_idx on public.post_comments (post_slug, created_at);
+
+create or replace function public.add_comment(p_entry jsonb) returns void
+language sql
+security definer
+as $$
+  insert into public.post_comments (post_slug, name, email, body, ip, country, user_agent)
+  values (
+    left(p_entry->>'post_slug', 120),
+    left(p_entry->>'name', 80),
+    nullif(left(p_entry->>'email', 200), ''),
+    left(p_entry->>'body', 2000),
+    left(p_entry->>'ip', 100),
+    left(p_entry->>'country', 10),
+    left(p_entry->>'user_agent', 500)
+  );
+$$;
+
+create or replace function public.approved_comments(p_slug text)
+returns table (id bigint, created_at timestamptz, name text, body text)
+language sql
+security definer
+stable
+as $$
+  select id, created_at, name, body
+  from public.post_comments
+  where post_slug = p_slug and approved
+  order by created_at;
+$$;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:

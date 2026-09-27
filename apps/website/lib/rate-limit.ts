@@ -130,6 +130,12 @@ export async function checkContactLimit(ip: string) {
   return { success }
 }
 
+/** Blog comments: a few per visitor per day, to keep spam down. */
+export async function checkCommentLimit(ip: string) {
+  const success = await check(`comment-ip:${ip}`, 3, 24 * 60 * 60)
+  return { success }
+}
+
 export function clientIp(headers: Headers) {
   const forwarded = headers.get('x-forwarded-for')
   if (forwarded) return forwarded.split(',')[0]!.trim()

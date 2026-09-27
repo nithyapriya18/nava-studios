@@ -78,6 +78,15 @@ export default function PrivacyPage() {
           work.
         </p>
 
+        <h3>Comments</h3>
+        <p>
+          If you comment on a post, I receive your name, your comment and, if you give
+          it, your email address, along with your IP address, approximate location and
+          browser type to help prevent spam. Comments are published only after I approve
+          them. Your name and comment are then shown publicly on the post; your email
+          address is never shown and is used only if I need to reply to you.
+        </p>
+
         <h3>Messages</h3>
         <p>
           If you use the contact form or email me, I receive your name, email address,
@@ -96,6 +105,7 @@ export default function PrivacyPage() {
           <li>To provide {REVIEW_PRODUCT.name}, apply its fair-use limits and prevent misuse</li>
           <li>To understand how the site is used and which of my services interest visitors</li>
           <li>To reply to messages, discuss projects and prepare quotes</li>
+          <li>To publish and moderate comments on posts</li>
           <li>To meet legal obligations</li>
         </ul>
         <p>
@@ -137,7 +147,7 @@ export default function PrivacyPage() {
           <li>Supabase, for the database that holds the records and limits described above</li>
           <li>Anthropic, the AI service that writes {REVIEW_PRODUCT.name} reviews</li>
           <li>Microlink, for taking screenshots of pages submitted by link</li>
-          <li>Resend, for delivering contact form messages to my inbox</li>
+          <li>Resend, for delivering contact form messages and comment notifications to my inbox</li>
         </ul>
         <p>
           These providers may store or process data outside India, including in the United
@@ -152,6 +162,7 @@ export default function PrivacyPage() {
             12 months
           </li>
           <li>Review counts used for the daily limit: reset every 24 hours</li>
+          <li>Comments: until you ask me to remove them, or the post is taken down</li>
           <li>Analytics and session recordings: no longer than my analytics plan retains them</li>
           <li>
             Messages: as long as needed to handle your enquiry and for ordinary business
