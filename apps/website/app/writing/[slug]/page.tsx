@@ -58,7 +58,12 @@ export default async function PostPage({ params }: Props) {
         <MDXRemote source={post.content} />
       </div>
 
-      <aside className="mt-12 rounded-3xl bg-surface p-6 md:p-8">
+      <p className="mt-10 border-t border-border pt-6 text-sm italic text-text-muted">
+        I write these with help from AI tools and edit them myself. The views and
+        experiences are my own.
+      </p>
+
+      <aside className="mt-8 rounded-3xl bg-surface p-6 md:p-8">
         <p className="font-sans text-lg font-medium text-text-primary">
           Have an idea you want built?
         </p>
