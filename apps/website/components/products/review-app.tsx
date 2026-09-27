@@ -10,16 +10,22 @@ import {
   FileText,
   Gauge,
   Link2,
+  ImagePlus,
   ListChecks,
   PenLine,
   RotateCcw,
   Sparkles,
   ThumbsUp,
+  TrendingDown,
+  TrendingUp,
   Type,
+  X,
 } from 'lucide-react'
 import { track } from '@/lib/analytics'
 import { toPlan, toPrompt, toText, type Review } from '@/lib/review'
 import { REVIEW_PRODUCT } from '@/lib/products'
+import { historyFor, pageKey, recordReview, shortDate, type HistoryEntry } from '@/lib/review-history'
+import { prepareScreenshot } from '@/lib/image-prep'
 import { AppIcon } from '@/components/products/app-icon'
 import { ScoreRing } from '@/components/products/score-ring'
 
@@ -34,10 +40,11 @@ const STAGES = [
 ]
 
 const INCLUDES = [
-  { icon: Gauge, title: 'A score out of 10', body: 'Plus clarity, audience, value, proof and call to action scored separately.' },
+  { icon: Gauge, title: 'A score out of 10', body: 'Plus clarity, audience, value, proof, call to action and design scored separately.' },
   { icon: AlertCircle, title: 'Issues, quoted', body: 'The exact words that cause problems, why they hurt, and how to fix them.' },
   { icon: PenLine, title: 'Suggested copy', body: 'A new headline, subheadline and button text to start from.' },
   { icon: Sparkles, title: 'Take it with you', body: 'Copy the fixes as an AI prompt, or download them as a plan.md.' },
+  { icon: TrendingUp, title: 'See your progress', body: 'Review the same page again after changes and see how each score has moved.' },
 ]
 
 // The link box starts with this so people only type their domain.
@@ -97,6 +104,9 @@ export function ReviewApp() {
   const [review, setReview] = useState<Review | null>(null)
   const [copied, setCopied] = useState<Copied>(null)
   const [quota, setQuota] = useState<Quota | null>(null)
+  const [shot, setShot] = useState<string | null>(null)
+  const [shotError, setShotError] = useState<string | null>(null)
+  const [previous, setPrevious] = useState<HistoryEntry[]>([])
 
   const input = (mode === 'text' ? text : url).trim()
   const outOfReviews = quota?.remaining === 0
@@ -165,7 +175,7 @@ export function ReviewApp() {
       const res = await fetch('/api/review', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify(mode === 'text' && shot ? { input, image: shot } : { input }),
       })
       const data = await res.json()
       if (data.quota) setQuota(data.quota)
@@ -175,6 +185,13 @@ export function ReviewApp() {
       }
       setSubmitted(input)
       setReview(data)
+      const key = pageKey(input, mode === 'url')
+      setPrevious(historyFor(key))
+      recordReview(key, {
+        at: new Date().toISOString(),
+        score: data.score,
+        areas: Object.fromEntries((data.breakdown ?? []).map((b: { area: string; score: number }) => [b.area, b.score])),
+      })
       track('roast_generated', { score: data.score })
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {
@@ -202,6 +219,16 @@ export function ReviewApp() {
     a.click()
     URL.revokeObjectURL(href)
     track('roast_plan_downloaded', { score: review.score })
+  }
+
+  async function onShotChosen(file: File | undefined) {
+    setShotError(null)
+    if (!file) return
+    try {
+      setShot(await prepareScreenshot(file))
+    } catch (err) {
+      setShotError(err instanceof Error ? err.message : 'That image couldn’t be used.')
+    }
   }
 
   function reset() {
@@ -316,6 +343,32 @@ export function ReviewApp() {
                   <p className="mt-2 text-right text-xs tabular-nums text-text-muted">
                     {text.length.toLocaleString()} / 6,000
                   </p>
+
+                  <p className="mt-3 text-[0.9375rem] font-medium text-text-primary">
+                    Screenshot <span className="font-normal text-text-muted">(optional)</span>
+                  </p>
+                  {shot ? (
+                    <div className="mt-2 flex items-center gap-4 rounded-2xl border border-border p-3">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={shot} alt="Your screenshot" className="h-16 w-24 rounded-lg border border-border object-cover object-top" />
+                      <p className="flex-1 text-sm text-text-muted">The design will be reviewed too.</p>
+                      <button type="button" onClick={() => setShot(null)} className="rounded-full p-2 text-text-muted hover:bg-surface hover:text-text-primary" aria-label="Remove screenshot">
+                        <X size={16} aria-hidden />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="mt-2 flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border px-4 py-3.5 text-sm text-text-muted transition-colors hover:border-accent/50 hover:text-text-primary">
+                      <ImagePlus size={18} className="text-accent" aria-hidden />
+                      Add a screenshot of the top of your page, so the design gets reviewed too
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="sr-only"
+                        onChange={(e) => onShotChosen(e.target.files?.[0])}
+                      />
+                    </label>
+                  )}
+                  {shotError && <p className="mt-2 text-sm text-accent">{shotError}</p>}
                 </>
               ) : (
                 <>
@@ -340,6 +393,10 @@ export function ReviewApp() {
                     Type the rest of your address, such as <span className="text-text-primary">yourproduct.com</span>{' '}
                     or <span className="text-text-primary">yourproduct.in</span>. You can edit the start
                     if your site uses http or doesn&apos;t use www.
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                    I&apos;ll also take a screenshot of the top of your page, so the design is
+                    reviewed along with the words.
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-text-muted">
                     Some sites block automatic reading. If yours does, switch to Paste copy.
@@ -458,7 +515,10 @@ export function ReviewApp() {
               <div className="md:sticky md:top-24">
                 <div className="flex items-center gap-4 md:flex-col md:items-start">
                   <ScoreRing score={review.score} size={120} />
-                  <p className="text-[0.9375rem] font-medium leading-snug text-text-primary">{review.verdict}</p>
+                  <div>
+                    <p className="text-[0.9375rem] font-medium leading-snug text-text-primary">{review.verdict}</p>
+                    <Progress score={review.score} previous={previous} />
+                  </div>
                 </div>
                 <nav aria-label="Review sections" className="mt-6 hidden md:block">
                   <ul className="space-y-0.5 text-sm">
@@ -496,6 +556,42 @@ export function ReviewApp() {
                   <span className="font-medium text-text-primary">Who it seems to be for: </span>
                   {review.audience}
                 </p>
+                {(review.screenshot || (review.visual === 'uploaded' && shot)) && (
+                  <figure className="mt-6">
+                    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+                      <div className="flex gap-1.5 border-b border-border px-3 py-2" aria-hidden>
+                        <span className="h-2 w-2 rounded-full bg-border" />
+                        <span className="h-2 w-2 rounded-full bg-border" />
+                        <span className="h-2 w-2 rounded-full bg-border" />
+                      </div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={review.screenshot ?? shot ?? ''}
+                        alt="The top of the reviewed page"
+                        className="max-h-[420px] w-full object-cover object-top"
+                      />
+                    </div>
+                    <figcaption className="mt-2 text-sm text-text-muted">
+                      What I reviewed: the top of the page, as a first-time visitor sees it.
+                    </figcaption>
+                  </figure>
+                )}
+                {review.visual === 'none' && submitted && mode === 'url' && (
+                  <p className="mt-4 rounded-xl bg-surface px-4 py-3 text-sm text-text-muted">
+                    The design wasn&apos;t reviewed this time because a screenshot couldn&apos;t be taken.
+                    To include it, switch to Paste copy and add a screenshot.
+                  </p>
+                )}
+                {previous.length > 0 && (
+                  <p className="mt-4 text-sm text-text-muted">
+                    Your earlier reviews of this {mode === 'url' ? 'page' : 'copy'}:{' '}
+                    {previous
+                      .slice(-4)
+                      .map((p) => `${p.score}/10 on ${shortDate(p.at)}`)
+                      .join(', ')}
+                    .
+                  </p>
+                )}
               </section>
 
               <section id="scores" className="scroll-mt-24">
@@ -505,7 +601,18 @@ export function ReviewApp() {
                     <li key={b.area} className="rounded-2xl border border-border p-4">
                       <div className="flex items-baseline justify-between gap-4">
                         <span className="font-medium text-text-primary">{b.area}</span>
-                        <span className="text-sm font-semibold tabular-nums text-text-primary">{b.score}/10</span>
+                        <span className="flex items-baseline gap-2 text-sm tabular-nums">
+                          {(() => {
+                            const was = previous.at(-1)?.areas?.[b.area]
+                            if (was === undefined || was === b.score) return null
+                            return (
+                              <span className={b.score > was ? 'text-[#0e8f80]' : 'text-accent'}>
+                                was {was}
+                              </span>
+                            )
+                          })()}
+                          <span className="font-semibold text-text-primary">{b.score}/10</span>
+                        </span>
                       </div>
                       <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-surface">
                         <div className="h-full rounded-full" style={{ width: `${b.score * 10}%`, backgroundImage: 'var(--grad-button)' }} />
@@ -600,6 +707,25 @@ export function ReviewApp() {
         </Link>
       </section>
     </div>
+  )
+}
+
+/** "Up 3 since 12 Sep" compared with the last review of the same page. */
+function Progress({ score, previous }: { score: number; previous: HistoryEntry[] }) {
+  const last = previous.at(-1)
+  if (!last) return null
+  const diff = score - last.score
+  const since = shortDate(last.at)
+  if (diff === 0) {
+    return <p className="mt-2 text-sm text-text-muted">Same score as on {since}</p>
+  }
+  const up = diff > 0
+  const Icon = up ? TrendingUp : TrendingDown
+  return (
+    <p className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-medium ${up ? 'bg-[#11ab8c]/10 text-[#0e8f80]' : 'bg-accent-light text-accent'}`}>
+      <Icon size={15} aria-hidden />
+      {last.score} → {score}, {up ? 'up' : 'down'} {Math.abs(diff)} since {since}
+    </p>
   )
 }
 

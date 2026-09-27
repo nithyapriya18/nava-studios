@@ -15,6 +15,10 @@ export type Review = {
   strengths: string[]
   rewrite: { headline: string; subheadline: string; cta: string }
   nextSteps: string[]
+  /** How the design was assessed: from a screenshot we took, one they uploaded, or not at all. */
+  visual?: 'screenshot' | 'uploaded' | 'none'
+  /** URL of the screenshot we took of their page, if any. */
+  screenshot?: string
 }
 
 function sourceLine(input: string) {

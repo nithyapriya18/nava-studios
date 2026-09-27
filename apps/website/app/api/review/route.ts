@@ -4,6 +4,7 @@ import type { Review } from '@/lib/review'
 import { REVIEW_PRODUCT } from '@/lib/products'
 import { logReview, requestMeta, type ReviewOutcome } from '@/lib/review-log'
 import { OWNER_COOKIE, isOwnerKey } from '@/lib/owner'
+import { parseImageDataUrl, screenshotUrl } from '@/lib/screenshot'
 
 const OWNER_QUOTA = { remaining: 999, limit: 999, resetsAt: null, owner: true }
 
@@ -29,6 +30,8 @@ Rules:
 - Judge it as a stranger landing on the page would: can they tell what it is, who it's for, why it's better, and what to do next?
 - Suggested copy must stay true to what they described. Never invent numbers, customers, features or results. Where proof is missing, use a clear placeholder such as [number of customers].
 - Write in plain English with plain punctuation. Never use dashes of any kind ("-", "–" or "—") as punctuation between words or clauses; use a comma, a colon or a new sentence instead.
+- If a screenshot of the page is attached, also judge what it shows: visual hierarchy, whether the main message and the main button stand out, readability and clutter. Score it as the "Design and layout" area and raise visual problems where they matter, saying where on the page they are, since you can't quote them. If no screenshot is attached, leave "Design and layout" out.
+- If the page text is missing or thin, review from the screenshot.
 - Submit your review with the submit_review tool.`
 
 const REVIEW_TOOL = {
@@ -45,12 +48,16 @@ const REVIEW_TOOL = {
       breakdown: {
         type: 'array',
         minItems: 5,
-        maxItems: 5,
+        maxItems: 6,
+        description: 'The five areas, plus "Design and layout" only when a screenshot is attached.',
         items: {
           type: 'object',
           required: ['area', 'score', 'note'],
           properties: {
-            area: { type: 'string', enum: ['Clarity', 'Audience', 'Value', 'Proof', 'Call to action'] },
+            area: {
+              type: 'string',
+              enum: ['Clarity', 'Audience', 'Value', 'Proof', 'Call to action', 'Design and layout'],
+            },
             score: { type: 'integer', minimum: 1, maximum: 10 },
             note: { type: 'string', description: 'One sentence on this area, specific to the submission.' },
           },
@@ -151,7 +158,7 @@ function normalise(raw: Record<string, unknown>): Review {
 }
 
 export async function POST(req: NextRequest) {
-  let body: { input?: string }
+  let body: { input?: string; image?: unknown }
   try {
     body = await req.json()
   } catch {
@@ -168,12 +175,19 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     )
   }
+  const uploaded = body.image ? parseImageDataUrl(body.image) : null
+  if (body.image && !uploaded) {
+    return NextResponse.json(
+      { error: 'That screenshot couldn’t be used. Try a PNG or JPEG under 3 MB.' },
+      { status: 400 },
+    )
+  }
 
-  let textToReview = raw
   const ip = clientIp(req.headers)
   const owner = isOwnerKey(req.cookies.get(OWNER_COOKIE)?.value)
   const meta = requestMeta(req.headers)
-  const inputType = looksLikeUrl(raw) ? 'link' : 'text'
+  const isLink = looksLikeUrl(raw)
+  const inputType = isLink ? 'link' : 'text'
   // Saved after the response is sent, so it never slows a review down.
   const log = (outcome: ReviewOutcome, extra: { score?: number; verdict?: string; review?: unknown } = {}) =>
     after(() =>
@@ -189,32 +203,6 @@ export async function POST(req: NextRequest) {
       }),
     )
 
-  // Fetch the page before counting against the limit, so a site that blocks
-  // us doesn't use up one of the visitor's reviews.
-  if (looksLikeUrl(raw)) {
-    const url = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
-    try {
-      const res = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; StudioNPVPageReview/1.0)' },
-        signal: AbortSignal.timeout(8000),
-      })
-      if (!res.ok) throw new Error(`status ${res.status}`)
-      const html = await res.text()
-      const text = stripHtml(html).slice(0, MAX_INPUT_CHARS)
-      if (text.length < 40) throw new Error('too little text')
-      textToReview = text
-    } catch {
-      log('unreadable_link')
-      return NextResponse.json(
-        {
-          error:
-            "Couldn't read that page, because some sites block automatic requests. Paste the text instead: your headline, subheadline and the main sections. This didn't use up a review.",
-        },
-        { status: 422 },
-      )
-    }
-  }
-
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     return NextResponse.json(
@@ -223,32 +211,71 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const perIp = owner ? { success: true } : await checkIpLimit(ip)
-  if (!perIp.success) {
-    log('limit_visitor')
-    const quota = await reviewQuota(ip)
+  const limited = async (outcome: 'limit_visitor' | 'limit_site') => {
+    log(outcome)
     return NextResponse.json(
       {
-        error: `You've used your ${PER_IP_LIMIT} free reviews for today. Get in touch if you'd like to talk the page through.`,
-        limited: true,
-        quota: { ...quota, remaining: 0 },
-      },
-      { status: 429 },
-    )
-  }
-
-  const daily = owner ? { success: true } : await checkDailyLimit()
-  if (!daily.success) {
-    log('limit_site')
-    return NextResponse.json(
-      {
-        error: 'The review service has reached its limit for today. Try again tomorrow.',
+        error:
+          outcome === 'limit_visitor'
+            ? `You've used your ${PER_IP_LIMIT} free reviews for today. Get in touch if you'd like to talk the page through.`
+            : 'The review service has reached its limit for today. Try again tomorrow.',
         limited: true,
         quota: { ...(await reviewQuota(ip)), remaining: 0 },
       },
       { status: 429 },
     )
   }
+
+  // Check (without using up) the visitor's allowance before spending a
+  // screenshot on them.
+  if (!owner && (await reviewQuota(ip)).remaining === 0) return limited('limit_visitor')
+
+  // For a link, read the page text and take a screenshot at the same time.
+  // A page that blocks one can often still be reviewed from the other; if
+  // both fail, the visitor keeps their review.
+  let pageText: string | null = raw
+  let pageShot: string | null = null
+  if (isLink) {
+    const url = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
+    const readText = async () => {
+      try {
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; StudioNPVPageReview/1.0)' },
+          signal: AbortSignal.timeout(8000),
+        })
+        if (!res.ok) return null
+        const text = stripHtml(await res.text()).slice(0, MAX_INPUT_CHARS)
+        return text.length >= 40 ? text : null
+      } catch {
+        return null
+      }
+    }
+    ;[pageText, pageShot] = await Promise.all([readText(), screenshotUrl(url)])
+    if (!pageText && !pageShot) {
+      log('unreadable_link')
+      return NextResponse.json(
+        {
+          error:
+            "Couldn't read that page, because some sites block automatic requests. Switch to Paste copy and paste your headline, subheadline and main sections, and add a screenshot if you have one. This didn't use up a review.",
+        },
+        { status: 422 },
+      )
+    }
+  }
+
+  const perIp = owner ? { success: true } : await checkIpLimit(ip)
+  if (!perIp.success) return limited('limit_visitor')
+  const daily = owner ? { success: true } : await checkDailyLimit()
+  if (!daily.success) return limited('limit_site')
+
+  const image = uploaded
+    ? { type: 'image', source: { type: 'base64', media_type: uploaded.mediaType, data: uploaded.data } }
+    : pageShot
+      ? { type: 'image', source: { type: 'url', url: pageShot } }
+      : null
+  const text = pageText
+    ? `Review this${image ? ' page. A screenshot of the top of the page is attached.' : ':'}\n\n${pageText}`
+    : 'Review this page. Its text could not be read, so review it from the attached screenshot of the top of the page.'
 
   try {
     const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
@@ -260,11 +287,11 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: 2000,
+        max_tokens: 2400,
         system: SYSTEM_PROMPT,
         tools: [REVIEW_TOOL],
         tool_choice: { type: 'tool', name: REVIEW_TOOL.name },
-        messages: [{ role: 'user', content: `Review this:\n\n${textToReview}` }],
+        messages: [{ role: 'user', content: image ? [image, { type: 'text', text }] : text }],
       }),
       signal: AbortSignal.timeout(50000),
     })
@@ -284,10 +311,17 @@ export async function POST(req: NextRequest) {
 
     const review = normalise(toolUse.input)
     if (!review.verdict || review.problems.length === 0) throw new Error('incomplete review')
+    // Only a screenshot can support a design score.
+    if (!image) review.breakdown = review.breakdown.filter((b) => b.area !== 'Design and layout')
 
-    log('reviewed', { score: review.score, verdict: review.verdict, review })
+    const withVisual = {
+      ...review,
+      visual: image ? (uploaded ? 'uploaded' : 'screenshot') : 'none',
+      screenshot: pageShot ?? undefined,
+    }
+    log('reviewed', { score: review.score, verdict: review.verdict, review: withVisual })
     const quota = owner ? OWNER_QUOTA : await reviewQuota(ip)
-    return NextResponse.json({ ...review, quota })
+    return NextResponse.json({ ...withVisual, quota })
   } catch (err) {
     console.error('Review route failure', err)
     log('error')

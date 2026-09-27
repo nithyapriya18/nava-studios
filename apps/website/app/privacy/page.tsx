@@ -14,7 +14,7 @@ export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-content px-6 pt-16 md:px-8 md:pt-24">
       <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Privacy policy</h1>
-      <p className="mt-4 font-sans text-sm text-text-muted">Last updated 25 September 2026</p>
+      <p className="mt-4 font-sans text-sm text-text-muted">Last updated 27 September 2026</p>
 
       <div className="prose mt-10">
         <p>
@@ -56,9 +56,18 @@ export default function PrivacyPage() {
           When you use <Link href={reviewHref}>{REVIEW_PRODUCT.name}</Link>, I keep a
           record of the text or link you submit, the review produced, the time, your IP
           address, approximate location and browser type. To produce the review, what you
-          submit is sent to an AI service provider. I also keep a count of reviews by IP
-          address, which is how the limit of two free reviews a day is applied. Please
-          don&apos;t submit confidential or personal information to the tool.
+          submit is sent to an AI service provider. If you submit a link, a screenshot of
+          the top of that page is taken by a screenshot service so the design can be
+          reviewed, and the record includes a link to it. If you upload a screenshot, it
+          is sent to the AI service for the review and isn&apos;t stored. I also keep a
+          count of reviews by IP address, which is how the limit of two free reviews a day
+          is applied. Please don&apos;t submit confidential or personal information to the
+          tool.
+        </p>
+        <p>
+          Your browser also keeps a short history of your own review scores, so a repeat
+          review can show how your page has improved. That history stays on your device,
+          I can&apos;t see it, and clearing your browser data removes it.
         </p>
 
         <h3>Resume downloads and profile visits</h3>
@@ -110,7 +119,9 @@ export default function PrivacyPage() {
         <h2>4. Cookies and similar technologies</h2>
         <p>
           The analytics tool uses a cookie and your browser&apos;s local storage to
-          recognise a returning visitor and group the pages of a single visit. I don&apos;t
+          recognise a returning visitor and group the pages of a single visit.{' '}
+          {REVIEW_PRODUCT.name} also uses local storage to keep your own score history on
+          your device. I don&apos;t
           use advertising cookies or track you across other websites. You can block or
           delete cookies in your browser settings, and the site will still work.
         </p>
@@ -125,6 +136,7 @@ export default function PrivacyPage() {
           <li>PostHog, for analytics and session recordings</li>
           <li>Supabase, for the database that holds the records and limits described above</li>
           <li>Anthropic, the AI service that writes {REVIEW_PRODUCT.name} reviews</li>
+          <li>Microlink, for taking screenshots of pages submitted by link</li>
           <li>Resend, for delivering contact form messages to my inbox</li>
         </ul>
         <p>
