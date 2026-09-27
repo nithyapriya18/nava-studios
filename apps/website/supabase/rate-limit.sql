@@ -191,6 +191,59 @@ as $$
   order by created_at;
 $$;
 
+-- One-click moderation from the notification email. Each comment has a
+-- secret token; only links carrying it can approve or delete that comment.
+alter table public.post_comments
+  add column if not exists moderation_token uuid not null default gen_random_uuid();
+
+drop function if exists public.add_comment(jsonb);
+create function public.add_comment(p_entry jsonb)
+returns table (id bigint, moderation_token uuid)
+language sql
+security definer
+as $$
+  insert into public.post_comments (post_slug, name, email, body, ip, country, user_agent)
+  values (
+    left(p_entry->>'post_slug', 120),
+    left(p_entry->>'name', 80),
+    nullif(left(p_entry->>'email', 200), ''),
+    left(p_entry->>'body', 2000),
+    left(p_entry->>'ip', 100),
+    left(p_entry->>'country', 10),
+    left(p_entry->>'user_agent', 500)
+  )
+  returning id, moderation_token;
+$$;
+
+create or replace function public.comment_for_moderation(p_id bigint, p_token uuid)
+returns table (post_slug text, name text, body text, approved boolean, created_at timestamptz)
+language sql
+security definer
+stable
+as $$
+  select post_slug, name, body, approved, created_at
+  from public.post_comments
+  where id = p_id and moderation_token = p_token;
+$$;
+
+create or replace function public.moderate_comment(p_id bigint, p_token uuid, p_action text)
+returns text
+language plpgsql
+security definer
+as $$
+begin
+  if p_action = 'approve' then
+    update public.post_comments set approved = true where id = p_id and moderation_token = p_token;
+  elsif p_action = 'delete' then
+    delete from public.post_comments where id = p_id and moderation_token = p_token;
+  else
+    return 'invalid';
+  end if;
+  if found then return 'ok'; end if;
+  return 'not_found';
+end;
+$$;
+
 -- Optional, worth adding once this is live: a daily cleanup of stale rows so
 -- the table doesn't grow forever. Requires the pg_cron extension (enable it
 -- under Database → Extensions), then:

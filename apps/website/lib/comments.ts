@@ -33,9 +33,42 @@ export async function addComment(entry: {
   ip: string
   country: string | null
   user_agent: string | null
-}) {
-  if (!supabase) return false
-  const { error } = await supabase.rpc('add_comment', { p_entry: entry })
-  if (error) console.error('[comments] insert failed:', error.message)
-  return !error
+}): Promise<{ id: number; token: string } | null> {
+  if (!supabase) return null
+  const { data, error } = await supabase.rpc('add_comment', { p_entry: entry })
+  if (error) {
+    console.error('[comments] insert failed:', error.message)
+    return null
+  }
+  const row = Array.isArray(data) ? data[0] : data
+  return row?.id ? { id: Number(row.id), token: String(row.moderation_token) } : { id: 0, token: '' }
+}
+
+export type ModerationView = {
+  post_slug: string
+  name: string
+  body: string
+  approved: boolean
+  created_at: string
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const validRef = (id: number, token: string) => Number.isInteger(id) && id > 0 && UUID.test(token)
+
+/** The comment behind a moderation link, or null if the link isn't valid. */
+export async function commentForModeration(id: number, token: string): Promise<ModerationView | null> {
+  if (!supabase || !validRef(id, token)) return null
+  const { data, error } = await supabase.rpc('comment_for_moderation', { p_id: id, p_token: token })
+  if (error) {
+    console.error('[comments] moderation lookup failed:', error.message)
+    return null
+  }
+  return (Array.isArray(data) ? data[0] : null) ?? null
+}
+
+export async function moderateComment(id: number, token: string, action: 'approve' | 'delete') {
+  if (!supabase || !validRef(id, token)) return false
+  const { data, error } = await supabase.rpc('moderate_comment', { p_id: id, p_token: token, p_action: action })
+  if (error) console.error('[comments] moderation failed:', error.message)
+  return data === 'ok'
 }

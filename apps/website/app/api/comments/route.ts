@@ -7,6 +7,9 @@ import { siteConfig } from '@/config'
 
 export const dynamic = 'force-dynamic'
 
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
+
 const clean = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
 function postTitle(slug: string) {
@@ -75,8 +78,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Your comment couldn’t be saved. Please try again.' }, { status: 502 })
   }
 
-  // Let the owner know, after the response is sent.
+  // Let the owner know, after the response is sent, with a link to approve
+  // or delete it in one click.
   const apiKey = process.env.RESEND_API_KEY
+  const moderateUrl = saved.token
+    ? `${siteConfig.url}/comments/moderate?id=${saved.id}&t=${saved.token}`
+    : null
   if (apiKey) {
     after(async () => {
       const res = await fetch('https://api.resend.com/emails', {
@@ -93,8 +100,20 @@ export async function POST(req: NextRequest) {
             '',
             text,
             '',
-            'It is waiting for approval. To publish it, open Supabase, go to Table Editor, then post_comments, and tick "approved" on this comment. To remove it, delete the row.',
+            moderateUrl
+              ? `It is waiting for your approval. Approve or delete it here: ${moderateUrl}`
+              : 'It is waiting for approval. To publish it, open Supabase, go to Table Editor, then post_comments, and tick "approved" on this comment.',
           ].join('\n'),
+          ...(moderateUrl
+            ? {
+                html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0b1220">
+<p style="margin:0 0 4px"><strong>${escapeHtml(name)}</strong>${email ? ` &lt;${escapeHtml(email)}&gt;` : ''} commented on <a href="${siteConfig.url}/writing/${slug}">${escapeHtml(title)}</a>:</p>
+<blockquote style="margin:12px 0;padding:12px 16px;background:#f4f6fa;border-left:3px solid #012987;white-space:pre-line">${escapeHtml(text)}</blockquote>
+<p style="margin:20px 0"><a href="${moderateUrl}" style="background:#012987;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:bold">Review comment</a></p>
+<p style="margin:0;color:#5b6474;font-size:13px">The button opens a page where you can approve or delete it. The comment stays hidden until you approve it.</p>
+</div>`,
+              }
+            : {}),
         }),
         signal: AbortSignal.timeout(10000),
       }).catch(() => null)
