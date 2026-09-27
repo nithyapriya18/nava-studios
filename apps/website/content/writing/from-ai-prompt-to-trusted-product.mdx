@@ -1,0 +1,42 @@
+---
+title: "Turning an AI prompt into a product people can trust"
+date: "2026-09-27"
+excerpt: "Second Opinion is an AI model reading a landing page. Getting a good answer once was easy. Making it dependable for strangers was most of the work."
+tags: ["Product"]
+---
+
+Second Opinion reviews a landing page in under a minute. I'll be upfront about what's underneath it: an AI model does the reading and the writing. Anyone can paste their page into a chatbot and ask for feedback, and some of the time they'll get a useful answer.
+
+Getting a good answer once took me an afternoon. Turning that into something a stranger can use, on any page, without it misleading them, breaking, or quietly running up a bill, took most of the work. That second part is the part I want to write about, because it's also what most of building software for someone else looks like.
+
+## Making it consistent
+
+Ask a chatbot to review the same page twice and you'll get two different essays. That's fine for a conversation and useless for a product. Nobody can act on feedback that changes shape every time they ask.
+
+So every review follows the same structure: a score out of ten, the same areas scored separately, each problem tied to the exact words on the page that cause it, and a specific fix for each. The model has to fill in that structure completely or the review doesn't go out. It sounds like a small decision, but it's what made the later features possible. Because two reviews of the same page are directly comparable, the tool can now tell you your page went from 5 to 8 after your changes, and which areas moved.
+
+## Stopping it from being too nice
+
+AI models want to please. Left alone, they praise pages that don't deserve it, and when asked to rewrite copy they invent things: "trusted by 10,000 teams", a testimonial from someone who doesn't exist, a statistic nobody measured. For a founder who pastes that straight onto their site, that's a real problem.
+
+The reviews are instructed to quote the page rather than generalise, to be direct without being harsh, and never to invent numbers, customers or results. Where a page needs proof it doesn't have yet, the suggestion leaves a clearly marked gap for the founder to fill with something true.
+
+## Deciding what it's allowed to cost
+
+Every review costs me about a cent in API fees. That's nothing until a post does well and a few thousand people arrive in an afternoon, or someone writes a script that submits pages in a loop.
+
+So each visitor gets two free reviews a day, and there's a ceiling for the whole site. The counting happens in a database rather than in the server's memory, so it holds no matter how many copies of the site are running. I learned why the details matter when the database, on a free plan, was paused for inactivity. The limiter had been written to let reviews through if it couldn't reach the database, which meant that for a while nothing was being limited at all. It now falls back to a simpler limit instead of switching off. No one would have noticed that from the outside, which is exactly why it needed deciding.
+
+## Planning for things going wrong
+
+Plenty of websites block automated visitors, and others load their content in a way that leaves almost no text to read. The tool now reads the page and takes a screenshot of it at the same time, and either one is enough for a review. If both fail, the visitor is told what to do instead, and the attempt doesn't count against their two reviews. Failing gracefully took more thought than the review itself.
+
+## Treating privacy as part of the design
+
+People paste unreleased products into tools like this. So the record of what's submitted is locked away where only I can see it, the privacy policy says plainly what is kept and why, and the prompt you can export describes your fixes without giving away how the reviews are produced. None of this is visible when the tool works, and all of it would be visible if it went wrong.
+
+## What this has to do with your product
+
+When a founder describes an idea, the demo version is usually the easy part, whether or not there's AI inside it. What decides whether the product works for real users is everything around it: what happens when inputs are messy, what it costs as it grows, what it does when a service it relies on goes down, and whether people can trust what it tells them.
+
+That's the part I enjoy most, and it's the part I bring to every project. If you'd like to see the result of all this, you can try [Second Opinion](/products/second-opinion) on your own landing page.
