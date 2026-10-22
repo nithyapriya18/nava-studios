@@ -8,7 +8,7 @@ import { reviewHref } from '@/lib/products'
 import { HeroDemo } from '@/components/hero-demo'
 import { Faq } from '@/components/faq'
 import { ContactBand } from '@/components/contact-band'
-import { Arrow, PenCircle, PenUnderline, Tick } from '@/components/pen'
+import { Arrow, Note, PenCircle, PenUnderline, Tick } from '@/components/pen'
 
 const stats = [
   { n: '10 yrs', t: 'in software and product, starting as an engineer in 2014' },
@@ -17,22 +17,31 @@ const stats = [
   { n: 'PSPO I', t: 'Professional Scrum Product Owner, Scrum.org' },
 ]
 
-const builds = [
+const leadTicks = [
+  'The core features your first users come for, and nothing they don’t need yet',
+  'The admin screens you need to run it day to day',
+  'Live, with the code and notes handed over to you',
+]
+
+const also = [
+  { title: 'Apps for your customers', body: 'Portals, booking and ordering flows.' },
+  { title: 'Internal tools', body: 'Replace the spreadsheets and copy-paste your team runs by hand.' },
+  { title: 'Websites that convert', body: 'A clear site that turns visitors into enquiries.' },
+]
+
+// Facts from "Turning an AI prompt into a product people can trust".
+const caseStudy = [
   {
-    title: 'New products',
-    body: 'Web apps and SaaS products for founders, with the core features your users come for.',
+    label: 'The problem',
+    body: 'Founders can’t tell why their landing page isn’t working, and asking a chatbot gives a different essay every time.',
   },
   {
-    title: 'Apps for your customers',
-    body: 'Portals, booking and ordering flows: your customers get things done without calling or emailing you.',
+    label: 'What I built',
+    body: 'A review with the same structure every time: a score, six areas, each problem quoted from the page with a fix. It reads the words and screenshots the design.',
   },
   {
-    title: 'Internal tools',
-    body: 'Software that replaces the spreadsheets, forms and copy-paste steps your team runs by hand.',
-  },
-  {
-    title: 'Websites that convert',
-    body: 'A site that explains what you do clearly and turns visitors into sign-ups or enquiries.',
+    label: 'How it runs',
+    body: 'Two free reviews a day, about a cent each to run, with a site-wide limit. Pages that can’t be read don’t use up a review, and submissions stay private.',
   },
 ]
 
@@ -48,17 +57,8 @@ const steps = [
   { title: 'It goes live, it’s yours', body: 'Product, code and notes any developer can pick up.' },
 ]
 
-const reviewTicks = [
-  'Scored on clarity, audience, value, proof, call to action and design',
-  'Design reviewed from a screenshot, not just the words',
-  'Each issue quotes your page and suggests a fix',
-  'Re-review after changes to see your score move',
-]
-
 // Posts for someone about to start a project come first.
 const FEATURED = ['what-i-need-from-the-first-call', 'what-belongs-in-a-first-version', 'from-ai-prompt-to-trusted-product']
-
-const ROMAN = ['i.', 'ii.', 'iii.', 'iv.']
 
 function shortDate(date: string) {
   return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -88,19 +88,89 @@ export default function Home() {
             From a <PenCircle draw>napkin</PenCircle> sketch to software <em>people use</em>.
           </h1>
           <p className="lede">
-            I design and build software for founders and small businesses. I scope it with you, I build
-            it, and the price is fixed before any work starts.
+            I design and build first versions of new products for founders: web apps and SaaS that real
+            users can sign up for. I scope it with you, I build it, and the price is fixed before any work
+            starts.
           </p>
-          <div className="btns">
-            <a href={contactHref} className="btn-primary" {...ctaProps}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
+            <a href={contactHref} className="btn-primary btn-lg" {...ctaProps}>
               Tell me about your idea <Arrow />
             </a>
-            <Link href="/start" className="more">
-              How a project runs <Arrow />
+            <Link href="/start" className="quiet-link">
+              or see how a project runs
             </Link>
           </div>
         </div>
         <HeroDemo />
+      </section>
+
+      <section className="tile section" aria-labelledby="build-h">
+        <p className="label">What I build</p>
+        <div className="section-body">
+          <h2 id="build-h" className="h2">
+            First versions of new products, built to be <em>used</em>
+          </h2>
+          <div className="lead-offer">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <h3 className="h3" style={{ fontSize: 22 }}>
+                New products for founders
+              </h3>
+              <p className="muted">
+                You have an idea and the people it’s for. I turn it into a web app or SaaS product they can
+                sign up for and use, usually within a few weeks.
+              </p>
+            </div>
+            <ul className="ticks" style={{ padding: 0, background: 'none' }}>
+              {leadTicks.map((t) => (
+                <li key={t}>
+                  <Tick />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <span className="label">The same approach also works for</span>
+            <ul className="also">
+              {also.map((a) => (
+                <li key={a.title}>
+                  <span className="h3">{a.title}</span>
+                  <span className="muted">{a.body}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="tile section band-warm" aria-labelledby="case-h">
+        <p className="label">Case study</p>
+        <div className="section-body">
+          <h2 id="case-h" className="h2">
+            Second Opinion: from a napkin to a live <em>product</em>
+          </h2>
+          <p className="measure muted">
+            A free tool that reviews a landing page in about 30 seconds. I scoped, designed, built and run
+            it the same way I’d build yours.
+          </p>
+          <div className="case">
+            {caseStudy.map((c) => (
+              <div key={c.label} className="case-col">
+                <span className="label">{c.label}</span>
+                <p>{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <Note>the easy part was getting it right once</Note>
+          <div className="btns">
+            <Link href={reviewHref} className="btn-primary">
+              Try it on your page, free <Arrow />
+            </Link>
+            <Link href="/writing/from-ai-prompt-to-trusted-product" className="more">
+              Read how I built it <Arrow />
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section className="tile section" aria-labelledby="who-h">
@@ -125,25 +195,6 @@ export default function Home() {
           <Link href="/about" className="more">
             More about my background <Arrow />
           </Link>
-        </div>
-      </section>
-
-      <section className="tile section" aria-labelledby="build-h">
-        <p className="label">What I build</p>
-        <div className="section-body">
-          <h2 id="build-h" className="h2">
-            Software that does one job <em>well</em> for your business
-          </h2>
-          <div className="grid2">
-            {builds.map((b, i) => (
-              <div key={b.title} className="cell">
-                <span className="idx">{ROMAN[i]}</span>
-                <h3 className="h3">{b.title}</h3>
-                <p className="muted">{b.body}</p>
-              </div>
-            ))}
-          </div>
-          <p className="muted">If your project isn’t one of these, tell me about it anyway.</p>
         </div>
       </section>
 
@@ -174,43 +225,6 @@ export default function Home() {
           <Link href="/start" className="more">
             Each step in detail <Arrow />
           </Link>
-        </div>
-      </section>
-
-      <section className="tile section band-warm" aria-labelledby="proof-h">
-        <p className="label">Something I built</p>
-        <div className="section-body">
-          <div className="product">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <h2 id="proof-h" className="h2">
-                Second Opinion reviews your landing page in about <em>30 seconds</em>
-              </h2>
-              <p className="muted">
-                Paste a link or your copy. You get a score, the points a first-time visitor won’t
-                understand, what’s working, and fixes you can hand to an AI tool or download as a plan. I
-                designed, built and run it, the same way I’d build yours.
-              </p>
-              <div className="btns">
-                <Link href={reviewHref} className="btn-primary">
-                  Review my page, free <Arrow />
-                </Link>
-                <Link href="/writing/from-ai-prompt-to-trusted-product" className="more">
-                  How I built it
-                </Link>
-              </div>
-            </div>
-            <ul className="ticks">
-              {reviewTicks.map((t) => (
-                <li key={t}>
-                  <Tick />
-                  <span>{t}</span>
-                </li>
-              ))}
-              <li className="muted" style={{ fontSize: 14, display: 'block', borderTop: '1px solid var(--rule)', paddingTop: 12 }}>
-                Free · two reviews a day
-              </li>
-            </ul>
-          </div>
         </div>
       </section>
 

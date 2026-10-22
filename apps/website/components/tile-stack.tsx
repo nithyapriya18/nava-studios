@@ -18,15 +18,12 @@ export function TileStack({ children }: { children: ReactNode }) {
     const root = ref.current
     if (!root) return
     const tiles = Array.from(root.querySelectorAll<HTMLElement>(':scope > .tile'))
-    const pins: number[] = []
 
     // Where each tile pins depends on its height, so it's set from JS.
     const layout = () => {
       const vh = window.innerHeight
-      tiles.forEach((tile, i) => {
-        const pin = Math.min(TOP, vh - tile.offsetHeight)
-        pins[i] = pin
-        tile.style.top = `${pin}px`
+      tiles.forEach((tile) => {
+        tile.style.top = `${Math.min(TOP, vh - tile.offsetHeight)}px`
       })
       update()
     }
@@ -34,16 +31,17 @@ export function TileStack({ children }: { children: ReactNode }) {
     let frame = 0
     const update = () => {
       frame = 0
-      const vh = window.innerHeight
       tiles.forEach((tile, i) => {
         const next = tiles[i + 1]
         let cover = 0
         if (next) {
-          const pinned = tile.getBoundingClientRect().top <= pins[i] + 1
-          if (pinned) {
-            const nextTop = next.getBoundingClientRect().top
-            cover = Math.min(1, Math.max(0, (vh - nextTop) / (vh * 0.8)))
-          }
+          // How much of the tile's visible part the next tile has slid over.
+          // The scale shrinks from the top edge, so the top is unaffected.
+          const top = tile.getBoundingClientRect().top
+          const bottom = top + tile.offsetHeight
+          const visibleTop = Math.max(top, 0)
+          const nextTop = next.getBoundingClientRect().top
+          cover = Math.min(1, Math.max(0, (bottom - nextTop) / (bottom - visibleTop)))
         }
         tile.style.setProperty('--cover', cover.toFixed(3))
       })
