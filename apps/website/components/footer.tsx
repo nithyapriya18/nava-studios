@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { siteConfig, linkedinHref } from '@/config'
-import { reviewHref } from '@/lib/products'
+import { reviewHref, scopeHref } from '@/lib/products'
 import { Wordmark } from '@/components/wordmark'
 import { TrackedLink } from '@/components/tracked-link'
 
@@ -18,7 +18,8 @@ export function Footer() {
           <div className="ftr-col">
             <span className="label">Studio</span>
             <Link href="/start">How it works</Link>
-            <Link href={reviewHref}>Free review</Link>
+            <Link href={reviewHref}>Crit</Link>
+            <Link href={scopeHref}>Scope Cutter</Link>
             <Link href="/writing">Writing</Link>
             <Link href="/about">About</Link>
           </div>

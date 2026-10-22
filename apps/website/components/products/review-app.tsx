@@ -242,7 +242,8 @@ export function ReviewApp() {
     a.href = href
     a.download = 'plan.md'
     a.click()
-    URL.revokeObjectURL(href)
+    // Revoking straight away can cancel the download in some browsers.
+    setTimeout(() => URL.revokeObjectURL(href), 1000)
     track('roast_plan_downloaded', { score: review.score })
   }
 
