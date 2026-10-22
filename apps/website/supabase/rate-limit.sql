@@ -73,7 +73,7 @@ as $$
   left join public.rate_limits r on r.key = p_key;
 $$;
 
--- Private log of every Second Opinion attempt, for the site owner. RLS on
+-- Private log of every Crit attempt, for the site owner. RLS on
 -- with no policies: only the server's secret key can read or write it.
 create table if not exists public.review_log (
   id bigint generated always as identity primary key,

@@ -147,7 +147,7 @@ export default function Home() {
         <p className="label">Case study</p>
         <div className="section-body">
           <h2 id="case-h" className="h2">
-            Second Opinion: from a napkin to a live <em>product</em>
+            Crit: from a napkin to a live <em>product</em>
           </h2>
           <p className="measure muted">
             A free tool that reviews a landing page in about 30 seconds. I scoped, designed, built and run

@@ -269,7 +269,7 @@ export function ReviewApp() {
     <section className="band page-head">
       <p className="label">Free tool · built and run by Studio NPV</p>
       <h1 className="display">
-        Second <em>Opinion</em>
+        <em>Crit</em>
       </h1>
       <p className="lede" style={{ maxWidth: '50ch' }}>
         A review of your landing page in about 30 seconds: what a first-time visitor won’t understand,
@@ -719,7 +719,7 @@ export function ReviewApp() {
         </div>
         <Note>it started as one prompt on a napkin</Note>
         <Link href="/writing/from-ai-prompt-to-trusted-product" className="more">
-          How I built Second Opinion <Arrow />
+          How I built Crit <Arrow />
         </Link>
       </div>
     </section>

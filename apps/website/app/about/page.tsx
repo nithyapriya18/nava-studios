@@ -180,7 +180,7 @@ export default function AboutPage() {
             See how I think about a <em>product</em>
           </h2>
           <p className="measure muted">
-            Run your landing page through Second Opinion, the free review tool I built. It’s a quick way to
+            Run your landing page through Crit, the free review tool I built. It’s a quick way to
             see what I look for before we’ve spoken.
           </p>
           <div className="btns">

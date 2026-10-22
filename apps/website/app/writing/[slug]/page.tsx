@@ -101,7 +101,7 @@ export default async function PostPage({ params }: Props) {
               {contactLabel} <Arrow />
             </a>
             <Link href={reviewHref} className="more">
-              Try Second Opinion <Arrow />
+              Try Crit <Arrow />
             </Link>
           </div>
         </div>

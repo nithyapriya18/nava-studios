@@ -13,7 +13,7 @@ const notes = [
   'this one is real. Try it on your own page.',
 ]
 
-/** Second Opinion at each stage of a project: the idea, the scope, the live product. */
+/** Crit at each stage of a project: the idea, the scope, the live product. */
 export function HeroDemo() {
   const [stage, setStage] = useState(0)
 
@@ -54,7 +54,7 @@ export function HeroDemo() {
               <span>Scope · written, v1</span>
               <span>2 pages</span>
             </div>
-            <p className="m-title">Second Opinion, first version</p>
+            <p className="m-title">Crit, first version</p>
             <p className="muted" style={{ fontSize: 14 }}>
               A landing page review for founders. Paste a link, get a score and fixes you can use.
             </p>
@@ -99,7 +99,7 @@ export function HeroDemo() {
           <>
             <div className="m-tag">
               <span>Shipped · live today</span>
-              <span>Second Opinion</span>
+              <span>Crit</span>
             </div>
             <div className="m-url">
               <span className="muted">https://</span>

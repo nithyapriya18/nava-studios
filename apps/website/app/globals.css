@@ -4,9 +4,8 @@
 
 /*
  * Studio NPV — "Indigo & Marigold". Full rules: brand/BRAND.md at the repo root.
- * Neel (indigo) carries the brand, Genda (marigold) lights it, Sindoor
- * (vermilion) is the pen. The page is calm and precise; the margin carries
- * the hand.
+ * Indigo carries the brand, marigold lights it, and vermilion is the pen.
+ * The page is calm and precise; the margin carries the hand.
  *
  * Two sets of tokens live side by side: the brand's hex colours (--paper,
  * --ink, ...) used by the classes below, and RGB triplets (--bg, --fg, ...)

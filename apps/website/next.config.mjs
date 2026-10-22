@@ -9,9 +9,11 @@ const nextConfig = {
       { source: '/work/:slug', destination: '/products', permanent: false },
       { source: '/lab', destination: '/products', permanent: false },
       { source: '/lab/:slug', destination: '/products', permanent: false },
-      { source: '/roast', destination: '/products/second-opinion', permanent: false },
-      { source: '/review', destination: '/products/second-opinion', permanent: false },
-      { source: '/products/landing-page-review', destination: '/products/second-opinion', permanent: false },
+      { source: '/roast', destination: '/products/crit', permanent: false },
+      { source: '/review', destination: '/products/crit', permanent: false },
+      { source: '/products/landing-page-review', destination: '/products/crit', permanent: false },
+      // The tool was called Second Opinion until October 2026.
+      { source: '/products/second-opinion', destination: '/products/crit', permanent: true },
     ]
   },
 }

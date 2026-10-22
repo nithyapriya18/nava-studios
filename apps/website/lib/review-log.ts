@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 /**
- * A private log of every Second Opinion attempt, for the site owner only.
+ * A private log of every Crit attempt, for the site owner only.
  *
  * Rows go in through log_review (supabase/rate-limit.sql), a security definer
  * function, so the site's existing publishable key is enough. The
