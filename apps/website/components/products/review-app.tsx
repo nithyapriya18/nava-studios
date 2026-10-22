@@ -26,7 +26,7 @@ import { toPlan, toPrompt, toText, type Review } from '@/lib/review'
 import { REVIEW_PRODUCT } from '@/lib/products'
 import { historyFor, pageKey, recordReview, shortDate, type HistoryEntry } from '@/lib/review-history'
 import { prepareScreenshot } from '@/lib/image-prep'
-import { AppIcon } from '@/components/products/app-icon'
+import { Arrow, Note } from '@/components/pen'
 import { ScoreRing } from '@/components/products/score-ring'
 
 type Mode = 'text' | 'url'
@@ -45,6 +45,15 @@ const INCLUDES = [
   { icon: PenLine, title: 'Suggested copy', body: 'A new headline, subheadline and button text to start from.' },
   { icon: Sparkles, title: 'Take it with you', body: 'Copy the fixes as an AI prompt, or download them as a plan.md.' },
   { icon: TrendingUp, title: 'See your progress', body: 'Review the same page again after changes and see how each score has moved.' },
+]
+
+const WHAT_YOU_GET = [
+  { title: 'A score out of 10', body: 'Clarity, audience, value, proof, call to action and design, each scored on its own.' },
+  { title: 'Design, not just words', body: 'It screenshots the top of your page, so the layout is reviewed along with the copy.' },
+  { title: 'Issues quoted from your page', body: 'Each one shows the wording, why it hurts, and a fix.' },
+  { title: 'Replacement copy', body: 'Suggested headline, subheadline and button text.' },
+  { title: 'Fixes you can use', body: 'Copy them as a prompt for an AI tool, or download them as plan.md.' },
+  { title: 'Progress over time', body: 'Re-review the same page after changes and see how the scores moved.' },
 ]
 
 // The link box starts with this so people only type their domain.
@@ -240,46 +249,31 @@ export function ReviewApp() {
   const status = loading ? 'Reviewing' : review ? 'Review ready' : 'Ready'
 
   return (
-    <div className="mx-auto max-w-layout px-4 pt-10 md:px-8 md:pt-14">
-      <nav aria-label="Breadcrumb" className="px-2 text-sm text-text-muted md:px-0">
-        <Link href="/products" className="hover:text-text-primary">
-          Products
-        </Link>
-        <span className="mx-2" aria-hidden>
-          /
-        </span>
-        <span className="text-text-primary">{REVIEW_PRODUCT.name}</span>
-      </nav>
+    <>
+    <section className="band page-head">
+      <p className="label">Free tool · built and run by Studio NPV</p>
+      <h1 className="display">
+        Second <em>Opinion</em>
+      </h1>
+      <p className="lede" style={{ maxWidth: '50ch' }}>
+        A review of your landing page in about 30 seconds: what a first-time visitor won’t understand,
+        what’s working, and the fixes, ready to use.
+      </p>
+      <ul className="flex flex-wrap gap-2 text-sm">
+        <li className="pill">Free</li>
+        <li className="pill" aria-live="polite">
+          {quota?.owner
+            ? 'Unlimited reviews (owner)'
+            : outOfReviews && msLeft
+            ? `Next review in ${clock(msLeft)}`
+            : quota
+              ? `${quota.remaining} of ${quota.limit} reviews left today`
+              : '2 free reviews a day'}
+        </li>
+        <li className="pill">About 30 seconds</li>
+      </ul>
 
-      <header className="mt-6 flex flex-wrap items-center gap-5 px-2 md:px-0">
-        <AppIcon size={64} />
-        <div className="min-w-0 flex-1">
-          <h1 className="text-3xl font-semibold text-text-primary md:text-4xl">
-            {REVIEW_PRODUCT.name}
-          </h1>
-          <p className="mt-1 text-text-muted">{REVIEW_PRODUCT.tagline}</p>
-        </div>
-        <ul className="flex flex-wrap gap-2 text-sm">
-          <li className="rounded-full border border-border bg-card px-3 py-1 text-text-muted">Free</li>
-          <li
-            className={`rounded-full border px-3 py-1 ${
-              outOfReviews ? 'border-accent/30 bg-accent-light text-accent' : 'border-border bg-card text-text-muted'
-            }`}
-            aria-live="polite"
-          >
-            {quota?.owner
-              ? 'Unlimited reviews (owner)'
-              : outOfReviews && msLeft
-              ? `Next review in ${clock(msLeft)}`
-              : quota
-                ? `${quota.remaining} of ${quota.limit} reviews left today`
-                : '2 free reviews a day'}
-          </li>
-          <li className="rounded-full border border-border bg-card px-3 py-1 text-text-muted">About 30 seconds</li>
-        </ul>
-      </header>
-
-      <div className="mt-8 overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_40px_80px_-50px_rgba(1,41,135,0.45)]">
+      <div className="card mt-4 overflow-hidden rounded-[20px] border border-border bg-card text-text-primary shadow-[0_30px_60px_-30px_rgba(8,10,40,0.55)]">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-3 border-b border-border bg-background/60 px-4 py-3 md:px-6">
           {!review ? (
@@ -315,7 +309,7 @@ export function ReviewApp() {
           <p className="ml-auto flex items-center gap-2 text-sm text-text-muted" aria-live="polite">
             <span
               className={`h-2 w-2 rounded-full ${
-                loading ? 'animate-pulse bg-[#0a3a9c]' : review ? 'bg-[#11ab8c]' : 'bg-border'
+                loading ? 'animate-pulse bg-[#F5B53F]' : review ? 'bg-[#232C82]' : 'bg-border'
               }`}
             />
             {status}
@@ -496,7 +490,7 @@ export function ReviewApp() {
                 >
                   <span
                     className={`grid h-6 w-6 shrink-0 place-items-center rounded-full ${
-                      i < stage ? 'bg-[#11ab8c] text-white' : i === stage ? 'bg-accent-light text-accent' : 'bg-surface'
+                      i < stage ? 'bg-[#232C82] text-white' : i === stage ? 'bg-accent-light text-accent' : 'bg-surface'
                     }`}
                   >
                     {i < stage ? <Check size={13} aria-hidden /> : i === stage ? <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" /> : null}
@@ -606,7 +600,7 @@ export function ReviewApp() {
                             const was = previous.at(-1)?.areas?.[b.area]
                             if (was === undefined || was === b.score) return null
                             return (
-                              <span className={b.score > was ? 'text-[#0e8f80]' : 'text-accent'}>
+                              <span className={b.score > was ? 'text-accent' : 'text-[#C2401E]'}>
                                 was {was}
                               </span>
                             )
@@ -656,7 +650,7 @@ export function ReviewApp() {
                 <ul className="mt-4 space-y-2.5">
                   {review.strengths.map((s, i) => (
                     <li key={i} className="flex gap-3 leading-relaxed text-text-muted">
-                      <Check size={18} className="mt-0.5 shrink-0 text-[#0e8f80]" aria-hidden />
+                      <Check size={18} className="mt-0.5 shrink-0 text-accent" aria-hidden />
                       {s}
                     </li>
                   ))}
@@ -690,23 +684,51 @@ export function ReviewApp() {
         )}
       </div>
 
-      <section className="mt-16 grid gap-8 px-2 md:grid-cols-[1fr_auto] md:items-center md:px-0">
-        <div className="max-w-2xl">
-          <h2 className="text-2xl font-semibold text-text-primary">Want help making the changes?</h2>
-          <p className="mt-2 text-lg leading-relaxed text-text-muted">
-            I design and build software for founders and small businesses, including the
-            pages that sell it.{' '}
-            <Link href="/start" className="text-link">
-              See how a project runs
-            </Link>
-            .
-          </p>
+    </section>
+
+    <section className="section" aria-labelledby="what-h">
+      <p className="label">What you get</p>
+      <div className="section-body">
+        <h2 id="what-h" className="h2">
+          Scored on the six things that decide a <em>first visit</em>
+        </h2>
+        <div className="grid2">
+          {WHAT_YOU_GET.map((item, i) => (
+            <div key={item.title} className="cell">
+              <span className="idx">{['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'][i]}</span>
+              <h3 className="h3">{item.title}</h3>
+              <p className="muted">{item.body}</p>
+            </div>
+          ))}
         </div>
-        <Link href="/contact" className="btn-primary !px-6 !py-3">
-          Get in touch
+        <Note>it started as one prompt on a napkin</Note>
+        <Link href="/writing/from-ai-prompt-to-trusted-product" className="more">
+          How I built Second Opinion <Arrow />
         </Link>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <section className="section band-warm" aria-labelledby="help-h">
+      <p className="label">Next step</p>
+      <div className="section-body">
+        <h2 id="help-h" className="h2">
+          Want help making the <em>changes?</em>
+        </h2>
+        <p className="measure muted">
+          I design and build sites and products for founders and small businesses, for a fixed price
+          agreed before work starts.
+        </p>
+        <div className="btns">
+          <Link href="/contact" className="btn-primary">
+            Get in touch <Arrow />
+          </Link>
+          <Link href="/start" className="more">
+            See how a project runs <Arrow />
+          </Link>
+        </div>
+      </div>
+    </section>
+    </>
   )
 }
 
@@ -722,7 +744,7 @@ function Progress({ score, previous }: { score: number; previous: HistoryEntry[]
   const up = diff > 0
   const Icon = up ? TrendingUp : TrendingDown
   return (
-    <p className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-medium ${up ? 'bg-[#11ab8c]/10 text-[#0e8f80]' : 'bg-accent-light text-accent'}`}>
+    <p className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-medium ${up ? 'bg-accent-light text-accent' : 'bg-[#C2401E]/10 text-[#C2401E]'}`}>
       <Icon size={15} aria-hidden />
       {last.score} → {score}, {up ? 'up' : 'down'} {Math.abs(diff)} since {since}
     </p>

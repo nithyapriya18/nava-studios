@@ -1,9 +1,12 @@
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getAllPosts, getPostBySlug } from '@/lib/mdx'
-import { contactHref, contactLabel, contactIsExternal } from '@/config'
+import { siteConfig, contactHref, contactLabel, contactIsExternal } from '@/config'
+import { reviewHref } from '@/lib/products'
+import { Arrow } from '@/components/pen'
 import { Comments } from '@/components/comments'
 
 interface Props {
@@ -33,7 +36,7 @@ export default async function PostPage({ params }: Props) {
     notFound()
   }
 
-  const date = new Date(post.date).toLocaleDateString('en-IN', {
+  const date = new Date(post.date).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -41,40 +44,90 @@ export default async function PostPage({ params }: Props) {
   const ctaProps = contactIsExternal
     ? { target: '_blank' as const, rel: 'noopener noreferrer' }
     : {}
+  const readNext = getAllPosts('writing')
+    .filter((p) => p.slug !== slug)
+    .slice(0, 2)
 
   return (
-    <article className="mx-auto max-w-content px-6 pt-12 md:px-8 md:pt-16">
-      <Link href="/writing" className="font-sans text-[0.9375rem] text-link">
-        All writing
-      </Link>
-
-      <header className="mt-10 border-b border-border pb-8">
-        <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{post.title}</h1>
-        <p className="mt-4 font-sans text-sm text-text-muted">
-          <time dateTime={post.date}>{date}</time>, {post.readingTime}
+    <>
+      <article className="article" style={{ padding: '64px 0 24px' }}>
+        <p style={{ margin: '0 0 40px' }}>
+          <Link href="/writing" className="more" style={{ fontSize: 15 }}>
+            <span aria-hidden>←</span> All writing
+          </Link>
         </p>
-      </header>
-
-      <div className="prose pt-8">
-        <MDXRemote source={post.content} />
-      </div>
-
-      <p className="mt-10 border-t border-border pt-6 text-sm italic text-text-muted">
-        I write these with help from AI tools and edit them myself. The views and
-        experiences are my own.
-      </p>
-
-      <aside className="mt-8 rounded-3xl bg-surface p-6 md:p-8">
-        <p className="font-sans text-lg font-medium text-text-primary">
-          Have an idea you want built?
+        <p className="label" style={{ margin: '0 0 18px' }}>
+          <time dateTime={post.date}>{date}</time> · {post.readingTime}
         </p>
-        <p className="mt-1 text-text-muted">Send me a few lines about it.</p>
-        <a href={contactHref} className="btn-primary mt-5" {...ctaProps}>
-          {contactLabel}
-        </a>
+        <h1 className="display" style={{ fontSize: 'clamp(40px, 5.4vw, 60px)', marginBottom: 26 }}>
+          {post.title}
+        </h1>
+        <div
+          className="byline"
+          style={{ marginBottom: 44, paddingBottom: 28, borderBottom: '1px solid var(--rule)' }}
+        >
+          <span className="avatar" style={{ width: 38, height: 38 }}>
+            <Image src="/nithya.jpeg" alt="" fill sizes="38px" className="object-cover" />
+          </span>
+          <span style={{ fontSize: 15 }}>
+            {siteConfig.founderFull} <span className="muted">· {siteConfig.name}</span>
+          </span>
+        </div>
+
+        <div className="prose">
+          <MDXRemote source={post.content} />
+        </div>
+
+        <p
+          className="muted"
+          style={{ fontSize: 14, marginTop: 36, paddingTop: 20, borderTop: '1px solid var(--rule)' }}
+        >
+          AI tools help me draft these posts. I edit them, and the views are my own.
+        </p>
+      </article>
+
+      <aside className="article" style={{ marginTop: 28 }} aria-labelledby="cta-h">
+        <div className="aside band-card" style={{ padding: 32, gap: 16 }}>
+          <span className="hand">if you’ve got an idea like this</span>
+          <h2 id="cta-h" className="h2" style={{ fontSize: 32 }}>
+            Have an idea you want <em>built?</em>
+          </h2>
+          <p className="muted">
+            I design and build software for founders and small businesses, for a fixed price agreed before
+            work starts.
+          </p>
+          <div className="btns">
+            <a href={contactHref} className="btn-primary" {...ctaProps}>
+              {contactLabel} <Arrow />
+            </a>
+            <Link href={reviewHref} className="more">
+              Try Second Opinion <Arrow />
+            </Link>
+          </div>
+        </div>
       </aside>
 
-      <Comments slug={slug} />
-    </article>
+      {readNext.length > 0 && (
+        <nav className="article" style={{ marginTop: 64 }} aria-labelledby="more-h">
+          <p id="more-h" className="label" style={{ marginBottom: 8 }}>
+            Read next
+          </p>
+          <div className="posts">
+            {readNext.map((p) => (
+              <Link key={p.slug} href={`/writing/${p.slug}`} className="post short">
+                <span className="post-t">{p.title}</span>
+                <span className="muted" style={{ fontSize: 14 }}>
+                  {p.readingTime.replace(' read', '')}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
+
+      <div className="article" style={{ paddingBottom: 48 }}>
+        <Comments slug={slug} />
+      </div>
+    </>
   )
 }

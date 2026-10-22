@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
-// Colours are CSS variables so a section can switch to the dark theme with a
-// single class (.theme-dark in globals.css) and everything inside follows.
+// Colours are CSS variables (RGB triplets in globals.css), so an indigo band,
+// a light panel or dark mode can retheme everything inside with one class.
 const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`
 
 const config: Config = {
@@ -23,9 +23,10 @@ const config: Config = {
         border: v('border'),
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-serif)', 'Georgia', 'serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        hand: ['var(--font-hand)', 'cursive'],
       },
       maxWidth: {
         content: '680px',

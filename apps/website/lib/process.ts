@@ -47,3 +47,40 @@ export const CAREER = [
   { year: '2025', role: 'Founding product manager, multi-agent systems', place: 'Early-stage companies' },
   { year: '2026', role: 'Founder', place: 'Studio NPV' },
 ]
+
+/** Shown on /start; the home page shows the first five. */
+export const FAQS = [
+  {
+    q: 'How much does it cost?',
+    a: 'Each project has a fixed price based on its scope, so there are no hourly bills. I send it after our first call, once we have agreed what to build, and nothing is billed until you accept it.',
+  },
+  {
+    q: 'How long does a project take?',
+    a: 'Most take a few weeks. The exact time depends on what the project includes, and you will have it in writing along with the quote.',
+  },
+  {
+    q: 'What if my idea is still rough?',
+    a: 'That is a normal place to start. Part of the first call is working out what the product should do at launch, and most ideas get clearer in that conversation. Sometimes we find it is too early to build, which is worth knowing before anyone spends money.',
+  },
+  {
+    q: 'Do I need a technical co-founder or developer?',
+    a: 'No. I handle the design, the code and the setup, and I explain the decisions in plain language so you can make the calls that matter to your business.',
+  },
+  {
+    q: 'Who owns the code?',
+    a: 'You do. When the work is done, the product, code and data are handed over to you, and you can take them to any developer.',
+  },
+  {
+    q: 'What happens after launch?',
+    a: 'That is up to you. Some founders run the product themselves, and others ask me for fixes, improvements or the next version. New work is quoted separately, and I can host the product for you if you prefer.',
+  },
+]
+
+/** What you have in hand at the end of each step, shown on /start. */
+export const STEP_GETS = [
+  'a clear next step, at no cost',
+  'a written scope and one fixed price',
+  'a preview you can use during the build',
+  'in-scope changes at no extra cost',
+  'the product, the code and the notes',
+]

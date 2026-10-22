@@ -25,7 +25,7 @@ export default async function ModeratePage({ searchParams }: Props) {
   if (done === 'deleted') {
     return (
       <Shell>
-        <h1 className="text-3xl font-semibold text-text-primary">Comment deleted</h1>
+        <h1 className="h2">Comment deleted</h1>
         <p className="mt-3 text-text-muted">It has been removed and won&apos;t appear on the site.</p>
       </Shell>
     )
@@ -33,7 +33,7 @@ export default async function ModeratePage({ searchParams }: Props) {
   if (done === 'failed') {
     return (
       <Shell>
-        <h1 className="text-3xl font-semibold text-text-primary">That didn&apos;t work</h1>
+        <h1 className="h2">That didn&apos;t work</h1>
         <p className="mt-3 text-text-muted">
           The comment may already have been deleted, or the link is incomplete. You can
           still manage comments in Supabase, under Table Editor, post_comments.
@@ -46,7 +46,7 @@ export default async function ModeratePage({ searchParams }: Props) {
   if (!comment) {
     return (
       <Shell>
-        <h1 className="text-3xl font-semibold text-text-primary">Link not valid</h1>
+        <h1 className="h2">Link not valid</h1>
         <p className="mt-3 text-text-muted">
           This link doesn&apos;t match a comment. It may have been deleted already.
         </p>
@@ -111,5 +111,5 @@ export default async function ModeratePage({ searchParams }: Props) {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto max-w-content px-6 pb-8 pt-16 md:px-8 md:pt-24">{children}</div>
+  return <div className="mx-auto max-w-content pb-16 pt-16 md:pt-24">{children}</div>
 }

@@ -1,51 +1,88 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getAllPosts } from '@/lib/mdx'
+import { getAllPosts, type Post } from '@/lib/mdx'
 
 export const metadata: Metadata = {
   title: 'Writing',
   description: 'Notes on scoping and building software products.',
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('en-IN', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+// Posts for someone about to start a project; everything else is about
+// building with AI.
+const BEFORE_YOU_BUILD = new Set(['what-i-need-from-the-first-call', 'what-belongs-in-a-first-version'])
+
+function shortDate(date: string) {
+  return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function PostList({ posts }: { posts: Post[] }) {
+  return (
+    <div className="posts">
+      {posts.map((post) => (
+        <Link key={post.slug} href={`/writing/${post.slug}`} className="post">
+          <span className="muted num" style={{ fontSize: 14 }}>
+            {shortDate(post.date)}
+          </span>
+          <span style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <span className="post-t">{post.title}</span>
+            <span className="muted" style={{ fontSize: 16 }}>
+              {post.excerpt}
+            </span>
+          </span>
+          <span className="muted" style={{ fontSize: 14 }}>
+            {post.readingTime.replace(' read', '')}
+          </span>
+        </Link>
+      ))}
+    </div>
+  )
 }
 
 export default function WritingPage() {
   const posts = getAllPosts('writing')
+  // Oldest first, so the posts read in the order a project runs.
+  const before = posts.filter((p) => BEFORE_YOU_BUILD.has(p.slug)).reverse()
+  const ai = posts.filter((p) => !BEFORE_YOU_BUILD.has(p.slug))
 
   return (
-    <div className="mx-auto max-w-layout px-6 pt-16 md:px-8 md:pt-24">
-      <header className="max-w-2xl">
-        <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Writing</h1>
-        <p className="mt-6 text-xl leading-relaxed text-text-primary">
-          Notes on scoping and building software products, written for founders and
-          business owners who are about to start one.
+    <>
+      <section className="band page-head">
+        <p className="label">Writing</p>
+        <h1 className="display">
+          <em>Notes</em> from the margin
+        </h1>
+        <p className="lede" style={{ maxWidth: '52ch' }}>
+          Notes on scoping and building software products, written for founders and business owners who
+          are about to start one.
         </p>
-      </header>
+      </section>
 
-      <ul className="mt-14 grid max-w-4xl gap-5">
-        {posts.map((post) => (
-          <li key={post.slug} className="fade-up">
-            <Link
-              href={`/writing/${post.slug}`}
-              className="group block rounded-3xl border border-border bg-card p-7 transition duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_24px_48px_-28px_rgba(1,41,135,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:p-8"
-            >
-              <p className="font-sans text-sm text-text-muted">
-                {formatDate(post.date)}, {post.readingTime}
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold text-text-primary transition-colors group-hover:text-accent">
-                {post.title}
-              </h2>
-              <p className="mt-2 max-w-2xl leading-relaxed text-text-muted">{post.excerpt}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+      {before.length > 0 && (
+        <section className="section" aria-labelledby="before-h">
+          <div className="rail">
+            <p className="label" id="before-h">
+              Before you build
+            </p>
+            <span className="hand" style={{ fontSize: 18 }}>
+              start here
+            </span>
+          </div>
+          <div className="section-body">
+            <PostList posts={before} />
+          </div>
+        </section>
+      )}
+
+      {ai.length > 0 && (
+        <section className="section" aria-labelledby="ai-h">
+          <p className="label" id="ai-h">
+            Building with AI
+          </p>
+          <div className="section-body">
+            <PostList posts={ai} />
+          </div>
+        </section>
+      )}
+    </>
   )
 }

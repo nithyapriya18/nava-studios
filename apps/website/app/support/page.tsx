@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function SupportPage() {
   return (
-    <div className="mx-auto max-w-content px-6 pt-16 md:px-8 md:pt-24">
-      <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Support</h1>
+    <div className="mx-auto max-w-content pb-16 pt-16 md:pt-24">
+      <h1 className="display">Support</h1>
       <p className="mt-6 text-xl leading-relaxed text-text-primary">
         Questions about a project, the landing page review, or this site come
         straight to me.

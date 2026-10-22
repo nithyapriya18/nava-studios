@@ -1,17 +1,14 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { Check } from 'lucide-react'
+import Link from 'next/link'
 import { track } from '@/lib/analytics'
 import { mailtoHref, siteConfig } from '@/config'
 
 type Status = 'idle' | 'sending' | 'sent'
 
-const field =
-  'mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-text-primary placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/25'
-
 /** The "Tell me about your project" form. Emails the message to me. */
-export function ContactForm({ id = 'contact' }: { id?: string }) {
+export function ContactForm({ id = 'contact-form' }: { id?: string }) {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState<{ message: string; fallback?: boolean } | null>(null)
   const [sentTo, setSentTo] = useState('')
@@ -48,60 +45,52 @@ export function ContactForm({ id = 'contact' }: { id?: string }) {
 
   if (status === 'sent') {
     return (
-      <div className="rounded-3xl bg-card p-7 text-text-primary md:p-8" role="status">
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-accent-light text-accent">
-          <Check size={20} aria-hidden />
-        </span>
-        <h3 className="mt-5 text-2xl font-semibold">Thanks, your message is on its way.</h3>
-        <p className="mt-3 leading-relaxed text-text-muted">
-          I read every enquiry myself and will reply to {sentTo || 'you'} with a few
-          questions or a time to talk.
+      <div className="panel sent" role="status">
+        <span className="hand">got it, thank you</span>
+        <p style={{ font: '400 30px/1.15 var(--serif)' }}>
+          I’ll reply to {sentTo || 'you'} by email within a few working days.
         </p>
-        <button onClick={() => setStatus('idle')} className="text-link mt-6 text-[0.9375rem]">
-          Send another message
-        </button>
+        <p className="muted">
+          While you wait, <Link href="/writing/what-i-need-from-the-first-call">what to bring to the first call</Link>{' '}
+          takes two minutes to read.
+        </p>
+        <div>
+          <button type="button" onClick={() => setStatus('idle')} className="btn-quiet btn-sm">
+            Send another message
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <form
-      id={id}
-      onSubmit={onSubmit}
-      className="rounded-3xl bg-card p-6 text-text-primary shadow-[0_30px_60px_-30px_rgba(6,13,31,0.5)] md:p-8"
-    >
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="block text-[0.9375rem] font-medium">
-          Name
-          <input name="name" required autoComplete="name" maxLength={100} className={field} />
-        </label>
-        <label className="block text-[0.9375rem] font-medium">
-          Email
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            maxLength={200}
-            className={field}
-          />
-        </label>
+    <form id={id} onSubmit={onSubmit} className="panel form" style={{ position: 'relative' }}>
+      <div className="field">
+        <label htmlFor="f-name">Name</label>
+        <input id="f-name" name="name" required autoComplete="name" maxLength={100} className="input" />
       </div>
-      <label className="mt-5 block text-[0.9375rem] font-medium">
-        Company or website <span className="font-normal text-text-muted">(optional)</span>
-        <input name="company" autoComplete="organization" maxLength={200} className={field} />
-      </label>
-      <label className="mt-5 block text-[0.9375rem] font-medium">
-        What would you like to build?
+      <div className="field">
+        <label htmlFor="f-email">Email</label>
+        <input id="f-email" name="email" type="email" required autoComplete="email" maxLength={200} className="input" />
+      </div>
+      <div className="field">
+        <label htmlFor="f-co">
+          Company or website <span className="hint">(optional)</span>
+        </label>
+        <input id="f-co" name="company" autoComplete="organization" maxLength={200} className="input" />
+      </div>
+      <div className="field">
+        <label htmlFor="f-msg">What would you like to build?</label>
         <textarea
+          id="f-msg"
           name="message"
           required
           rows={5}
           maxLength={5000}
-          placeholder="A few lines is plenty: what it should do, who it's for, and any timing you have in mind."
-          className={`${field} resize-y`}
+          placeholder="Who it’s for, what it should do first, and anything you already have."
+          className="input"
         />
-      </label>
+      </div>
       {/* Spam trap: hidden from people, filled in by bots. */}
       <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
         <label>
@@ -111,25 +100,19 @@ export function ContactForm({ id = 'contact' }: { id?: string }) {
       </div>
 
       {error && (
-        <p className="mt-5 rounded-xl bg-accent-light px-4 py-3 text-[0.9375rem]" role="alert">
+        <p className="alert" role="alert">
           {error.message}{' '}
-          {error.fallback && (
-            <a href={mailtoHref} className="text-link">
-              {siteConfig.email}
-            </a>
-          )}
+          {error.fallback && <a href={mailtoHref}>{siteConfig.email}</a>}
         </p>
       )}
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        <p className="text-sm text-text-muted">Your details are only used to reply to you.</p>
-        <button
-          type="submit"
-          disabled={status === 'sending'}
-          className="btn-primary !px-6 !py-3 disabled:cursor-wait disabled:opacity-70"
-        >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
+        <button type="submit" disabled={status === 'sending'} className="btn-primary" aria-live="polite">
           {status === 'sending' ? 'Sending…' : 'Send message'}
         </button>
+        <p className="muted" style={{ fontSize: 13 }}>
+          Your details are only used to reply to you. <Link href="/privacy">Privacy</Link>
+        </p>
       </div>
     </form>
   )

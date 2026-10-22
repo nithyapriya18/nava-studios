@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function RefundsPage() {
   return (
-    <div className="mx-auto max-w-content px-6 pt-16 md:px-8 md:pt-24">
-      <h1 className="text-5xl font-semibold text-text-primary md:text-6xl">Refund policy</h1>
+    <div className="mx-auto max-w-content pb-16 pt-16 md:pt-24">
+      <h1 className="display">Refund policy</h1>
       <p className="mt-4 font-sans text-sm text-text-muted">Last updated 24 September 2026.</p>
 
       <div className="prose mt-10">

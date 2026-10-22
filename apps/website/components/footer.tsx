@@ -1,81 +1,72 @@
 import Link from 'next/link'
 import { siteConfig, linkedinHref } from '@/config'
+import { reviewHref } from '@/lib/products'
 import { Wordmark } from '@/components/wordmark'
 import { TrackedLink } from '@/components/tracked-link'
 
-const links = [
-  { href: '/start', label: 'How it works' },
-  { href: '/products', label: 'Products' },
-  { href: '/writing', label: 'Writing' },
-  { href: '/about', label: 'About' },
-  { href: '/support', label: 'Support' },
-  { href: '/privacy', label: 'Privacy' },
-  { href: '/terms', label: 'Terms' },
-]
-
 export function Footer() {
   return (
-    <footer className="theme-dark relative z-10 mt-24">
-      <div className="mx-auto grid max-w-layout gap-10 px-6 py-14 font-sans md:grid-cols-[1fr_auto] md:px-8">
-        <div>
-          <Wordmark className="text-2xl" />
-          <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-text-muted">
-            A product studio in {siteConfig.location}, run by {siteConfig.founderFull}. It
-            designs and builds software for founders and small businesses.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-6 text-[0.9375rem] md:items-end">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 text-text-muted md:justify-end">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="hover:text-text-primary">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
-            <li>
-              <TrackedLink
-                href={`mailto:${siteConfig.email}`}
-                event="email_clicked"
-                properties={{ location: 'footer' }}
-                className="text-link"
-              >
-                {siteConfig.email}
-              </TrackedLink>
-            </li>
+    <footer className="ftr">
+      <div className="wrap">
+        <div className="ftr-grid">
+          <div className="ftr-col">
+            <Wordmark />
+            <p className="muted" style={{ maxWidth: '34ch' }}>
+              A one-person product studio in {siteConfig.location}, run by {siteConfig.founderFull}.
+            </p>
+          </div>
+          <div className="ftr-col">
+            <span className="label">Studio</span>
+            <Link href="/start">How it works</Link>
+            <Link href={reviewHref}>Free review</Link>
+            <Link href="/writing">Writing</Link>
+            <Link href="/about">About</Link>
+          </div>
+          <div className="ftr-col">
+            <span className="label">Contact</span>
+            <TrackedLink
+              href={`mailto:${siteConfig.email}`}
+              event="email_clicked"
+              properties={{ location: 'footer' }}
+            >
+              {siteConfig.email}
+            </TrackedLink>
             {linkedinHref ? (
-              <li>
-                <TrackedLink
-                  href="/linkedin?from=footer"
-                  event="linkedin_opened"
-                  properties={{ location: 'footer' }}
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                  className="text-link"
-                >
-                  LinkedIn
-                </TrackedLink>
-              </li>
-            ) : null}
-            <li>
               <TrackedLink
-                href="/resume?from=footer"
-                download
-                rel="nofollow"
-                event="resume_downloaded"
+                href="/linkedin?from=footer"
+                event="linkedin_opened"
                 properties={{ location: 'footer' }}
-                className="text-link"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
               >
-                Resume (PDF)
+                LinkedIn
               </TrackedLink>
-            </li>
-          </ul>
-          <p className="text-sm text-text-muted">
+            ) : null}
+            <TrackedLink
+              href="/resume?from=footer"
+              download
+              rel="nofollow"
+              event="resume_downloaded"
+              properties={{ location: 'footer' }}
+            >
+              Resume (PDF)
+            </TrackedLink>
+          </div>
+          <div className="ftr-col">
+            <span className="label">Help</span>
+            <Link href="/support">Support</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/refunds">Refunds</Link>
+          </div>
+        </div>
+        <div className="ftr-base">
+          <span className="muted" style={{ fontSize: 13 }}>
             © {new Date().getFullYear()} {siteConfig.name}
-          </p>
+          </span>
+          <span className="hand" style={{ fontSize: 18 }}>
+            made by hand in {siteConfig.location}
+          </span>
         </div>
       </div>
     </footer>
