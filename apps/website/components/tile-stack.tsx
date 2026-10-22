@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, type ReactNode } from 'react'
 
-const PEEK = 10 // px of each earlier tile left showing above the stack
-const TOP = 76 // where the first tile pins, just under the floating nav
+const TOP = 76 // where tiles pin, just under the floating nav
 
 /**
  * Sections as a deck of tiles: each `.tile` child pins as it reaches the top
- * and the next slides up over it, while the covered tile eases back. A tile
+ * and the next slides up over it, while the covered tile recedes and fades
+ * away, so only one tile is ever in view under the nav. A tile
  * taller than the screen pins by its bottom edge, so all of it is seen
  * before it's covered.
  */
@@ -24,7 +24,7 @@ export function TileStack({ children }: { children: ReactNode }) {
     const layout = () => {
       const vh = window.innerHeight
       tiles.forEach((tile, i) => {
-        const pin = Math.min(TOP + i * PEEK, vh - tile.offsetHeight)
+        const pin = Math.min(TOP, vh - tile.offsetHeight)
         pins[i] = pin
         tile.style.top = `${pin}px`
       })

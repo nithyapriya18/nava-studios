@@ -1208,8 +1208,9 @@ textarea.input {
 }
 
 /* Tiles: sections as a deck of cards on a deep indigo backdrop. Each pins
-   and the next slides over it (components/tile-stack.tsx sets `top` and
-   --cover, 0 to 1, as a tile gets covered). Tiles run nearly edge to edge;
+   and the next slides over it while the covered one recedes and fades out
+   (components/tile-stack.tsx sets `top`, and --cover from 0 to 1 as a tile
+   gets covered). Tiles run nearly edge to edge;
    their padding puts the content back on the page column. */
 .tiles {
   position: relative;
@@ -1229,8 +1230,8 @@ textarea.input {
   clip-path: none;
   box-shadow: 0 -18px 40px -26px rgba(5, 7, 30, 0.6);
   transform-origin: 50% 0;
-  transform: scale(calc(1 - var(--cover, 0) * 0.05));
-  filter: brightness(calc(1 - var(--cover, 0) * 0.14));
+  transform: scale(calc(1 - var(--cover, 0) * 0.08));
+  opacity: calc(1 - var(--cover, 0));
 }
 .tiles > .tile.band {
   background: var(--indigo);
@@ -1408,7 +1409,6 @@ textarea.input {
   }
   .tiles > .tile {
     transform: none;
-    filter: none;
   }
   * {
     transition: none !important;
