@@ -3,6 +3,7 @@ import { siteConfig, contactHref, contactIsExternal } from '@/config'
 import { FAQS, STEPS, STEP_GETS } from '@/lib/process'
 import { TrackedLink } from '@/components/tracked-link'
 import { Faq } from '@/components/faq'
+import { TileStack } from '@/components/tile-stack'
 import { Arrow, Note, PenUnderline } from '@/components/pen'
 
 export const metadata: Metadata = {
@@ -14,8 +15,8 @@ export default function StartPage() {
   const ctaProps = contactIsExternal ? { target: '_blank' as const, rel: 'noopener noreferrer' } : {}
 
   return (
-    <>
-      <section className="band page-head">
+    <TileStack>
+      <section className="tile band page-head">
         <p className="label">How it works</p>
         <h1 className="display">
           How a project{' '}
@@ -29,7 +30,7 @@ export default function StartPage() {
         </p>
       </section>
 
-      <section className="section" aria-labelledby="steps-h">
+      <section className="tile section" aria-labelledby="steps-h">
         <p className="label" id="steps-h">
           The five steps
         </p>
@@ -56,7 +57,7 @@ export default function StartPage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="faq-h">
+      <section className="tile section" aria-labelledby="faq-h">
         <p className="label">Common questions</p>
         <div className="section-body">
           <h2 id="faq-h" className="h2">
@@ -67,7 +68,7 @@ export default function StartPage() {
         </div>
       </section>
 
-      <section className="section band-warm" aria-labelledby="start-h">
+      <section className="tile section band-warm" aria-labelledby="start-h">
         <p className="label">Start</p>
         <div className="section-body">
           <h2 id="start-h" className="h2">
@@ -94,6 +95,6 @@ export default function StartPage() {
           </div>
         </div>
       </section>
-    </>
+    </TileStack>
   )
 }

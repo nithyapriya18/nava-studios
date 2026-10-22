@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { TileStack } from '@/components/tile-stack'
 import { siteConfig, contactHref, contactIsExternal } from '@/config'
 import { FAQS } from '@/lib/process'
 import { getAllPosts } from '@/lib/mdx'
@@ -69,8 +70,8 @@ export default function Home() {
   const posts = FEATURED.map((slug) => all.find((p) => p.slug === slug)).filter((p) => p !== undefined)
 
   return (
-    <>
-      <section className="hero band" aria-labelledby="hero-h">
+    <TileStack>
+      <section className="tile hero band" aria-labelledby="hero-h">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
           <div className="byline">
             <span className="avatar">
@@ -102,7 +103,7 @@ export default function Home() {
         <HeroDemo />
       </section>
 
-      <section className="section" aria-labelledby="who-h">
+      <section className="tile section" aria-labelledby="who-h">
         <p className="label">Who builds it</p>
         <div className="section-body">
           <h2 id="who-h" className="pull">
@@ -127,7 +128,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="build-h">
+      <section className="tile section" aria-labelledby="build-h">
         <p className="label">What I build</p>
         <div className="section-body">
           <h2 id="build-h" className="h2">
@@ -146,7 +147,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="how-h">
+      <section className="tile section" aria-labelledby="how-h">
         <p className="label">How a project runs</p>
         <div className="section-body">
           <h2 id="how-h" className="h2">
@@ -176,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section band-warm" aria-labelledby="proof-h">
+      <section className="tile section band-warm" aria-labelledby="proof-h">
         <p className="label">Something I built</p>
         <div className="section-body">
           <div className="product">
@@ -213,7 +214,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="faq-h">
+      <section className="tile section" aria-labelledby="faq-h">
         <p className="label">Straight answers</p>
         <div className="section-body">
           <h2 id="faq-h" className="h2">
@@ -231,7 +232,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="writing-h">
+      <section className="tile section" aria-labelledby="writing-h">
         <p className="label">Writing</p>
         <div className="section-body">
           <h2 id="writing-h" className="h2">
@@ -268,6 +269,6 @@ export default function Home() {
           </>
         }
       />
-    </>
+    </TileStack>
   )
 }

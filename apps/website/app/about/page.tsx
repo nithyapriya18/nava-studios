@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { TileStack } from '@/components/tile-stack'
 import { siteConfig, contactHref, contactIsExternal, linkedinHref } from '@/config'
 import { CAREER } from '@/lib/process'
 import { reviewHref } from '@/lib/products'
@@ -24,8 +25,8 @@ export default function AboutPage() {
   const ctaProps = contactIsExternal ? { target: '_blank' as const, rel: 'noopener noreferrer' } : {}
 
   return (
-    <>
-      <section className="hero band" aria-labelledby="about-h">
+    <TileStack>
+      <section className="tile hero band" aria-labelledby="about-h">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
           <p className="label">About</p>
           <h1 id="about-h" className="display">
@@ -89,7 +90,7 @@ export default function AboutPage() {
         </figure>
       </section>
 
-      <section className="section" aria-labelledby="work-h">
+      <section className="tile section" aria-labelledby="work-h">
         <p className="label">How I work</p>
         <div className="section-body">
           <h2 id="work-h" className="pull">
@@ -110,7 +111,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="tl-h">
+      <section className="tile section" aria-labelledby="tl-h">
         <p className="label">Work so far</p>
         <div className="section-body">
           <h2 id="tl-h" className="h2">
@@ -172,7 +173,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section band-warm" aria-labelledby="see-h">
+      <section className="tile section band-warm" aria-labelledby="see-h">
         <p className="label">Before we talk</p>
         <div className="section-body">
           <h2 id="see-h" className="h2">
@@ -189,6 +190,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </>
+    </TileStack>
   )
 }

@@ -169,6 +169,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font: 400 17px/1.6 var(--sans);
@@ -1206,6 +1207,40 @@ textarea.input {
   gap: 6px;
 }
 
+/* Tiles: sections as a deck of cards on a deep indigo backdrop. Each pins
+   and the next slides over it (components/tile-stack.tsx sets `top` and
+   --cover, 0 to 1, as a tile gets covered). Tiles run nearly edge to edge;
+   their padding puts the content back on the page column. */
+.tiles {
+  position: relative;
+  padding: 1px 0 12px;
+  background: var(--deep);
+  box-shadow: 0 0 0 100vmax var(--deep);
+  clip-path: inset(0 -100vmax);
+}
+.tiles > .tile {
+  position: sticky;
+  top: 76px;
+  margin: 12px calc(50% - 50vw + 12px) 0;
+  padding-inline: calc(50vw - 50% - 12px);
+  border: 1px solid var(--rule);
+  border-radius: 28px;
+  background: var(--paper);
+  clip-path: none;
+  box-shadow: 0 -18px 40px -26px rgba(5, 7, 30, 0.6);
+  transform-origin: 50% 0;
+  transform: scale(calc(1 - var(--cover, 0) * 0.05));
+  filter: brightness(calc(1 - var(--cover, 0) * 0.14));
+}
+.tiles > .tile.band {
+  background: var(--indigo);
+  border-color: transparent;
+}
+.tiles > .tile.band-warm {
+  background: var(--wash);
+  border-color: transparent;
+}
+
 /* Footer: deep indigo */
 .ftr {
   background: var(--deep);
@@ -1263,6 +1298,10 @@ textarea.input {
   .wrap,
   .hdr-bar {
     padding: 0 40px;
+  }
+  .tiles > .tile {
+    margin-inline: calc(50% - 50vw + 16px);
+    padding-inline: calc(50vw - 50% - 16px);
   }
   .nav {
     display: flex;
@@ -1366,6 +1405,10 @@ textarea.input {
   .score-ring-arc,
   .sheet {
     animation: none;
+  }
+  .tiles > .tile {
+    transform: none;
+    filter: none;
   }
   * {
     transition: none !important;

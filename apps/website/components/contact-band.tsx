@@ -85,7 +85,7 @@ export function ContactBand({ page = false, title }: { page?: boolean; title: Re
     )
   }
   return (
-    <section className="section band" aria-labelledby="contact-h" id="contact">
+    <section className="tile section band" aria-labelledby="contact-h" id="contact">
       <p className="label">Get in touch</p>
       <div className="section-body">{body}</div>
     </section>
