@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
@@ -16,9 +16,9 @@ const links = [
 
 export function Nav() {
   const pathname = usePathname()
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => setOpen(false), [pathname])
+  // The menu belongs to the page it was opened on, so it closes on navigation.
+  const [openOn, setOpenOn] = useState<string | null>(null)
+  const open = openOn === pathname
 
   const ctaProps = contactIsExternal
     ? { target: '_blank' as const, rel: 'noopener noreferrer' }
@@ -42,7 +42,7 @@ export function Nav() {
         <button
           type="button"
           className="menu-btn"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpenOn(open ? null : pathname)}
           aria-expanded={open}
           aria-controls="menu"
         >

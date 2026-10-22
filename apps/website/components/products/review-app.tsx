@@ -69,14 +69,34 @@ function normalisePastedUrl(pasted: string) {
 
 type Quota = { remaining: number; limit: number; resetsAt: string | null; owner?: boolean }
 
-/** Milliseconds until `iso`, ticking every second. Null when there's no time. */
-function useCountdown(iso: string | null) {
+/**
+ * Milliseconds until `iso`, ticking every second. Null when there's no time.
+ * Calls `onDone` once when the time is up.
+ */
+function useCountdown(iso: string | null, onDone: () => void) {
   const [now, setNow] = useState(() => Date.now())
+  const done = useRef(onDone)
+  useEffect(() => {
+    done.current = onDone
+  })
   useEffect(() => {
     if (!iso) return
-    setNow(Date.now())
-    const timer = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(timer)
+    const end = new Date(iso).getTime()
+    const tick = () => {
+      const t = Date.now()
+      setNow(t)
+      if (t >= end) {
+        clearInterval(timer)
+        done.current()
+      }
+    }
+    const timer = setInterval(tick, 1000)
+    // The clock may be stale from before the countdown started.
+    const first = setTimeout(tick)
+    return () => {
+      clearInterval(timer)
+      clearTimeout(first)
+    }
   }, [iso])
   return iso ? Math.max(0, new Date(iso).getTime() - now) : null
 }
@@ -119,7 +139,11 @@ export function ReviewApp() {
 
   const input = (mode === 'text' ? text : url).trim()
   const outOfReviews = quota?.remaining === 0
-  const msLeft = useCountdown(outOfReviews ? quota?.resetsAt ?? null : null)
+  // When the countdown runs out, the reviews are back: unlock the form.
+  const msLeft = useCountdown(outOfReviews ? quota?.resetsAt ?? null : null, () => {
+    setError(null)
+    refreshQuota()
+  })
   const ready = !outOfReviews && (mode === 'text' ? input.length > 0 : hasAddress(url))
 
   // Ask the server how many reviews this visitor has left today.
@@ -130,14 +154,6 @@ export function ReviewApp() {
       .catch(() => {})
   }
   useEffect(refreshQuota, [])
-
-  // When the countdown runs out, the reviews are back: unlock the form.
-  useEffect(() => {
-    if (msLeft === 0) {
-      setError(null)
-      refreshQuota()
-    }
-  }, [msLeft])
 
   // On switching to Page link, put the cursor after the prefix. Not on first
   // load, so phones don't open the keyboard before the visitor asks.
@@ -167,7 +183,6 @@ export function ReviewApp() {
   // Move through the progress stages while the review is being written.
   useEffect(() => {
     if (!loading) return
-    setStage(0)
     const timer = setInterval(() => setStage((s) => Math.min(s + 1, STAGES.length - 1)), 4500)
     return () => clearInterval(timer)
   }, [loading])
@@ -178,6 +193,7 @@ export function ReviewApp() {
 
     track('roast_submitted', { input_type: mode, input_length: input.length })
     setLoading(true)
+    setStage(0)
     setError(null)
     setReview(null)
     try {

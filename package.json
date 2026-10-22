@@ -10,5 +10,8 @@
     "build": "npm run build -w @nava-studios/website",
     "lint": "npm run lint -w @nava-studios/website",
     "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^9.39.5"
   }
 }
