@@ -52,7 +52,7 @@ Every screen ships in both schemes, because not everyone likes a dark background
 | Accent word, links, active states | Indigo `#232C82` | Marigold `#F5B53F` | on Night, 9.8:1 |
 | Primary button | Indigo, white text | Marigold, Deep Indigo text | 8.9:1 |
 | Button hover | Marigold, Deep Indigo text | White, Deep Indigo text | |
-| Bands (hero, contact) | Indigo wash `#EEEFFA`, Ink text 14.6:1, vermilion notes 4.5:1 | Night indigo `#1C2468` | white, 14.0:1 |
+| Bands (hero, contact) | Indigo wash `#EEEFFA`, Ink text 14.9:1, vermilion notes 4.5:1 | Night indigo `#1C2468` | white, 14.0:1 |
 | Warm bands | Turmeric `#FCE9C2` | Night turmeric `#2A2547` | Mist, 12.7:1 |
 | Footer | White, with a hairline on top | Midnight `#0B0E2A` | Mist, 16.7:1 |
 | Margin notes | Vermilion `#C2401E` | Light vermilion `#FF8F6B` | on Night, 7.9:1 |
