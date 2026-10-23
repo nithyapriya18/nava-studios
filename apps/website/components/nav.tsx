@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
 import { reviewHref } from '@/lib/products'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { Wordmark } from '@/components/wordmark'
 
 const links = [
@@ -78,18 +79,21 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <a href={contactHref} className="btn-primary btn-sm" {...ctaProps}>
-          {contactLabel}
-        </a>
-        <button
-          type="button"
-          className="menu-btn"
-          onClick={() => setOpenOn(open ? null : pathname)}
-          aria-expanded={open}
-          aria-controls="menu"
-        >
-          {open ? 'Close' : 'Menu'}
-        </button>
+        <div className="hdr-actions">
+          <ThemeToggle />
+          <a href={contactHref} className="btn-primary btn-sm" {...ctaProps}>
+            {contactLabel}
+          </a>
+          <button
+            type="button"
+            className="menu-btn"
+            onClick={() => setOpenOn(open ? null : pathname)}
+            aria-expanded={open}
+            aria-controls="menu"
+          >
+            {open ? 'Close' : 'Menu'}
+          </button>
+        </div>
         {open && (
           <nav id="menu" className="sheet" aria-label="Menu">
             {links.map((link) => (

@@ -46,8 +46,9 @@
   --accent-soft: 252 233 194;
 }
 
+/* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #10143a;
     --surface-c: #1a1f4d;
     --ink: #eef0fb;
@@ -75,6 +76,35 @@
     --accent-soft: 42 37 71;
     color-scheme: dark;
   }
+}
+/* …or the toggle chose dark. */
+:root[data-theme="dark"] {
+  --paper: #10143a;
+  --surface-c: #1a1f4d;
+  --ink: #eef0fb;
+  --graphite: #aeb3d8;
+  --rule: #2a3070;
+  --indigo: #1c2468;
+  --deep: #0b0e2a;
+  --wash: #2a2547;
+  --red: #ff8f6b;
+  --accent-c: #f5b53f;
+  --pen: #ff8f6b;
+  --mark: #f5b53f;
+  --btn: #f5b53f;
+  --on-btn: #161b4f;
+  --btn-hover: #ffffff;
+  --on-btn-hover: #161b4f;
+
+  --bg: 16 20 58;
+  --surface: 33 39 92;
+  --card: 26 31 77;
+  --fg: 238 240 251;
+  --muted: 174 179 216;
+  --border: 42 48 112;
+  --accent: 245 181 63;
+  --accent-soft: 42 37 71;
+  color-scheme: dark;
 }
 
 /* Indigo surfaces: hero and contact bands, the footer, and older markup that
@@ -136,11 +166,12 @@
   --accent-soft: 252 233 194;
   color: var(--ink);
 }
+/* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
-  .band .panel,
-  .band .card,
-  .band .mock,
-  .band .review {
+  :root:not([data-theme="light"]) .band .panel,
+  :root:not([data-theme="light"]) .band .card,
+  :root:not([data-theme="light"]) .band .mock,
+  :root:not([data-theme="light"]) .band .review {
     --ink: #eef0fb;
     --graphite: #aeb3d8;
     --rule: #2a3070;
@@ -160,6 +191,30 @@
     --card: 26 31 77;
     --accent-soft: 42 37 71;
   }
+}
+/* …or the toggle chose dark. */
+:root[data-theme="dark"] .band .panel,
+:root[data-theme="dark"] .band .card,
+:root[data-theme="dark"] .band .mock,
+:root[data-theme="dark"] .band .review {
+  --ink: #eef0fb;
+  --graphite: #aeb3d8;
+  --rule: #2a3070;
+  --accent-c: #f5b53f;
+  --pen: #ff8f6b;
+  --mark: #f5b53f;
+  --btn: #f5b53f;
+  --on-btn: #161b4f;
+  --btn-hover: #ffffff;
+  --on-btn-hover: #161b4f;
+
+  --fg: 238 240 251;
+  --muted: 174 179 216;
+  --border: 42 48 112;
+  --accent: 245 181 63;
+  --surface: 33 39 92;
+  --card: 26 31 77;
+  --accent-soft: 42 37 71;
 }
 
 html {
@@ -223,11 +278,17 @@ body {
   box-shadow: 0 0 0 100vmax var(--wash);
   clip-path: inset(0 -100vmax);
 }
+/* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
-  .band-warm {
+  :root:not([data-theme="light"]) .band-warm {
     --graphite: #c4c1de;
     --muted: 196 193 222;
   }
+}
+/* …or the toggle chose dark. */
+:root[data-theme="dark"] .band-warm {
+  --graphite: #c4c1de;
+  --muted: 196 193 222;
 }
 
 /* Wordmark */
@@ -889,11 +950,17 @@ a.more {
   background: var(--marigold);
   color: #161b4f;
 }
+/* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
-  .step-n {
+  :root:not([data-theme="light"]) .step-n {
     background: var(--marigold);
     color: #161b4f;
   }
+}
+/* …or the toggle chose dark. */
+:root[data-theme="dark"] .step-n {
+  background: var(--marigold);
+  color: #161b4f;
 }
 .step > .note {
   grid-column: 2;
@@ -1405,12 +1472,19 @@ textarea.input.sc-short {
   outline: 2px solid var(--mark);
   outline-offset: 2px;
 }
+/* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
-  .sc-chip input:checked + span {
+  :root:not([data-theme="light"]) .sc-chip input:checked + span {
     background: var(--marigold);
     border-color: var(--marigold);
     color: #161b4f;
   }
+}
+/* …or the toggle chose dark. */
+:root[data-theme="dark"] .sc-chip input:checked + span {
+  background: var(--marigold);
+  border-color: var(--marigold);
+  color: #161b4f;
 }
 .sc-steplist,
 .sc-assign {
@@ -1893,4 +1967,37 @@ textarea.input.sc-short {
   .scope-doc .sc-made {
     display: block;
   }
+}
+
+/* The toggle chose light: keep form controls and scrollbars light too. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Light / dark toggle */
+.theme-btn {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms;
+}
+.theme-btn:hover {
+  border-color: var(--ink);
+}
+.theme-btn:focus-visible {
+  outline: 2px solid var(--mark);
+  outline-offset: 2px;
+}
+
+.hdr-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

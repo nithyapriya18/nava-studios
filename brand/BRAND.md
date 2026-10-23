@@ -1,6 +1,6 @@
 # Studio NPV — Brand guidelines: Indigo & Marigold
 
-v2.0 · October 2026. This is the brand for everything Studio NPV makes: the website, decks, documents, social posts, product UI and email. The same rules as a designed page: [brand-guidelines.html](brand-guidelines.html) and [Studio-NPV-Brand-Guidelines.pdf](Studio-NPV-Brand-Guidelines.pdf). The live implementation is [apps/website/app/globals.css](../apps/website/app/globals.css). The source design is the "Indigo & Marigold (final)" page of the design canvas at https://claude.ai/artifact/2E386gd3aCLdFDpmkCtVSh.
+v2.1 · October 2026. This is the brand for everything Studio NPV makes: the website, decks, documents, social posts, product UI and email. The same rules as a designed page: [brand-guidelines.html](brand-guidelines.html) and [Studio-NPV-Brand-Guidelines.pdf](Studio-NPV-Brand-Guidelines.pdf) (light) and [Studio-NPV-Brand-Guidelines-Dark.pdf](Studio-NPV-Brand-Guidelines-Dark.pdf) (dark). The live implementation is [apps/website/app/globals.css](../apps/website/app/globals.css). The source design is the "Indigo & Marigold (final)" page of the design canvas at https://claude.ai/artifact/2E386gd3aCLdFDpmkCtVSh.
 
 ## 1. Idea: a page, and a margin
 
@@ -33,16 +33,36 @@ There are two brand colours, one pen colour and three neutrals. Every text pairi
 - **On a Paper page:** ink text, accent word in indigo, indigo button.
 - **On a Turmeric band:** use it for proof and next steps; notes go in vermilion.
 
-**Dark mode**
+### Light and dark schemes
 
-| Role | Colour |
-|---|---|
-| Background | `#10143A` |
-| Cards | `#1A1F4D` |
-| Text | `#EEF0FB` |
-| Secondary text | `#AEB3D8` |
-| Accent and buttons | Marigold |
-| Notes | lighter vermilion, `#FF8F6B` |
+Every screen ships in both schemes, because not everyone likes a dark background, and not everyone likes a bright one.
+
+- **Default:** follow the device's setting.
+- **Choice:** a round sun / moon button in the header, beside the main button, switches scheme. The choice is remembered on that browser and applied before the page paints, so it never flashes.
+- **Same brand in both:** the same type, marks, layout and voice. Only the colours of each role change, as below. Indigo bands stay indigo in both schemes, a shade deeper at night.
+
+| Role | Light scheme | Dark scheme | Text on it, dark |
+|---|---|---|---|
+| Page background | Paper `#F4F2EC` | Night `#10143A` | Mist, 15.6:1 |
+| Cards and panels | White `#FFFFFF` | Night card `#1A1F4D` | Mist, 13.7:1 |
+| Body text and headlines | Ink `#171A33` | Mist `#EEF0FB` | |
+| Secondary text, labels | Slate `#555A78` | Haze `#AEB3D8` | on Night, 8.7:1 |
+| Lines and borders | `#DDD9CE` | `#2A3070` | |
+| Accent word, links, active states | Indigo `#232C82` | Marigold `#F5B53F` | on Night, 9.8:1 |
+| Primary button | Indigo, white text | Marigold, Deep Indigo text | 8.9:1 |
+| Button hover | Marigold, Deep Indigo text | White, Deep Indigo text | |
+| Indigo bands | Indigo `#232C82` | Night indigo `#1C2468` | white, 14.0:1 |
+| Warm bands | Turmeric `#FCE9C2` | Night turmeric `#2A2547` | Mist, 12.7:1 |
+| Footer | Deep Indigo `#161B4F` | Midnight `#0B0E2A` | Mist, 16.7:1 |
+| Margin notes | Vermilion `#C2401E` | Light vermilion `#FF8F6B` | on Night, 7.9:1 |
+| Pen circles and underlines | Marigold (`#E39A1C` on Paper) | Marigold | |
+
+**Pairings in the dark scheme**
+- **On a Night page:** Mist text, accent word in marigold, marigold button with Deep Indigo text.
+- **On a Night indigo band:** the same as the light band: white headline, marigold accent, marigold button.
+- **Light objects on a band** (mock-ups, review cards) switch to Night card with Mist text, so nothing glows white in the dark.
+
+Every pairing in both schemes passes WCAG AA (4.5:1).
 
 ## 3. Wordmark
 
@@ -51,6 +71,7 @@ There are two brand colours, one pen colour and three neutrals. Every text pairi
 | Background | "npv" colour |
 |---|---|
 | Paper | indigo |
+| Night (dark scheme) | marigold |
 | Indigo | marigold |
 | Marigold | Deep Indigo |
 
@@ -120,7 +141,8 @@ Write plainly and directly, in the first person. Say what it costs and what you 
 - Open every page on an Indigo block.
 - Use one pen mark per view, pointing at something true.
 - Keep finished UI crisp; the hand belongs to drafts and notes.
-- Check every page in dark mode and at 390px.
+- Ship every page in both schemes, with the sun / moon toggle in the header.
+- Check every page in light, in dark, and at 390px.
 
 **Don't**
 - Draw buttons, fields or the wordmark by hand.
@@ -130,13 +152,14 @@ Write plainly and directly, in the first person. Say what it costs and what you 
 
 ## Using it outside the website
 
-- **Decks:**
-  - Title and section slides use an Indigo background with white Instrument Serif and a marigold italic accent word.
-  - Content slides use a Paper background.
+- **Decks:** made in either scheme. Light for printing and bright rooms; dark for screens and dim rooms.
+  - Title and section slides use an Indigo background (Night indigo in the dark scheme) with white Instrument Serif and a marigold italic accent word.
+  - Content slides use a Paper background, or Night in the dark scheme.
   - Put at most one Kalam note per slide.
 - **Documents:**
-  - The page is Paper or white, with Instrument Serif headings and Instrument Sans body text.
-  - Callouts sit on Turmeric.
+  - The page is Paper or white, with Instrument Serif headings and Instrument Sans body text. Anything meant to be printed uses the light scheme.
+  - Callouts sit on Turmeric (Night turmeric in the dark scheme).
+- **Product UI** (Crit, Scope Cutter, Growth OS): both schemes, the same toggle in the header, and the same tokens.
 - **Social posts:**
   - Use an Indigo or Turmeric background and one headline.
   - Use one pen mark at most.

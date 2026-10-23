@@ -3,6 +3,7 @@ import { Instrument_Sans, Instrument_Serif, Kalam } from 'next/font/google'
 import './globals.css'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
+import { themeBoot } from '@/components/theme-toggle'
 import { siteConfig } from '@/config'
 
 const sans = Instrument_Sans({
@@ -56,7 +57,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${serif.variable} ${hand.variable}`}>
+    <html lang="en" className={`${sans.variable} ${serif.variable} ${hand.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
+      </head>
       <body>
         <a
           href="#content"
