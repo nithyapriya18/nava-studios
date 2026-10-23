@@ -39,7 +39,8 @@ Every screen ships in both schemes, because not everyone likes a dark background
 
 - **Default:** follow the device's setting.
 - **Choice:** a round sun / moon button in the header, beside the main button, switches scheme. The choice is remembered on that browser and applied before the page paints, so it never flashes.
-- **Same brand in both:** the same type, marks, layout and voice. Only the colours of each role change, as below. Indigo bands stay indigo in both schemes, a shade deeper at night.
+- **Same brand in both:** the same type, marks, layout and voice. Only the colours of each role change, as below.
+- **Light means light:** in the light scheme nothing on the page is dark. Bands become Indigo wash and the footer is white, and indigo moves into the headlines, accent words and buttons. Solid indigo blocks belong to the dark scheme, and to print and social where a single bold block is the whole design.
 
 | Role | Light scheme | Dark scheme | Text on it, dark |
 |---|---|---|---|
@@ -51,15 +52,16 @@ Every screen ships in both schemes, because not everyone likes a dark background
 | Accent word, links, active states | Indigo `#232C82` | Marigold `#F5B53F` | on Night, 9.8:1 |
 | Primary button | Indigo, white text | Marigold, Deep Indigo text | 8.9:1 |
 | Button hover | Marigold, Deep Indigo text | White, Deep Indigo text | |
-| Indigo bands | Indigo `#232C82` | Night indigo `#1C2468` | white, 14.0:1 |
+| Bands (hero, contact) | Indigo wash `#EEEFFA`, Ink text 14.6:1, vermilion notes 4.5:1 | Night indigo `#1C2468` | white, 14.0:1 |
 | Warm bands | Turmeric `#FCE9C2` | Night turmeric `#2A2547` | Mist, 12.7:1 |
-| Footer | Deep Indigo `#161B4F` | Midnight `#0B0E2A` | Mist, 16.7:1 |
+| Footer | White, with a hairline on top | Midnight `#0B0E2A` | Mist, 16.7:1 |
 | Margin notes | Vermilion `#C2401E` | Light vermilion `#FF8F6B` | on Night, 7.9:1 |
 | Pen circles and underlines | Marigold (`#E39A1C` on Paper) | Marigold | |
 
 **Pairings in the dark scheme**
 - **On a Night page:** Mist text, accent word in marigold, marigold button with Deep Indigo text.
-- **On a Night indigo band:** the same as the light band: white headline, marigold accent, marigold button.
+- **On a Night indigo band:** white headline, marigold accent, marigold button.
+- **On an Indigo wash band (light scheme):** Ink headline, accent word in indigo, indigo button, marigold pen circles, vermilion notes.
 - **Light objects on a band** (mock-ups, review cards) switch to Night card with Mist text, so nothing glows white in the dark.
 
 Every pairing in both schemes passes WCAG AA (4.5:1).
@@ -111,7 +113,7 @@ Controls belong to the page, never the margin: they are round and exact, and nev
 
 ## 7. Layout
 
-- **Page rhythm:** Indigo hero → Paper sections → a Turmeric band for proof → Paper → Indigo contact band → Deep Indigo footer. Every page opens on a colour block, and no stretch of plain paper runs longer than about two screens.
+- **Page rhythm:** a colour-block hero → Paper sections → a Turmeric band for proof → Paper → a colour-block contact band → footer. The colour block is Indigo wash in the light scheme and Night indigo in the dark. Every page opens on one, and no stretch of plain paper runs longer than about two screens.
 - **Spacing:**
   - 8px base unit.
   - Sections sit 72px apart on desktop and 48px on phones.
@@ -138,7 +140,7 @@ Write plainly and directly, in the first person. Say what it costs and what you 
 ## 9. Do and don't
 
 **Do**
-- Open every page on an Indigo block.
+- Open every page on a colour block (Indigo wash in light, Night indigo in dark).
 - Use one pen mark per view, pointing at something true.
 - Keep finished UI crisp; the hand belongs to drafts and notes.
 - Ship every page in both schemes, with the sun / moon toggle in the header.

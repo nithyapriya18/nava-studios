@@ -31,6 +31,10 @@
   --on-btn: #ffffff;
   --btn-hover: #f5b53f;
   --on-btn-hover: #161b4f;
+  /* Light scheme: bands and the footer stay light; indigo moves to text, accents and buttons. */
+  --band-bg: #eeeffa;
+  --footer-bg: #ffffff;
+  --tiles-bg: #e4e1d7;
 
   --serif: var(--font-serif), 'Iowan Old Style', Georgia, serif;
   --sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -49,6 +53,9 @@
 /* Dark: follows the system unless the toggle chose light… */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    --band-bg: #1c2468;
+    --footer-bg: #0b0e2a;
+    --tiles-bg: #0b0e2a;
     --paper: #10143a;
     --surface-c: #1a1f4d;
     --ink: #eef0fb;
@@ -79,6 +86,9 @@
 }
 /* …or the toggle chose dark. */
 :root[data-theme="dark"] {
+  --band-bg: #1c2468;
+  --footer-bg: #0b0e2a;
+  --tiles-bg: #0b0e2a;
   --paper: #10143a;
   --surface-c: #1a1f4d;
   --ink: #eef0fb;
@@ -107,12 +117,48 @@
   color-scheme: dark;
 }
 
-/* Indigo surfaces: hero and contact bands, the footer, and older markup that
-   still says .theme-dark. Text goes white and the accent goes marigold. */
+/* Bands, the footer, and older markup that still says .theme-dark. In the dark
+   scheme they are indigo with white text and a marigold accent; in the light
+   scheme they are light (see --band-bg) and use the page's own colours. */
 .band,
 .band-card,
 .theme-dark,
-.ftr {
+.aside.band-card {
+  background: var(--band-bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .band,
+  :root:not([data-theme="light"]) .band-card,
+  :root:not([data-theme="light"]) .theme-dark,
+  :root:not([data-theme="light"]) .ftr {
+    --ink: #ffffff;
+    --graphite: #c9ccee;
+    --rule: rgba(255, 255, 255, 0.18);
+    --accent-c: #f5b53f;
+    --pen: #f5b53f;
+    --mark: #f5b53f;
+    --btn: #f5b53f;
+    --on-btn: #161b4f;
+    --btn-hover: #ffffff;
+    --on-btn-hover: #161b4f;
+
+    --fg: 255 255 255;
+    --muted: 201 204 238;
+    --border: 78 86 160;
+    --accent: 245 181 63;
+    --surface: 52 62 150;
+    --card: 45 55 145;
+    --accent-soft: 52 62 150;
+    color: var(--ink);
+  }
+  :root:not([data-theme="light"]) .ftr {
+    --rule: rgba(255, 255, 255, 0.14);
+  }
+}
+:root[data-theme="dark"] .band,
+:root[data-theme="dark"] .band-card,
+:root[data-theme="dark"] .theme-dark,
+:root[data-theme="dark"] .ftr {
   --ink: #ffffff;
   --graphite: #c9ccee;
   --rule: rgba(255, 255, 255, 0.18);
@@ -133,11 +179,7 @@
   --accent-soft: 52 62 150;
   color: var(--ink);
 }
-.theme-dark,
-.aside.band-card {
-  background: var(--indigo);
-}
-.ftr {
+:root[data-theme="dark"] .ftr {
   --rule: rgba(255, 255, 255, 0.14);
 }
 
@@ -268,8 +310,8 @@ body {
 /* Colour bands: full-bleed from inside the column. */
 .band {
   position: relative;
-  background: var(--indigo);
-  box-shadow: 0 0 0 100vmax var(--indigo);
+  background: var(--band-bg);
+  box-shadow: 0 0 0 100vmax var(--band-bg);
   clip-path: inset(0 -100vmax);
 }
 .band-warm {
@@ -742,7 +784,7 @@ a.more {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
   border-radius: 999px;
   padding: 5px;
 }
@@ -853,7 +895,7 @@ a.more {
   font: 500 12px var(--sans);
 }
 .band .pill {
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
 }
 .m-url {
   display: flex;
@@ -1338,8 +1380,8 @@ textarea.input {
 .tiles {
   position: relative;
   padding: 1px 0 12px;
-  background: var(--deep);
-  box-shadow: 0 0 0 100vmax var(--deep);
+  background: var(--tiles-bg);
+  box-shadow: 0 0 0 100vmax var(--tiles-bg);
   clip-path: inset(0 -100vmax);
 }
 .tiles > .tile {
@@ -1357,7 +1399,7 @@ textarea.input {
   opacity: calc(1 - var(--cover, 0));
 }
 .tiles > .tile.band {
-  background: var(--indigo);
+  background: var(--band-bg);
   border-color: transparent;
 }
 .tiles > .tile.band-warm {
@@ -1746,9 +1788,10 @@ textarea.input.sc-short {
   gap: 6px;
 }
 
-/* Footer: deep indigo */
+/* Footer: soft paper in the light scheme, midnight in the dark */
 .ftr {
-  background: var(--deep);
+  background: var(--footer-bg);
+  border-top: 1px solid var(--rule);
   padding: 48px 0 32px;
   font-size: 15px;
 }
@@ -1767,7 +1810,7 @@ textarea.input.sc-short {
   text-decoration: none;
 }
 .ftr-col a:hover {
-  color: #ffffff;
+  color: var(--ink);
 }
 .ftr-base {
   margin-top: 36px;
