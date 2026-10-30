@@ -4,13 +4,12 @@ import { useEffect, useState, type FocusEvent, type MouseEvent } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { contactHref, contactLabel, contactIsExternal } from '@/config'
-import { reviewHref } from '@/lib/products'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Wordmark } from '@/components/wordmark'
 
 const links = [
   { href: '/start', label: 'How it works' },
-  { href: reviewHref, label: 'Free review' },
+  { href: '/products', label: 'Products' },
   { href: '/writing', label: 'Writing' },
   { href: '/about', label: 'About' },
 ]

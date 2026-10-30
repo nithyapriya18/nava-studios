@@ -18,17 +18,12 @@ export const STUDIO = {
   title: 'Founder',
   org: 'Studio NPV',
   dates: '2026 – Present',
-  body: 'My own product studio. I scope, design and build first versions of software for founders and small businesses, for a fixed price agreed before work starts. I built its two free tools myself, from idea to production, and run them in public:',
+  body: 'My own product studio. I scope, design and build first versions of software for founders and small businesses, for a fixed price agreed before work starts. I built its first product myself, from idea to production, and run it in public:',
   products: [
     {
       name: 'Crit',
       href: studio('/products/crit'),
       body: 'Reviews a landing page in about 30 seconds: a score, what a first-time visitor won’t understand, and the fixes.',
-    },
-    {
-      name: 'Scope Cutter',
-      href: studio('/products/scope-cutter'),
-      body: 'Cuts a feature list down to a first release, using the Kano model, story mapping and a time budget.',
     },
   ],
 }

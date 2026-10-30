@@ -30,4 +30,6 @@ export const SCOPE_PRODUCT = {
 export const scopeHref = `/products/${SCOPE_PRODUCT.slug}`
 export const scopeUrl = `${siteConfig.url}${scopeHref}`
 
-export const PRODUCTS = [REVIEW_PRODUCT, SCOPE_PRODUCT]
+// Scope Cutter is off the site while it's reworked: it asks too many
+// questions before it gives an answer. Add it back here and in the route.
+export const PRODUCTS = [REVIEW_PRODUCT]
