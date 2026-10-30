@@ -20,6 +20,8 @@
   --venture-rule: #f0d9a3;
   --chip: #eeeffa;
   --chip-ink: #232c82;
+  --dot: #d6d2c4;
+  --beam-from: #232c82;
 
   --sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
@@ -44,6 +46,8 @@
     --venture-rule: #4a3f5e;
     --chip: #1c2468;
     --chip-ink: #eef0fb;
+    --dot: #262c66;
+    --beam-from: #8a93f0;
     color-scheme: dark;
   }
 }
@@ -65,6 +69,8 @@
   --venture-rule: #4a3f5e;
   --chip: #1c2468;
   --chip-ink: #eef0fb;
+  --dot: #262c66;
+  --beam-from: #8a93f0;
   color-scheme: dark;
 }
 
@@ -533,6 +539,175 @@ a:hover .arr {
   color: var(--muted);
 }
 
+/*
+ * Effects adapted from Aceternity UI, in CSS and a few lines of JS (no
+ * motion library). Pointer effects run only with a mouse, and everything
+ * stands still for reduced motion.
+ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Dot background: a dotted sheet behind the page, fading out from the top left. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--dot) 1.1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 12% 0%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 85% 70% at 12% 0%, #000 15%, transparent 75%);
+}
+
+/* Flip Words: the word lifts away in a blur; the next types itself in. */
+.tagline .flip {
+  position: relative;
+  display: block;
+  white-space: nowrap;
+  font: 700 22px/1.35 var(--sans);
+  letter-spacing: -0.015em;
+  color: var(--accent);
+}
+.flip-in > span {
+  display: inline-block;
+  animation: flip-in 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--k) * 32ms);
+}
+@keyframes flip-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(6px);
+  }
+}
+.flip-out {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: flip-out 450ms ease-in forwards;
+}
+@keyframes flip-out {
+  to {
+    opacity: 0;
+    transform: translate(28px, -26px) scale(1.5);
+    filter: blur(8px);
+  }
+}
+
+/* Timeline: a rail, a gradient beam that draws down it as you scroll, a dot per role. */
+.tline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-left: 32px;
+}
+.tline::before,
+.tline::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  width: 2px;
+  border-radius: 2px;
+}
+.tline::before {
+  bottom: 8px;
+  background: var(--rule);
+}
+.tline::after {
+  height: calc((100% - 16px) * var(--beam, 0));
+  background: linear-gradient(to bottom, transparent, var(--beam-from) 18%, var(--mark));
+}
+.tl-role {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding-bottom: 32px;
+}
+.tl-role:last-child {
+  padding-bottom: 0;
+}
+.tl-dot {
+  position: absolute;
+  left: -31px;
+  top: 5px;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--rule);
+  background: var(--bg);
+  transition: background 250ms, border-color 250ms, box-shadow 250ms;
+}
+.passed > .tl-dot {
+  border-color: var(--mark);
+  background: var(--mark);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--mark) 22%, transparent);
+}
+.tl-when {
+  font: 400 13px/1.6 var(--mono);
+  color: var(--muted);
+  transition: color 250ms;
+}
+.passed > .tl-when {
+  color: var(--ink);
+}
+.tl-what {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.tl-role:last-child .tl-what {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+/* 3D Card: the studio card leans towards the pointer; its product cards lift off it. */
+.tilt-stage {
+  perspective: 1100px;
+}
+.tilt {
+  transform-style: preserve-3d;
+  transition: transform 220ms ease-out;
+}
+.tilt .product {
+  transition: transform 260ms ease-out, border-color 150ms;
+}
+.tilt[data-tilt] .product {
+  transform: translateZ(26px);
+}
+
+/* Card Spotlight: a soft marigold light follows the pointer across a card. */
+.spot {
+  position: relative;
+  overflow: hidden;
+}
+.spot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(200px circle at var(--x, 50%) var(--y, 50%), rgb(245 181 63 / 0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 250ms;
+  pointer-events: none;
+}
+.spot:hover::before {
+  opacity: 1;
+}
+.spot > * {
+  position: relative;
+}
+
 /* 404 */
 .lost {
   min-height: 100vh;
@@ -606,11 +781,25 @@ a:hover .arr {
   .name {
     font-size: 34px;
   }
+  /* Aceternity's sticky dates: each role's dates stay in view while you read it. */
+  .tl-role {
+    grid-template-columns: 172px minmax(0, 1fr);
+    gap: 24px;
+  }
+  .tl-when {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .flip-in > span,
+  .flip-out {
+    animation: none;
   }
   * {
     transition: none !important;

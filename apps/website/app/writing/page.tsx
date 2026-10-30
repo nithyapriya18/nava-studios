@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPosts, type Post } from '@/lib/mdx'
+import { Generate } from '@/components/generate'
+import { HoverGroup } from '@/components/hover-group'
 
 export const metadata: Metadata = {
   title: 'Writing',
@@ -17,24 +19,26 @@ function shortDate(date: string) {
 
 function PostList({ posts }: { posts: Post[] }) {
   return (
-    <div className="posts">
-      {posts.map((post) => (
-        <Link key={post.slug} href={`/writing/${post.slug}`} className="post">
-          <span className="muted num" style={{ fontSize: 14 }}>
-            {shortDate(post.date)}
-          </span>
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span className="post-t">{post.title}</span>
-            <span className="muted" style={{ fontSize: 16 }}>
-              {post.excerpt}
+    <HoverGroup items="a.post" bleed={16}>
+      <div className="posts">
+        {posts.map((post) => (
+          <Link key={post.slug} href={`/writing/${post.slug}`} className="post">
+            <span className="muted num" style={{ fontSize: 14 }}>
+              {shortDate(post.date)}
             </span>
-          </span>
-          <span className="muted" style={{ fontSize: 14 }}>
-            {post.readingTime.replace(' read', '')}
-          </span>
-        </Link>
-      ))}
-    </div>
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span className="post-t">{post.title}</span>
+              <span className="muted" style={{ fontSize: 16 }}>
+                {post.excerpt}
+              </span>
+            </span>
+            <span className="muted" style={{ fontSize: 14 }}>
+              {post.readingTime.replace(' read', '')}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </HoverGroup>
   )
 }
 
@@ -49,7 +53,9 @@ export default function WritingPage() {
       <section className="band page-head">
         <p className="label">Writing</p>
         <h1 className="display">
-          <em>Notes</em> from the margin
+          <Generate>
+            <em>Notes</em> from the margin
+          </Generate>
         </h1>
         <p className="lede" style={{ maxWidth: '52ch' }}>
           Notes on scoping and building software products, written for founders and business owners who

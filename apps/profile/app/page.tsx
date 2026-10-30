@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import { Spotlight, TiltCard, Timeline } from '@/components/effects'
+import { FlipWords } from '@/components/flip-words'
 import { SectionNav } from '@/components/section-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { TrackedLink } from '@/components/tracked-link'
@@ -70,7 +72,13 @@ export default function Home() {
           <ThemeToggle />
         </div>
         <h1 className="name">{siteConfig.name}</h1>
-        <p className="tagline">{siteConfig.summary}</p>
+        <p className="tagline">
+          <FlipWords
+            prefix="Ten years as a"
+            words={['software engineer', 'data scientist', 'product manager', 'founder']}
+            sentence={siteConfig.summary}
+          />
+        </p>
         <p className="where">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
             <path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
@@ -103,68 +111,69 @@ export default function Home() {
               <a href={studio()}>Studio NPV</a>, my own studio, where I design and build products end to end.
             </p>
           </div>
-          <dl className="stats">
+          <Spotlight className="stats">
             {STATS.map((s) => (
-              <div key={s.n} className="stat">
+              <div key={s.n} className="stat spot">
                 <dt>{s.n}</dt>
                 <dd>{s.t}</dd>
               </div>
             ))}
-          </dl>
+          </Spotlight>
         </section>
 
         <section id="experience" aria-labelledby="experience-h" className="sec">
           <Heading id="experience">Experience</Heading>
 
-          <article className="venture">
-            <div className="role-head">
-              <div>
-                <span className="kicker">My own company</span>
-                <h3 className="role-t">
-                  {STUDIO.title}, <a href={studio()}>{STUDIO.org}</a>
-                </h3>
-              </div>
-              <span className="dates">{STUDIO.dates}</span>
-            </div>
-            <p className="muted">{STUDIO.body}</p>
-            <div className="products">
-              {STUDIO.products.map((p) => (
-                <a key={p.name} href={p.href} className="product">
-                  <span className="product-t">
-                    {p.name} <Arrow />
-                  </span>
-                  <span className="muted">{p.body}</span>
-                </a>
-              ))}
-            </div>
-            <TrackedLink
-              href={studio()}
-              event="studio_opened"
-              properties={{ location: 'experience' }}
-              className="more"
-            >
-              Visit studionpv.com <Arrow />
-            </TrackedLink>
-          </article>
-
-          <ol className="roles">
+          <Timeline>
+            <li className="tl-role">
+              <span className="tl-dot" aria-hidden />
+              <span className="tl-when">{STUDIO.dates}</span>
+              <TiltCard className="venture">
+                <div>
+                  <span className="kicker">My own company</span>
+                  <h3 className="role-t">
+                    {STUDIO.title}, <a href={studio()}>{STUDIO.org}</a>
+                  </h3>
+                </div>
+                <p className="muted">{STUDIO.body}</p>
+                <div className="products">
+                  {STUDIO.products.map((p) => (
+                    <a key={p.name} href={p.href} className="product">
+                      <span className="product-t">
+                        {p.name} <Arrow />
+                      </span>
+                      <span className="muted">{p.body}</span>
+                    </a>
+                  ))}
+                </div>
+                <TrackedLink
+                  href={studio()}
+                  event="studio_opened"
+                  properties={{ location: 'experience' }}
+                  className="more"
+                >
+                  Visit studionpv.com <Arrow />
+                </TrackedLink>
+              </TiltCard>
+            </li>
             {ROLES.map((r) => (
-              <li key={`${r.org}-${r.title}`} className="role">
-                <div className="role-head">
+              <li key={`${r.org}-${r.title}`} className="tl-role">
+                <span className="tl-dot" aria-hidden />
+                <span className="tl-when">{r.dates}</span>
+                <div className="tl-what">
                   <div>
                     <h3 className="role-t">{r.title}</h3>
                     <span className="org">{r.org}</span>
                   </div>
-                  <span className="dates">{r.dates}</span>
+                  <ul className="points">
+                    {r.points.map((p) => (
+                      <li key={p}>{p}</li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="points">
-                  {r.points.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
               </li>
             ))}
-          </ol>
+          </Timeline>
         </section>
 
         <section id="skills" aria-labelledby="skills-h" className="sec">

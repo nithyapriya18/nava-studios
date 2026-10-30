@@ -2044,3 +2044,113 @@ textarea.input.sc-short {
   align-items: center;
   gap: 10px;
 }
+
+/* Aceternity-derived effects. All are CSS or a few lines of JS, and all
+   stand still for reduced motion. None glows; the page stays crisp. */
+
+/* Text Generate Effect: hero words come out of a blur, one after another. */
+.gen-w {
+  animation: gen-in 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+@keyframes gen-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+/* The pen mark waits for its word. */
+.display .draw path {
+  animation-delay: 650ms;
+}
+
+/* Card Hover Effect: one wash slides between the items in a group. */
+.hover-group {
+  position: relative;
+}
+.hover-group > :not(.hover-wash) {
+  position: relative;
+  z-index: 1;
+}
+.hover-wash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 14px;
+  background: var(--wash);
+  pointer-events: none;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.band-warm .hover-wash {
+  background: var(--surface-c);
+}
+
+/* Timeline beam: a marigold line draws down as you scroll; dots fill as it passes. */
+.beam::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  width: 2px;
+  height: calc((100% - 20px) * var(--beam, 0));
+  border-radius: 2px;
+  background: var(--marigold);
+}
+.beam .tl-dot {
+  z-index: 1;
+  transition: background 250ms, border-color 250ms;
+}
+.beam .passed .tl-dot {
+  background: var(--marigold);
+  border-color: var(--marigold);
+}
+
+/* Stateful Button: the spinner and tick grow in beside the label. */
+.btn-primary.stateful:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.sb-icon {
+  display: inline-flex;
+  width: 0;
+  margin-right: -10px;
+  overflow: hidden;
+  transform: scale(0);
+  transition: width 200ms, margin 200ms, transform 200ms;
+}
+.sb-icon.on {
+  width: 18px;
+  margin-right: 0;
+  transform: scale(1);
+}
+.sb-spin {
+  animation: spin 0.7s linear infinite;
+}
+
+/* Accordion: answers slide open instead of popping in. */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-panel > div {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s 260ms;
+}
+.faq-panel[data-open] {
+  grid-template-rows: 1fr;
+}
+.faq-panel[data-open] > div {
+  visibility: visible;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gen-w,
+  .sb-spin {
+    animation: none;
+  }
+}
