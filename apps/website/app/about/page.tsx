@@ -43,23 +43,12 @@ export default function AboutPage() {
               Get in touch <Arrow />
             </a>
             <TrackedLink
-              href="/resume?from=about"
-              download
-              rel="nofollow"
-              event="resume_downloaded"
+              href={siteConfig.profileUrl}
+              event="profile_opened"
               properties={{ location: 'about' }}
               className="btn-quiet"
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                <path
-                  d="M8 2.5v8m0 0L5 7.5m3 3l3-3M3 13.5h10"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Download my resume (PDF)
+              My full profile and resume <Arrow />
             </TrackedLink>
           </div>
         </div>
@@ -148,14 +137,12 @@ export default function AboutPage() {
               <span className="label">Certification</span>&nbsp;&nbsp;PSPO I, Scrum.org
             </span>
             <TrackedLink
-              href="/resume?from=about"
-              download
-              rel="nofollow"
-              event="resume_downloaded"
+              href={siteConfig.profileUrl}
+              event="profile_opened"
               properties={{ location: 'about_timeline' }}
               className="more"
             >
-              Full resume (PDF) <Arrow />
+              Full profile at nithyapriya.com <Arrow />
             </TrackedLink>
             {linkedinHref && (
               <TrackedLink

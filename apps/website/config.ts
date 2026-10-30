@@ -1,5 +1,5 @@
 export const siteConfig = {
-  url: 'https://nithyapriya.com',
+  url: 'https://studionpv.com',
   name: 'Studio NPV',
   tagline: "Have an idea? Let's build it.",
   description:
@@ -12,6 +12,8 @@ export const siteConfig = {
   email: 'studio.npv@outlook.com',
   linkedin: 'https://linkedin.com/in/npv',
   resumeFile: '/Nithyapriya-Veeraraghavan.pdf',
+  // My own profile, resume and career live on my personal site.
+  profileUrl: 'https://www.nithyapriya.com',
 }
 
 const calendlyReady = !siteConfig.calendlyUrl.includes('[')

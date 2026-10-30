@@ -1,0 +1,25 @@
+{
+  "name": "@nava-studios/profile",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "next": "^16.2.1",
+    "posthog-js": "^1.429.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.1",
+    "typescript": "^5.5.4"
+  }
+}

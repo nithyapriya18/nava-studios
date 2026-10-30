@@ -59,13 +59,11 @@ export function ContactBand({ page = false, title }: { page?: boolean; title: Re
             <span>
               Want to know who you’d be working with? <Link href="/about">About me</Link> ·{' '}
               <TrackedLink
-                href="/resume?from=contact"
-                download
-                rel="nofollow"
-                event="resume_downloaded"
+                href={siteConfig.profileUrl}
+                event="profile_opened"
                 properties={{ location: 'contact' }}
               >
-                Resume (PDF)
+                Full profile and resume
               </TrackedLink>
             </span>
           )}

@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "apps/website"
+    "apps/website",
+    "apps/profile"
   ],
   "scripts": {
     "dev": "npm run dev -w @nava-studios/website",
-    "build": "npm run build -w @nava-studios/website",
-    "lint": "npm run lint -w @nava-studios/website",
+    "dev:profile": "npm run dev -w @nava-studios/profile",
+    "build": "npm run build -w @nava-studios/website && npm run build -w @nava-studios/profile",
+    "lint": "npm run lint -w @nava-studios/website && npm run lint -w @nava-studios/profile",
     "format": "prettier --write ."
   },
   "devDependencies": {

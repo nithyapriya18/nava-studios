@@ -83,14 +83,12 @@ export default function StartPage() {
               Get in touch <Arrow />
             </a>
             <TrackedLink
-              href="/resume?from=how_it_works"
-              download
-              rel="nofollow"
-              event="resume_downloaded"
+              href={siteConfig.profileUrl}
+              event="profile_opened"
               properties={{ location: 'how_it_works' }}
               className="more"
             >
-              Read my resume first <Arrow />
+              Read my profile first <Arrow />
             </TrackedLink>
           </div>
         </div>

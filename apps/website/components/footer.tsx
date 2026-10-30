@@ -43,14 +43,8 @@ export function Footer() {
                 LinkedIn
               </TrackedLink>
             ) : null}
-            <TrackedLink
-              href="/resume?from=footer"
-              download
-              rel="nofollow"
-              event="resume_downloaded"
-              properties={{ location: 'footer' }}
-            >
-              Resume (PDF)
+            <TrackedLink href={siteConfig.profileUrl} event="profile_opened" properties={{ location: 'footer' }}>
+              nithyapriya.com
             </TrackedLink>
           </div>
           <div className="ftr-col">

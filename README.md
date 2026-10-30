@@ -3,23 +3,28 @@
 One-person services studio in Bengaluru. Nithyapriya Veeraraghavan takes an
 idea and builds the first version a small or mid-size team can use.
 
-Site: [nithyapriya.com](https://www.nithyapriya.com)
+Studio: [studionpv.com](https://studionpv.com) · Profile: [nithyapriya.com](https://www.nithyapriya.com)
 Repo: [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios)
 
 ## Layout
 
-This is a single-app repo — `apps/website` is the whole product.
+Two Next.js apps, each its own Vercel project:
 
-- `apps/website` — the Nava Studios site (Next.js). Home, About, Start
-  (how an engagement works), `/lab` (personal projects, not client work),
-  Writing, and `/roast` (Roast My Launch — a free lead magnet).
+- `apps/website` — the Studio NPV site, on studionpv.com (Vercel project
+  `studio-npv`). Home, About, Start (how an engagement works), Writing, and
+  the free tools under `/products` (Crit, Scope Cutter).
+- `apps/profile` — my personal profile, on nithyapriya.com (Vercel project
+  `nithyapriya-profile`). One static page: experience, skills, education,
+  resume. It borrows the studio's colours but not its type or marks, and
+  sends old studio paths on this domain to studionpv.com.
 
 ## Run
 
 ```bash
 npm install
-npm run dev     # website on :3000
-npm run build
+npm run dev           # studio on :3000
+npm run dev:profile   # profile on :3001
+npm run build         # both
 ```
 
 ## What this is not
