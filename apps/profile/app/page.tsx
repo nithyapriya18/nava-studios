@@ -9,9 +9,6 @@ import { TrackedLink } from '@/components/tracked-link'
 import { siteConfig, mailtoHref, studio } from '@/config'
 import { CERTIFICATION, EDUCATION, LANGUAGES, POSTS, SKILLS, STATS } from '@/lib/profile'
 
-// The slow band of keywords between About and Experience.
-const DOMAINS = ['Healthcare AI', 'Supply chain', 'Retail', 'Enterprise SaaS', 'Early-stage startups', 'Agentic AI', 'NLP']
-
 function Arrow() {
   return (
     <span className="arr" aria-hidden>
@@ -152,21 +149,6 @@ export default function Home() {
             </Spotlight>
           </div>
         </section>
-
-        <div className="band" aria-hidden>
-          <div className="band-track">
-            {[0, 1].map((copy) => (
-              <span key={copy} className="band-row">
-                {DOMAINS.map((d) => (
-                  <span key={d}>
-                    {d}
-                    <i />
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-        </div>
 
         <section id="experience" className="sec" aria-labelledby="experience-h">
           <div className="wrap">

@@ -650,40 +650,6 @@ a:hover .arr {
   position: relative;
 }
 
-/* The keyword band: a slow line of italics between About and Experience. */
-.band {
-  overflow: hidden;
-  border-block: 1px solid var(--rule);
-  padding: 26px 0;
-}
-.band-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 48s linear infinite;
-}
-.band-row {
-  display: flex;
-  align-items: center;
-}
-.band-row span {
-  display: inline-flex;
-  align-items: center;
-  font: italic 400 clamp(30px, 4vw, 54px) / 1 var(--serif);
-  white-space: nowrap;
-}
-.band-row i {
-  width: 10px;
-  height: 10px;
-  margin: 0 36px;
-  border-radius: 50%;
-  background: var(--mark);
-}
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 /* Experience: a sticky panel beside the cards (Sticky Scroll Reveal). */
 .xp {
   display: grid;
@@ -1053,7 +1019,6 @@ a:hover .arr {
 @media print {
   .top,
   .cue,
-  .band,
   .actions,
   .theme-btn {
     display: none !important;
