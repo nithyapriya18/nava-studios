@@ -1,13 +1,22 @@
 import type { Metadata, Viewport } from 'next'
-import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
+import { Instrument_Serif, JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
-import { themeBoot } from '@/components/theme-toggle'
+import { themeBoot } from '@/lib/theme-boot'
 import { siteConfig, studio } from '@/config'
 import { EDUCATION } from '@/lib/profile'
 
 const sans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
+})
+
+// Headlines: the one typeface shared with Studio NPV, so the two read as family.
+const serif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
   display: 'swap',
 })
 
@@ -36,8 +45,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F6F5F1' },
-    { media: '(prefers-color-scheme: dark)', color: '#10143A' },
+    { media: '(prefers-color-scheme: light)', color: '#F6F6F7' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0B0E' },
   ],
 }
 
@@ -60,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${serif.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }} />

@@ -5,11 +5,12 @@ import { studio } from '@/config'
  * the resume in public/; change them here when the resume changes.
  */
 
+// Shown as count-ups: prefix + value + suffix, e.g. $6.4M.
 export const STATS = [
-  { n: '10+ yrs', t: 'across engineering, data science and product' },
-  { n: '$6.4M', t: 'documented cost savings from an NLP platform at Novartis' },
-  { n: '500K+', t: 'enterprise users on supply chain AI at Resilinc' },
-  { n: '75%', t: 'enterprise adoption of AI proofs of concept at Novartis' },
+  { prefix: '', value: 10, decimals: 0, suffix: '+ yrs', t: 'across engineering, data science and product' },
+  { prefix: '$', value: 6.4, decimals: 1, suffix: 'M', t: 'documented cost savings from an NLP platform at Novartis' },
+  { prefix: '', value: 500, decimals: 0, suffix: 'K+', t: 'enterprise users on supply chain AI at Resilinc' },
+  { prefix: '', value: 75, decimals: 0, suffix: '%', t: 'enterprise adoption of AI proofs of concept at Novartis' },
 ]
 
 /** My own studio. It gets a little more room on the page than a role. */

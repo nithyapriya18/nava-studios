@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-/** Runs before the page paints, so a saved choice never flashes the other theme. */
-export const themeBoot = `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
-
 /**
  * Light or dark. Until someone chooses, the page follows their device; once
  * they do, the choice is remembered on this browser.

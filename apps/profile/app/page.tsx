@@ -1,11 +1,16 @@
 import Image from 'next/image'
-import { Spotlight, TiltCard, Timeline } from '@/components/effects'
+import { Spotlight } from '@/components/effects'
+import { Experience } from '@/components/experience'
 import { FlipWords } from '@/components/flip-words'
-import { SectionNav } from '@/components/section-nav'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { Header } from '@/components/header'
+import { ScrollFx } from '@/components/scroll-fx'
+import { ScrollWords } from '@/components/scroll-words'
 import { TrackedLink } from '@/components/tracked-link'
 import { siteConfig, mailtoHref, studio } from '@/config'
-import { CERTIFICATION, EDUCATION, LANGUAGES, POSTS, ROLES, SKILLS, STATS, STUDIO } from '@/lib/profile'
+import { CERTIFICATION, EDUCATION, LANGUAGES, POSTS, SKILLS, STATS } from '@/lib/profile'
+
+// The slow band of keywords between About and Experience.
+const DOMAINS = ['Healthcare AI', 'Supply chain', 'Retail', 'Enterprise SaaS', 'Early-stage startups', 'Agentic AI', 'NLP']
 
 function Arrow() {
   return (
@@ -15,7 +20,7 @@ function Arrow() {
   )
 }
 
-function Resume({ location, className }: { location: string; className: string }) {
+function Resume({ location, className, label = 'Resume (PDF)' }: { location: string; className: string; label?: string }) {
   return (
     <TrackedLink
       href={siteConfig.resumeFile}
@@ -33,7 +38,7 @@ function Resume({ location, className }: { location: string; className: string }
           strokeLinejoin="round"
         />
       </svg>
-      Resume (PDF)
+      {label}
     </TrackedLink>
   )
 }
@@ -53,212 +58,221 @@ function LinkedIn({ location, className }: { location: string; className: string
   )
 }
 
-function Heading({ id, children }: { id: string; children: React.ReactNode }) {
+function SectionHead({ id, n, label, children }: { id: string; n: string; label: string; children: React.ReactNode }) {
   return (
-    <h2 id={`${id}-h`} className="sec-h">
-      {children}
-    </h2>
+    <div className="sec-head rv">
+      <span className="eyebrow">
+        <b>{n}</b> {label}
+      </span>
+      <h2 id={`${id}-h`} className="sec-t">
+        {children}
+      </h2>
+    </div>
   )
 }
 
 export default function Home() {
   return (
-    <div className="shell">
-      <aside className="side">
-        <div className="side-top">
-          <div className="portrait">
-            <Image src="/nithya.jpeg" alt={`Portrait of ${siteConfig.name}`} fill sizes="112px" preload />
-          </div>
-          <ThemeToggle />
-        </div>
-        <h1 className="name">{siteConfig.name}</h1>
-        <p className="tagline">
-          <FlipWords
-            prefix="Ten years as a"
-            words={['software engineer', 'data scientist', 'product manager', 'founder']}
-            sentence={siteConfig.summary}
-          />
-        </p>
-        <p className="where">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-            <path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-            <circle cx="12" cy="9.5" r="2.5" />
-          </svg>
-          {siteConfig.location}
-        </p>
-        <div className="actions">
-          <Resume location="sidebar" className="btn btn-primary" />
-          <LinkedIn location="sidebar" className="btn" />
-          <TrackedLink href={mailtoHref} event="email_clicked" properties={{ location: 'sidebar' }} className="btn">
-            Email
-          </TrackedLink>
-        </div>
-        <SectionNav />
-      </aside>
+    <>
+      <Header />
+      <ScrollFx />
 
-      <main id="content" className="main">
-        <section id="about" aria-labelledby="about-h" className="sec">
-          <Heading id="about">About</Heading>
-          <div className="prose">
-            <p className="lead">
-              I’ve spent ten years building software: first as an engineer, then as a data scientist, and for
-              the last six years as a product manager on AI products in healthcare, supply chain and retail.
-            </p>
-            <p>
+      <main id="content">
+        <section id="top" className="hero" aria-label="Introduction">
+          <div className="hero-in">
+            <div className="hero-text">
+              <span className="now">
+                <span className="now-dot" aria-hidden />
+                Head of Product at PetaSight · Founder of Studio NPV
+              </span>
+              <h1 className="hero-name">
+                Nithyapriya <em>Veeraraghavan</em>
+              </h1>
+              <p className="hero-flip">
+                <FlipWords
+                  prefix="Ten years as a"
+                  words={['software engineer', 'data scientist', 'product manager', 'founder']}
+                  sentence={siteConfig.summary}
+                />
+              </p>
+              <div className="actions">
+                <Resume location="hero" className="btn btn-primary" />
+                <LinkedIn location="hero" className="btn" />
+                <TrackedLink href={mailtoHref} event="email_clicked" properties={{ location: 'hero' }} className="btn">
+                  Email
+                </TrackedLink>
+              </div>
+            </div>
+            <figure className="hero-photo">
+              <Image
+                src="/nithya.jpeg"
+                alt={`Portrait of ${siteConfig.name}`}
+                fill
+                sizes="(min-width: 1000px) 420px, 80vw"
+                preload
+              />
+              <figcaption>{siteConfig.location}</figcaption>
+            </figure>
+          </div>
+          <a href="#about" className="cue">
+            <span>Scroll</span>
+            <i aria-hidden />
+          </a>
+        </section>
+
+        <section id="about" className="sec" aria-labelledby="about-h">
+          <div className="wrap">
+            <SectionHead id="about" n="01" label="About">
+              Engineer, data scientist, <em>product manager</em>.
+            </SectionHead>
+            <ScrollWords
+              className="reveal-text"
+              text="I’ve spent ten years building software: first as an engineer, then as a data scientist, and for the last six years as a product manager on AI products in healthcare, supply chain and retail."
+            />
+            <p className="about-more rv">
               I’ve worked inside global enterprises such as Novartis and Resilinc, and as the founding product
               manager at early-stage startups. I’m at home in regulated environments with zero tolerance for
               error, and in small teams going from an idea to a first release. I also run{' '}
               <a href={studio()}>Studio NPV</a>, my own studio, where I design and build products end to end.
             </p>
+            <Spotlight as="dl" className="stats">
+              {STATS.map((s, i) => (
+                <div key={s.t} className="stat spot rv" style={{ transitionDelay: `${i * 80}ms` }}>
+                  <dt
+                    data-count={s.value}
+                    data-prefix={s.prefix}
+                    data-suffix={s.suffix}
+                    data-decimals={s.decimals}
+                  >
+                    {`${s.prefix}${s.value.toFixed(s.decimals)}${s.suffix}`}
+                  </dt>
+                  <dd>{s.t}</dd>
+                </div>
+              ))}
+            </Spotlight>
           </div>
-          <Spotlight className="stats">
-            {STATS.map((s) => (
-              <div key={s.n} className="stat spot">
-                <dt>{s.n}</dt>
-                <dd>{s.t}</dd>
-              </div>
-            ))}
-          </Spotlight>
         </section>
 
-        <section id="experience" aria-labelledby="experience-h" className="sec">
-          <Heading id="experience">Experience</Heading>
+        <div className="band" aria-hidden>
+          <div className="band-track">
+            {[0, 1].map((copy) => (
+              <span key={copy} className="band-row">
+                {DOMAINS.map((d) => (
+                  <span key={d}>
+                    {d}
+                    <i />
+                  </span>
+                ))}
+              </span>
+            ))}
+          </div>
+        </div>
 
-          <Timeline>
-            <li className="tl-role">
-              <span className="tl-dot" aria-hidden />
-              <span className="tl-when">{STUDIO.dates}</span>
-              <TiltCard className="venture">
-                <div>
-                  <span className="kicker">My own company</span>
-                  <h3 className="role-t">
-                    {STUDIO.title}, <a href={studio()}>{STUDIO.org}</a>
-                  </h3>
-                </div>
-                <p className="muted">{STUDIO.body}</p>
-                <div className="products">
-                  {STUDIO.products.map((p) => (
-                    <a key={p.name} href={p.href} className="product">
-                      <span className="product-t">
-                        {p.name} <Arrow />
-                      </span>
-                      <span className="muted">{p.body}</span>
-                    </a>
-                  ))}
-                </div>
-                <TrackedLink
-                  href={studio()}
-                  event="studio_opened"
-                  properties={{ location: 'experience' }}
-                  className="more"
-                >
-                  Visit studionpv.com <Arrow />
-                </TrackedLink>
-              </TiltCard>
-            </li>
-            {ROLES.map((r) => (
-              <li key={`${r.org}-${r.title}`} className="tl-role">
-                <span className="tl-dot" aria-hidden />
-                <span className="tl-when">{r.dates}</span>
-                <div className="tl-what">
-                  <div>
-                    <h3 className="role-t">{r.title}</h3>
-                    <span className="org">{r.org}</span>
-                  </div>
-                  <ul className="points">
-                    {r.points.map((p) => (
-                      <li key={p}>{p}</li>
+        <section id="experience" className="sec" aria-labelledby="experience-h">
+          <div className="wrap">
+            <SectionHead id="experience" n="02" label="Experience">
+              Where I’ve <em>worked</em>
+            </SectionHead>
+            <Experience />
+          </div>
+        </section>
+
+        <section id="skills" className="sec alt" aria-labelledby="skills-h">
+          <div className="wrap">
+            <SectionHead id="skills" n="03" label="Skills and education">
+              What I <em>bring</em>
+            </SectionHead>
+            <Spotlight className="skills">
+              {SKILLS.map((g, i) => (
+                <div key={g.group} className="card skill spot rv" style={{ transitionDelay: `${i * 80}ms` }}>
+                  <h3 className="eyebrow">{g.group}</h3>
+                  <ul className="chips">
+                    {g.items.map((s) => (
+                      <li key={s}>{s}</li>
                     ))}
                   </ul>
                 </div>
-              </li>
-            ))}
-          </Timeline>
-        </section>
-
-        <section id="skills" aria-labelledby="skills-h" className="sec">
-          <Heading id="skills">Skills</Heading>
-          <div className="skills">
-            {SKILLS.map((g) => (
-              <div key={g.group} className="skill-group">
-                <h3 className="kicker">{g.group}</h3>
-                <ul className="chips">
-                  {g.items.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="education" aria-labelledby="education-h" className="sec">
-          <Heading id="education">Education</Heading>
-          <ul className="roles">
-            {EDUCATION.map((e) => (
-              <li key={e.title} className="role">
-                <div className="role-head">
+              ))}
+            </Spotlight>
+            <div className="edu rv">
+              {EDUCATION.map((e) => (
+                <div key={e.title} className="edu-row">
                   <div>
-                    <h3 className="role-t">{e.title}</h3>
-                    <span className="org">{e.org}</span>
+                    <h3 className="card-t">{e.title}</h3>
+                    <span className="muted">{e.org}</span>
                   </div>
                   <span className="dates">{e.dates}</span>
                 </div>
-              </li>
-            ))}
-          </ul>
-          <dl className="facts">
-            <div>
-              <dt className="kicker">Certification</dt>
-              <dd>{CERTIFICATION}</dd>
+              ))}
+              <dl className="facts">
+                <div>
+                  <dt className="eyebrow">Certification</dt>
+                  <dd>{CERTIFICATION}</dd>
+                </div>
+                <div>
+                  <dt className="eyebrow">Languages</dt>
+                  <dd>{LANGUAGES}</dd>
+                </div>
+              </dl>
             </div>
-            <div>
-              <dt className="kicker">Languages</dt>
-              <dd>{LANGUAGES}</dd>
-            </div>
-          </dl>
-        </section>
-
-        <section id="writing" aria-labelledby="writing-h" className="sec">
-          <Heading id="writing">Writing</Heading>
-          <ul className="posts">
-            {POSTS.map((p) => (
-              <li key={p.slug}>
-                <a href={studio(`/writing/${p.slug}`)}>
-                  <span>{p.title}</span>
-                  <span className="dates">{p.date}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href={studio('/writing')} className="more">
-            All writing <Arrow />
-          </a>
-        </section>
-
-        <section id="contact" aria-labelledby="contact-h" className="sec contact">
-          <Heading id="contact">Contact</Heading>
-          <p className="lead">Open to conversations about roles, collaborations and talks.</p>
-          <p className="muted">
-            Email or LinkedIn reaches me fastest. If you have something you want built, start at{' '}
-            <a href={studio('/contact')}>Studio NPV</a>.
-          </p>
-          <div className="actions">
-            <TrackedLink href={mailtoHref} event="email_clicked" properties={{ location: 'contact' }} className="btn btn-primary">
-              {siteConfig.email}
-            </TrackedLink>
-            <LinkedIn location="contact" className="btn" />
-            <Resume location="contact" className="btn" />
           </div>
         </section>
 
-        <footer className="foot">
+        <section id="writing" className="sec" aria-labelledby="writing-h">
+          <div className="wrap">
+            <SectionHead id="writing" n="04" label="Writing">
+              Notes on product and <em>craft</em>
+            </SectionHead>
+            <ul className="posts">
+              {POSTS.map((p, i) => (
+                <li key={p.slug} className="rv" style={{ transitionDelay: `${i * 80}ms` }}>
+                  <a href={studio(`/writing/${p.slug}`)}>
+                    <span className="post-t">{p.title}</span>
+                    <span className="dates">{p.date}</span>
+                    <Arrow />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a href={studio('/writing')} className="more rv">
+              All writing <Arrow />
+            </a>
+          </div>
+        </section>
+
+        <section id="contact" className="sec contact" aria-labelledby="contact-h">
+          <div className="wrap">
+            <SectionHead id="contact" n="05" label="Contact">
+              Let’s <em>talk</em>.
+            </SectionHead>
+            <p className="contact-lede rv">
+              Open to conversations about roles, collaborations and talks. If you have something you want
+              built, start at <a href={studio('/contact')}>Studio NPV</a>.
+            </p>
+            <TrackedLink
+              href={mailtoHref}
+              event="email_clicked"
+              properties={{ location: 'contact' }}
+              className="big-mail rv"
+            >
+              {siteConfig.email} <Arrow />
+            </TrackedLink>
+            <div className="actions rv">
+              <LinkedIn location="contact" className="btn" />
+              <Resume location="contact" className="btn" />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="foot">
+        <div className="wrap foot-in">
           <span>
             © {new Date().getFullYear()} {siteConfig.name}
           </span>
           <a href={studio()}>Studio NPV</a>
-        </footer>
-      </main>
-    </div>
+        </div>
+      </footer>
+    </>
   )
 }
