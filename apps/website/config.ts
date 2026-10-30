@@ -9,7 +9,7 @@ export const siteConfig = {
   title: 'Founder, Studio NPV',
   location: 'Bengaluru',
   calendlyUrl: 'https://calendly.com/[your-handle]',
-  email: 'studio.npv@outlook.com',
+  email: 'hello@studionpv.com',
   linkedin: 'https://linkedin.com/in/npv',
   resumeFile: '/Nithyapriya-Veeraraghavan.pdf',
   // My own profile, resume and career live on my personal site.
