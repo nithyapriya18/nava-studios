@@ -5,10 +5,9 @@ import { siteConfig } from '@/config'
 export const runtime = 'nodejs'
 
 /**
- * Contact form. Sends the message to CONTACT_TO_EMAIL through Resend
- * (resend.com). Until a domain is verified in Resend, messages are sent from
- * onboarding@resend.dev, which Resend only delivers to the address the Resend
- * account was created with, so CONTACT_TO_EMAIL must be that address.
+ * Contact form. Sends the message to CONTACT_TO_EMAIL (or the studio's
+ * address) through Resend (resend.com), from the studio's own address:
+ * studionpv.com is verified in Resend, so it can send as hello@.
  */
 
 const LIMITS = { name: 100, email: 200, company: 200, message: 5000 }
@@ -73,7 +72,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: process.env.CONTACT_FROM_EMAIL ?? `${siteConfig.name} <onboarding@resend.dev>`,
+        from: process.env.CONTACT_FROM_EMAIL ?? `${siteConfig.name} <${siteConfig.email}>`,
         to: [to],
         reply_to: email,
         subject: `New enquiry from ${name}${company ? `, ${company}` : ''}`,

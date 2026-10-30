@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: process.env.CONTACT_FROM_EMAIL ?? `${siteConfig.name} <onboarding@resend.dev>`,
+          from: process.env.CONTACT_FROM_EMAIL ?? `${siteConfig.name} <${siteConfig.email}>`,
           to: [process.env.CONTACT_TO_EMAIL ?? siteConfig.email],
           ...(email ? { reply_to: email } : {}),
           subject: `New comment on "${title}"`,
