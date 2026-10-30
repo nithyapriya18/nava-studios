@@ -7,8 +7,6 @@ import { CAREER } from '@/lib/process'
 import { reviewHref } from '@/lib/products'
 import { TrackedLink } from '@/components/tracked-link'
 import { Arrow, Note } from '@/components/pen'
-import { Generate } from '@/components/generate'
-import { ScrollBeam } from '@/components/scroll-beam'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -32,9 +30,7 @@ export default function AboutPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
           <p className="label">About</p>
           <h1 id="about-h" className="display">
-            <Generate>
-              Hi, I’m <em>Nithya</em>.
-            </Generate>
+            Hi, I’m <em>Nithya</em>.
           </h1>
           <p className="lede" style={{ maxWidth: '46ch' }}>
             I run {siteConfig.name} from {siteConfig.location}. I design and build software for founders and
@@ -110,7 +106,7 @@ export default function AboutPage() {
           <h2 id="tl-h" className="h2">
             From engineer to product, and back to <em>building</em>
           </h2>
-          <ScrollBeam className="tl">
+          <ol className="tl">
             {CAREER.map((c, i) => (
               <li key={`${c.year}-${c.role}`} className={`tl-item${i === CAREER.length - 1 ? ' now' : ''}`}>
                 <span className="tl-dot" aria-hidden />
@@ -126,7 +122,7 @@ export default function AboutPage() {
                 </div>
               </li>
             ))}
-          </ScrollBeam>
+          </ol>
           <div
             style={{
               display: 'flex',

@@ -5,7 +5,6 @@ import { TrackedLink } from '@/components/tracked-link'
 import { Faq } from '@/components/faq'
 import { TileStack } from '@/components/tile-stack'
 import { Arrow, Note, PenUnderline } from '@/components/pen'
-import { Generate } from '@/components/generate'
 
 export const metadata: Metadata = {
   title: 'How it works',
@@ -20,12 +19,10 @@ export default function StartPage() {
       <section className="tile band page-head">
         <p className="label">How it works</p>
         <h1 className="display">
-          <Generate>
-            How a project{' '}
-            <PenUnderline draw>
-              <em>runs</em>
-            </PenUnderline>
-          </Generate>
+          How a project{' '}
+          <PenUnderline draw>
+            <em>runs</em>
+          </PenUnderline>
         </h1>
         <p className="lede" style={{ maxWidth: '52ch' }}>
           Every project follows the same five steps, from the first conversation to launch. At each one

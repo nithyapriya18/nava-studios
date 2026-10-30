@@ -5,8 +5,7 @@ import Link from 'next/link'
 import { track } from '@/lib/analytics'
 import { mailtoHref, siteConfig } from '@/config'
 
-// 'done' is the moment the button shows its tick, before the thank-you panel.
-type Status = 'idle' | 'sending' | 'done' | 'sent'
+type Status = 'idle' | 'sending' | 'sent'
 
 /** The "Tell me about your project" form. Emails the message to me. */
 export function ContactForm({ id = 'contact-form' }: { id?: string }) {
@@ -16,7 +15,7 @@ export function ContactForm({ id = 'contact-form' }: { id?: string }) {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (status !== 'idle') return
+    if (status === 'sending') return
     const form = e.currentTarget
     const data = Object.fromEntries(new FormData(form))
 
@@ -35,10 +34,9 @@ export function ContactForm({ id = 'contact-form' }: { id?: string }) {
         return
       }
       setSentTo(String(data.email ?? ''))
-      setStatus('done')
+      setStatus('sent')
       form.reset()
       track('contact_submitted')
-      setTimeout(() => setStatus('sent'), 900)
     } catch {
       setError({ message: "Couldn't send your message. Check your connection, or email me directly:", fallback: true })
       setStatus('idle')
@@ -109,19 +107,8 @@ export function ContactForm({ id = 'contact-form' }: { id?: string }) {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-        {/* Aceternity's Stateful Button: a spinner grows in while sending, then a tick. */}
-        <button type="submit" disabled={status !== 'idle'} className="btn-primary stateful" aria-live="polite">
-          <span className={`sb-icon${status === 'sending' ? ' on' : ''}`} aria-hidden>
-            <svg className="sb-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M12 3a9 9 0 1 0 9 9" />
-            </svg>
-          </span>
-          <span className={`sb-icon${status === 'done' ? ' on' : ''}`} aria-hidden>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12.5l4.5 4.5L19 7.5" />
-            </svg>
-          </span>
-          {status === 'sending' ? 'Sending' : status === 'done' ? 'Sent' : 'Send message'}
+        <button type="submit" disabled={status === 'sending'} className="btn-primary" aria-live="polite">
+          {status === 'sending' ? 'Sending…' : 'Send message'}
         </button>
         <p className="muted" style={{ fontSize: 13 }}>
           Your details are only used to reply to you. <Link href="/privacy">Privacy</Link>

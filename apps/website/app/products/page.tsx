@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PRODUCTS } from '@/lib/products'
 import { Arrow, Tick } from '@/components/pen'
-import { Generate } from '@/components/generate'
 
 export const metadata: Metadata = {
   title: 'Products',
@@ -15,9 +14,7 @@ export default function ProductsPage() {
       <section className="band page-head">
         <p className="label">Products</p>
         <h1 className="display">
-          <Generate>
-            Things I <em>run</em>
-          </Generate>
+          Things I <em>run</em>
         </h1>
         <p className="lede" style={{ maxWidth: '52ch' }}>
           Small products I’ve built and run myself. They’re free to use, and they show the kind of care I

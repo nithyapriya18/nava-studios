@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-/** One answer open at a time; the first starts open. Answers slide open, shadcn Accordion style. */
+/** One answer open at a time; the first starts open. */
 export function Faq({ items }: { items: { q: string; a: string }[] }) {
   const [open, setOpen] = useState(0)
 
@@ -26,13 +26,11 @@ export function Faq({ items }: { items: { q: string; a: string }[] }) {
                 </svg>
               </button>
             </h3>
-            <div className="faq-panel" data-open={expanded || undefined}>
-              <div>
-                <p id={`faq-${i}`} className="faq-a">
-                  {item.a}
-                </p>
-              </div>
-            </div>
+            {expanded && (
+              <p id={`faq-${i}`} className="faq-a">
+                {item.a}
+              </p>
+            )}
           </div>
         )
       })}

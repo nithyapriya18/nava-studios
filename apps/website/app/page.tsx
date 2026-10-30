@@ -6,8 +6,6 @@ import { FAQS } from '@/lib/process'
 import { getAllPosts } from '@/lib/mdx'
 import { reviewHref } from '@/lib/products'
 import { HeroDemo } from '@/components/hero-demo'
-import { Generate } from '@/components/generate'
-import { HoverGroup } from '@/components/hover-group'
 import { Faq } from '@/components/faq'
 import { ContactBand } from '@/components/contact-band'
 import { Arrow, Note, PenCircle, PenUnderline, Tick } from '@/components/pen'
@@ -87,9 +85,7 @@ export default function Home() {
             </span>
           </div>
           <h1 id="hero-h" className="display">
-            <Generate>
-              From a <PenCircle draw>napkin</PenCircle> sketch to software <em>people use</em>.
-            </Generate>
+            From a <PenCircle draw>napkin</PenCircle> sketch to software <em>people use</em>.
           </h1>
           <p className="lede">
             I design and build first versions of new products for founders: web apps and SaaS that real
@@ -135,16 +131,14 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <span className="label">The same approach also works for</span>
-            <HoverGroup items=".also li">
-              <ul className="also">
-                {also.map((a) => (
-                  <li key={a.title}>
-                    <span className="h3">{a.title}</span>
-                    <span className="muted">{a.body}</span>
-                  </li>
-                ))}
-              </ul>
-            </HoverGroup>
+            <ul className="also">
+              {also.map((a) => (
+                <li key={a.title}>
+                  <span className="h3">{a.title}</span>
+                  <span className="muted">{a.body}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -258,26 +252,24 @@ export default function Home() {
           <h2 id="writing-h" className="h2">
             Notes for founders about to <em>start</em>
           </h2>
-          <HoverGroup items="a.post" bleed={16}>
-            <div className="posts">
-              {posts.map((post) => (
-                <Link key={post.slug} href={`/writing/${post.slug}`} className="post">
-                  <span className="muted num" style={{ fontSize: 14 }}>
-                    {shortDate(post.date)}
+          <div className="posts">
+            {posts.map((post) => (
+              <Link key={post.slug} href={`/writing/${post.slug}`} className="post">
+                <span className="muted num" style={{ fontSize: 14 }}>
+                  {shortDate(post.date)}
+                </span>
+                <span style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span className="post-t">{post.title}</span>
+                  <span className="muted" style={{ fontSize: 16 }}>
+                    {post.excerpt}
                   </span>
-                  <span style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <span className="post-t">{post.title}</span>
-                    <span className="muted" style={{ fontSize: 16 }}>
-                      {post.excerpt}
-                    </span>
-                  </span>
-                  <span className="muted" style={{ fontSize: 14 }}>
-                    {post.readingTime.replace(' read', '')}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </HoverGroup>
+                </span>
+                <span className="muted" style={{ fontSize: 14 }}>
+                  {post.readingTime.replace(' read', '')}
+                </span>
+              </Link>
+            ))}
+          </div>
           <Link href="/writing" className="more">
             All writing <Arrow />
           </Link>
